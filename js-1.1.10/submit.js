@@ -72,7 +72,7 @@ if (detectIE()===false){
 function startWebWorker(){
 	//start instance of webWorkerPDF.js
 	console.log('main: starting webWorker.js...');
-	const myWorker = new Worker('js-1.1.9/submitComponents/webWorker.js');
+	const myWorker = new Worker('js-1.1.10/submitComponents/webWorker.js');
 
 	//passes input data to webWorkerPDF.js
 	myWorker.postMessage(inputs);

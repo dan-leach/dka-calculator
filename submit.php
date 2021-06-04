@@ -68,7 +68,7 @@
 						*/
 
 						// Attempt MySQL server connection.
-						$link = mysqli_connect("localhost", "dkacalcu_submit", "password", "dkacalcu_dka_database");
+						$link = mysqli_connect("localhost", "dkacalcu_submit", "lZ^SbTsEFq)x", "dkacalcu_dka_database");
 						 
 						// Check connection
 						if($link === false){

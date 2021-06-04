@@ -49,4 +49,7 @@ Added Ulster Hospital Dundonald to list of NI hospitals
 v1.1.9
 05/02/2021 14:15
 Disclaimer modal now has to be accepted to reach start page
-Git init
+
+v1.1.10
+04/06/2021 16:22
+Removed Nevill Hall and Royal Gwent Hospitals, replaced by Grange University Hospital

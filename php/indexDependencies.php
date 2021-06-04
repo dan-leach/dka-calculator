@@ -12,10 +12,10 @@
 <script src="externalDependencies/bootstrap-3.4.1-dist/js/bootstrap.min.js"></script>
 
 <!--my scripts-->
-<script src="js-1.1.9/indexComponents/regionHospitals.js"></script>
-<script src="js-1.1.9/indexComponents/weightLimits.js"></script>
-<script src="js-1.1.9/index.js"></script>
-<script src="js-1.1.9/disclaimer.js"></script>
+<script src="js-1.1.10/indexComponents/regionHospitals.js"></script>
+<script src="js-1.1.10/indexComponents/weightLimits.js"></script>
+<script src="js-1.1.10/index.js"></script>
+<script src="js-1.1.10/disclaimer.js"></script>
 
 <!--moment-->
 <script src="externalDependencies/moment/moment.min.js"></script>

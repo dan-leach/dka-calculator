@@ -20,12 +20,12 @@
 <script src="externalDependencies/pdfmake/vfs_fonts.js"></script>
 
 <!--my scripts-->
-<script src="js-1.1.9/submitComponents/inputs.js"></script>
-<script src="js-1.1.9/submitComponents/imageStore.js"></script>
-<script src="js-1.1.9/submitComponents/documentVariables.js"></script>
-<script src="js-1.1.9/submitComponents/documentDefinition.js"></script>
-<script src="js-1.1.9/submitComponents/showWorking.js"></script>
-<script src="js-1.1.9/submit.js"></script>
+<script src="js-1.1.10/submitComponents/inputs.js"></script>
+<script src="js-1.1.10/submitComponents/imageStore.js"></script>
+<script src="js-1.1.10/submitComponents/documentVariables.js"></script>
+<script src="js-1.1.10/submitComponents/documentDefinition.js"></script>
+<script src="js-1.1.10/submitComponents/showWorking.js"></script>
+<script src="js-1.1.10/submit.js"></script>
 
 <!--bootbox -->
 <script src="externalDependencies/bootbox/bootbox.min.js"></script>

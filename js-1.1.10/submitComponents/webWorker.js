@@ -5,9 +5,9 @@ document = { createElementNS: function () { return {}; } };
 importScripts('../../externalDependencies/pdfmake/pdfmake.min.js');
 importScripts('../../externalDependencies/pdfmake/vfs_fonts.js');
 importScripts('../../externalDependencies/moment/moment.min.js');
-importScripts('../../js-1.1.9/submitComponents/imageStore.js');
-importScripts('../../js-1.1.9/submitComponents/documentVariables.js');
-importScripts('../../js-1.1.9/submitComponents/documentDefinition.js');
+importScripts('../../js-1.1.10/submitComponents/imageStore.js');
+importScripts('../../js-1.1.10/submitComponents/documentVariables.js');
+importScripts('../../js-1.1.10/submitComponents/documentDefinition.js');
 
 onmessage = function(req) {
   console.log('webWorker: request received...');

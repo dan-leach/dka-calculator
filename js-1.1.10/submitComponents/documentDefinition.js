@@ -38,7 +38,7 @@ function getDocumentDefinition(inputs, documentVariables){//returns the document
                             [
                                 {text: ""},
                                 {text: "Name: "+inputs.name, alignment: 'left', style: 'header'},
-                                {text: "www.dka-calculator.co.uk (v1.1.9)", alignment: 'center', style: 'header'},
+                                {text: "www.dka-calculator.co.uk (v1.1.10)", alignment: 'center', style: 'header'},
                                 {text: "Protocol Page "+currentPage+" of "+pageCount, alignment: 'right', style: 'header'},
                                 {text: ""}
                             ],
