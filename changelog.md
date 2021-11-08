@@ -5,13 +5,16 @@ All notable changes to this project will be documented in this file.
 - Started work on development version 2021-11-05 13:26
 - More significant changes in anticipation of new BSPED guideline update
 ### Added
-- Capped bolus volume to 500ml
+- Capped bolus volume to 750ml
 - Capped deficit volume to 7500ml
 - Warning notice applied to ICP where bolus, deficit or maintenance cap has been applied
 - Each submission now records calculator version in database
 - New form input for episode type to distinguish between new episodes, redo protocols, and test/training purposes - new column in database to store this
 - Calculator logo to header
 - Prevented submission errors caused by refreshing submit page by replacing URL in address bar to start page
+- Link to danleach.uk in footer
+- Link to changelog in footer
+- Temporary update panel regarding changes with new guideline
 ### Changed
 - Deficit percentage for moderate DKA reduced from 7% to 5%
 - 1st resus bolus volume reduced from 20ml/kg to 10ml/kg
