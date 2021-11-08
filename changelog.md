@@ -7,7 +7,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Capped bolus volume to 750ml
 - Capped deficit volume to 7500ml
-- Warning notice applied to ICP where bolus, deficit or maintenance cap has been applied
+- Capped insulin rate to 7.5 Units/hour
+- Warning notice applied to ICP where bolus, deficit, maintenance or insulin cap has been applied
 - Each submission now records calculator version in database
 - New form input for episode type to distinguish between new episodes, redo protocols, and test/training purposes - new column in database to store this
 - Calculator logo to header
@@ -16,12 +17,16 @@ All notable changes to this project will be documented in this file.
 - Link to changelog in footer
 - Temporary update panel regarding changes with new guideline
 - Check isset for overrideCheckbox in submit.php to prevent non-fatal PHP error
+- Check isset for protocolStart in submit.php to prevent non-fatal PHP errors
+- Force clear form on index page load to prevent weight checking error when navigated to using back
+- Access to legacy v1.1.10 (will be removed after 6 month transition period)
 ### Changed
 - Deficit percentage for moderate DKA reduced from 7% to 5%
 - 1st resus bolus volume reduced from 20ml/kg to 10ml/kg
 - Resus bolus section now includes space for 4th resus bolus to keep total 40ml/kg total despite reduced initial bolus volume
 - Recommended upper limit for weight reduced from 80kg to 75kg - capped maintenance daily fluid volume unchanged at 3000ml
 - Audit ID method now generates shorter unique ID which is checked against database to confirm unique
+- Changed positioning of demographics on ICP front page due to shorter audit ID
 - Old plain text version log replaced with new markdown changelog
 - Audit ID is added automatically to form, without needing to click 'generate audit id' button
 - Shape of DKA severity selector box changed to fit new flow chart shape that combines mild and moderate severity into a single deficit percentage
