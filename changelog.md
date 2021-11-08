@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
-- Started work on development version 2021-11-05 13:26
+- v1.2.0 Development version live on sub-directory for testing purposes from 2021-11-05 13:26
 - More significant changes in anticipation of new BSPED guideline update
 ### Added
 - Capped bolus volume to 750ml
@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Link to danleach.uk in footer
 - Link to changelog in footer
 - Temporary update panel regarding changes with new guideline
+- Check isset for overrideCheckbox in submit.php to prevent non-fatal PHP error
 ### Changed
 - Deficit percentage for moderate DKA reduced from 7% to 5%
 - 1st resus bolus volume reduced from 20ml/kg to 10ml/kg
@@ -22,6 +23,8 @@ All notable changes to this project will be documented in this file.
 - Recommended upper limit for weight reduced from 80kg to 75kg - capped maintenance daily fluid volume unchanged at 3000ml
 - Audit ID method now generates shorter unique ID which is checked against database to confirm unique
 - Old plain text version log replaced with new markdown changelog
+- Audit ID is added automatically to form, without needing to click 'generate audit id' button
+- Shape of DKA severity selector box changed to fit new flow chart shape that combines mild and moderate severity into a single deficit percentage
 ### Removed
 - Example calculation formulae on fluids page to allow space for capped volume warnings
 
