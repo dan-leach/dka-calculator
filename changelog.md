@@ -5,10 +5,15 @@ All notable changes to this project will be documented in this file.
 - v1.2.0 Development version live on sub-directory for testing purposes from 2021-11-05 13:26
 - More significant changes in anticipation of new BSPED guideline update
 ### Added
-- Capped bolus volume to 750ml
-- Capped deficit volume to 7500ml
-- Capped insulin rate to 7.5 Units/hour
+- All calculated values now limited by maximum weight of 75kg
+-- Capped bolus volume to 750ml
+-- Capped deficit volume to 7500ml if 10% dehydrated
+-- Capped deficit volume to 3750ml if 5% dehydrated
+-- Capped insulin rate to 7.5 Units/hour if using 0.1 Units/kg/hour
+-- Capped insulin rate to 3.75 Units/hour if using 0.05 Units/kg/hour
+-- Capped maintenance daily fluid volume unchanged to 2600ml
 - Warning notice applied to ICP where bolus, deficit, maintenance or insulin cap has been applied
+- Dagger indicator added to show working to indicate capped values
 - Each submission now records calculator version in database
 - New form input for episode type to distinguish between new episodes, redo protocols, and test/training purposes - new column in database to store this
 - Calculator logo to header
@@ -24,12 +29,14 @@ All notable changes to this project will be documented in this file.
 - Deficit percentage for moderate DKA reduced from 7% to 5%
 - 1st resus bolus volume reduced from 20ml/kg to 10ml/kg
 - Resus bolus section now includes space for 4th resus bolus to keep total 40ml/kg total despite reduced initial bolus volume
-- Recommended upper limit for weight reduced from 80kg to 75kg - capped maintenance daily fluid volume unchanged at 3000ml
+- Recommended upper limit for weight reduced from 80kg to 75kg
 - Audit ID method now generates shorter unique ID which is checked against database to confirm unique
 - Changed positioning of demographics on ICP front page due to shorter audit ID
 - Old plain text version log replaced with new markdown changelog
 - Audit ID is added automatically to form, without needing to click 'generate audit id' button
 - Shape of DKA severity selector box changed to fit new flow chart shape that combines mild and moderate severity into a single deficit percentage
+- Refactored calcVars.js, docDef.js and showWorking.js
+- Improved appearance of protocol generation loading modal
 ### Removed
 - Example calculation formulae on fluids page to allow space for capped volume warnings
 
