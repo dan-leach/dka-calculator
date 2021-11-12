@@ -3,6 +3,4 @@ error_log
 externalDependencies/
 cgi-bin/
 .well-known
-regionHospitals.js
-weightLimits.js
 link.php
