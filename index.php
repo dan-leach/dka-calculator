@@ -4,14 +4,26 @@
 	<title>Paediatric DKA Protocol Generator - Start Page</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description=" content="Paediatric DKA Calculator - Use this tool to generate an integrated care pathway for managing paediatric diabetic ketoacidosis based on the BSPED 2020 Guidelines. It will pre-fill calculations in the pathway based on the values for your patient.">
-	<?php include 'php/indexDependencies.php';?> <!--includes the dependencies required for this page including favicon, bootstrap, javascript file, moment, date/time picker, popover and unique ID generator-->
-	<?php include 'php/loader.php';?> <!--includes the loader which displays until page is ready-->
+	<?php include 'php-1.1.10/indexDependencies.php';?> <!--includes the dependencies required for this page including favicon, bootstrap, javascript file, moment, date/time picker, popover and unique ID generator-->
+	<?php include 'php-1.1.10/loader.php';?> <!--includes the loader which displays until page is ready-->
 </head>
 <body>
 	<div class="loader"></div> <!--this div required for php/loader.php to work-->
 	<div class="container">
-		<?php include 'php/jumbotron.php';?> <!--includes the header file-->
+		<?php include 'php-1.1.10/jumbotron.php';?> <!--includes the header file-->
 		<form> <!--This first form contains confidential information that is not submitted to the server-->
+			<div class="panel panel-danger"> 
+		        <div class="panel-heading">
+		            This is the legacy version (v1.1.10) of the DKA Calculator.
+		        </div>
+				<div class="panel-body">
+				    <div class="row">
+						<div class="col-sm-12">
+						    <p>The DKA Calculator was updated in response to the latest <a href="https://www.bsped.org.uk/clinical-resources/guidelines/#diabetes" _target="blank">BSPED DKA Guidelines</a>. This legacy version is provided for a 6 month transition period and will be removed in April 2022.<br><br><a href="/">Click here to access the most up to date version of the calculator</a>.
+						</div>
+					</div>
+				</div>
+			</div>
 			<div class="panel panel-default"> <!--panel for advisory notes-->
 				<div class="panel-body">
 					<div class="row">
@@ -71,7 +83,7 @@
 				</div>
 			</div>
 		</form>
-		<form id="protocolForm" method="post" action="submit.php"> <!--This second form contains the non-confidential information that IS submitted to the server and logged-->
+		<form id="protocolForm" method="post" action="submit-legacy.php"> <!--This second form contains the non-confidential information that IS submitted to the server and logged-->
 			<div class="panel panel-default">
 				<div class="panel-heading">Protocol variables <a href="#" tabindex="-1" data-toggle="tooltip" title="Data entered into this section is used for calculation of relevant values in the generated protocol. These values are stored for audit purposes."><span class="glyphicon glyphicon-info-sign"></span></a></div>
 				<div class="panel-body">
@@ -272,7 +284,7 @@
 			</div>		
 		</form>
 		</br>
-		<?php include 'php/footer.php';?> <!--includes footer file-->
+		<?php include 'php-1.1.10/footer.php';?> <!--includes footer file-->
 	</div>
 	<script>
 	    //this function must be in the php file not js as it requires the unique ID which is echo'd during php running on server side-->
