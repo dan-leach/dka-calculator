@@ -15,7 +15,7 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<p>Error 404 - Resource not found</p><br>
-							<p>You seem to be looking for something that isn't here. Click <a href="https://dka-calculator.co.uk">here</a> to return to the DKA calculator start page.</p> 
+							<p>You seem to be looking for something that isn't here. Click <a href="/">here</a> to return to the DKA calculator start page.</p> 
 						</div>
 					</div>
 				</div>

@@ -1,0 +1,29 @@
+Testing data set to validate new version
+Add video
+Cross browser testing
+make showWorking look nicer
+close link
+
+Prelaunch:
+Remove comment from history.replaceState at top of submit.js
+Update version log
+Update GitHub
+Update DKA Calcualtor hosted blank ICP file and all links to it
+Update links to BSPED hosted ICP - actually just check this isn't required as pointing to the page - perhaps add the #diabetes HTML anchor
+Remove watermark
+Remove not for clinical use panel in body and notice in footer
+remove v1.2/ from href of legacy link on start page
+remove hi i'm working on this right now alert top of index.js
+delete /php
+rename v1.2.php to index.php
+rename submit-v1.2.php to submit.php and change (<form id="protocolForm" method="post" action="submit-v1.2.php">) in index
+change link.php back to non-dev version
+
+
+Changes to ICP-but-not-to-code DONE:
+1. Title Page (Page 1 - calculator and non calculator versions) - full guideline description from 2020 to 2021, change version number to v1.2, change date from March 2020 to November 2021
+2. Flow Chart 2 - Resuscitation (Page 4 - one version) - Change number of resus bolus boxes from 3 to 4, change text to 10ml/kg from 20ml/kg, added consider NGT box
+3. Flow Chart 4 - Fluids (Page 6 - calculator and non-calculator versions) - both mild and moderate point to 5% deficit box, 75kg in warning box at top, over 30 mins from warning box for deficit subtraction
+(from calculator version only) removed example calculations to allow space for capping messages
+4. Flow Chart 5 - Insulin (Page 6 - calculator version only) removed example calculations to allow space for capping messages
+(both versions ) added low potassium guidance box

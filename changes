@@ -1,0 +1,48 @@
+Dan:
+
+Kev:
+
+Rob:
+
+index.js
+
+// Consider adding failure to the Age varable if the DOB is updated to be out of range i.e. if a user initially adds an acceptable DOB then changes it,
+// currently the Age variable remains updated with previous number - may be unnecesary though
+line 107 add: 					indexForm.inputs.age.set(-1);
+line 104 move to 109:					//indexForm.inputs.age.blur();
+
+// Do you want to add a time check for protocols generated far in the past by accident? Not in index.js as I can see, can even be before they were born
+// Such as:
+line 184:   				if (this.goodFormat() && this.notFuture() && this.recentPast()) return true;
+insert at line 195:
+			recentPast: function(){
+				if (moment().diff(moment(this.value(), "DD/MM/YYYY HH:mm"), 'months') <= 12) return true;
+				return false;
+			},
+insert at line 198
+				if (!this.recentPast()) return "Protocol start date/time must be within the last year.";
+
+// I wonder if you want to keep the error message up for weight even when override is ticked, though could make it less prominent
+// Should there be a hard limit that cannot be overriden, like 150kg max?
+
+// If permitting input of previous dates for Protocol start time, your calculation of age in months and all contingent could be wrong
+// e.g. line 338 which seems to calculate age in months c.f. current time, not age at protocol start
+// Perhaps an argument to make protocol start within last month?
+
+// Line 391 & 396 - should this refer to the upper and lower limits within calcVars.js not be hard coded?
+
+// Line 703 - On testing I am not getting this box to confirm I wish to proceed with the 200kg Joe Bloggs
+// Still with disabled popup blocker. I can run the function from the console and the popup comes.
+
+// Updates we did together to make the override box pop up:
+Line 681:       		    	
+if (indexForm.inputs.weight.isOverridden()) {
+    this.confirmOverride();
+} else {
+    this.send();
+}
+Line 721:
+indexForm.submit.send();
+Line 741 add:
+this.preSendSet();
+this.store();
