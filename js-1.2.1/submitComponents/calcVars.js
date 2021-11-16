@@ -83,8 +83,8 @@ function getCalcVars(inputs){
             },
         },
         utilities: {
-            volumeToRate: function(volume, hours){//takes a volume in mL and divides by number of hours over which it should run to give a rate in mL/hour
-                return volume/hours;
+            volumeToRate: function(volume, unitTime){ //takes a volume and divides by number of unitTime over which it should run to give a rate in volumeUnit/unitTime
+                return volume/unitTime;
             },
             timing: {
                 time: function(addHours){ //returns time component of datetime; addHours after protocolStart
