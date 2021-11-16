@@ -166,7 +166,7 @@ const showWorking = {
         insulinRate: {
             name: "Insulin infusion rate",
             formula: function() {
-                return "[[Insulin rate (Units/kg/hour)] x [Patient weight]]";
+                return "[Insulin rate (Units/kg/hour)] x [Patient weight]";
             },
             limit: function() {
                 if (inputs.insulin == 0.05) return calcVars.settings.caps.insulin005 + " Units/hour (for 0.05 Units/kg/hour)";
