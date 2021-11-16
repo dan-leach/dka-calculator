@@ -77,7 +77,7 @@ var indexForm = {
 				return false;
 			},
 			goodLength: function(){
-				if (this.value().length > 4) return true;
+				if ((this.value().length > 4) && (this.value().length < 21)) return true;
 				return false;
 			},
 			failMsg: function(){
@@ -152,7 +152,7 @@ var indexForm = {
 				return false;
 			},
 			goodLength: function(){
-				if (this.value().length > 4) return true;
+				if ((this.value().length > 4) && (this.value().length < 21)) return true;
 				return false;
 			},
 			failMsg: function(){
@@ -181,7 +181,7 @@ var indexForm = {
 				indexForm.style.progressBar();
 			},
 			pass: function(){
-				if (this.goodFormat() && this.notFuture()) return true;
+				if (this.goodFormat() && this.notFuture() && this.isRecent()) return true;
 				return false;
 			},
 			goodFormat: function(){
@@ -192,9 +192,14 @@ var indexForm = {
 				if (moment().diff(moment(this.value(), "DD/MM/YYYY HH:mm"), 'hours') >= 0) return true;
 				return false;
 			},
+			isRecent: function(){
+				if (moment().diff(moment(this.value(), "DD/MM/YYYY HH:mm"), 'days') < 32) return true;
+				return false;
+			},
 			failMsg: function(){
 				if (!this.goodFormat()) return "Protocol start date/time must be in the format DD/MM/YYYY HH:MM.";
 				if (!this.notFuture()) return "Protocol start date/time cannot be in the future.";
+				if (!this.isRecent()) return "Protocol start date/time must be within the last month.";
 				throw "Unable to select failMsg";
 			}
 		},
