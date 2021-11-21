@@ -19,7 +19,7 @@
 				<div class="panel-body">
 				    <div class="row">
 						<div class="col-sm-12">
-						    <p>An update to the BSPED DKA Guidelines is coming soon. This is the development testing platform for that update. Do not use this site for generating clinical protocols.<br><a href="/">Visit the live DKA Calculator instead.</a></p>
+						    <p>An update to the BSPED DKA Guidelines is coming soon. This is the development testing platform for that update. Do not use this site for generating clinical protocols.<br><a href="https://www.dka-calculator.co.uk">Visit the live DKA Calculator instead.</a></p>
 						</div>
 					</div>
 				</div>
@@ -114,7 +114,7 @@
 					<div class="row"> <!--Protocol start date/time-->
 						<div class="col-sm-7">
 							<div id="div_protocolStart" class="input-group has-feedback">
-								<span class="input-group-addon"><a href="#" tabindex="-1" data-toggle="tooltip" title="Please enter the date and time the decision to start the patient on the DKA protocol using the date/timer picker, or the format dd/mm/yyyy hh:mm."><i class="glyphicon glyphicon-time"></i></a></span>
+								<span class="input-group-addon"><a href="#" tabindex="-1" data-toggle="tooltip" title="Please enter the date and time the decision to start the patient on the DKA protocol using the date/time picker, or the format dd/mm/yyyy hh:mm."><i class="glyphicon glyphicon-time"></i></a></span>
 								<span class="input-group-addon" style="width:210px;text-align:left"> Protocol start date/time</span>
 								<input id="protocolStart" type="text" autocomplete="off" class="form-control datepicker-here" data-timepicker="true" data-date-format="dd/mm/yyyy" data-time-format='hh:ii' data-language="en" name="protocolStart" onBlur="indexForm.inputs.protocolStart.blur()">
 								<div id="div_protocolStart_glyph"></div>
@@ -309,7 +309,7 @@
 					<div style="display:none"> <!--datetime of client browser gets placed in this hidden input field for posting after submit click-->
 						<input id="client_DT" type="text" class="form-control" name="client_DT">
 					</div>
-					<div style="display:none"> <!--navigator.userAgent getss placed in this hidden input field for posting after submit click, allows later analysis of which browsers being used to access site-->
+					<div style="display:none"> <!--navigator.userAgent gets placed in this hidden input field for posting after submit click, allows later analysis of which browsers being used to access site-->
 						<input id="client_uA" type="text" class="form-control" name="client_uA">
 					</div> 
 				</div>
