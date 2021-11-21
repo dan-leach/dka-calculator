@@ -2,6 +2,23 @@ Dan:
 
 Kev:
 
+index.js
+
+// For future refs it might be possible to simplify the pass function from:
+        pass: function(){
+                        if (this.condition_1() && this.condition_2()) return true;
+                        return false;
+                    },
+// to:
+        pass: function(){
+                        return this.condition_1() && this.condition_2();
+                    },
+
+// but it works perfectly fine at the moment, so no need to change!
+
+line 706:
+// added text to make explicit that weight limit is recommended by BSPED guideline
+
 Rob:
 
 index.js
