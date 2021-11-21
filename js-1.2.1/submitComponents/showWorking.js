@@ -82,7 +82,7 @@ const showWorking = {
         deficitVolumeLessBolus: {
             name: "Deficit volume less bolus",
             formula: function() {
-                return "[Deficit volume] - [10mL/kg bolus (only for non-shocked patients)]";
+                return "[Deficit volume] - [10mL/kg bolus] (only for non-shocked patients)";
             },
             limit: function() {
                 return "";

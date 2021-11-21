@@ -74,7 +74,7 @@
 					<div class="row"> <!--name-->
 						<div class="col-sm-7">
 							<div id="div_name" class="input-group has-feedback">
-								<span class="input-group-addon"><a href="#" tabindex="-1" data-toggle="tooltip" title="Please enter the patients full name."><i class="glyphicon glyphicon-user"></i></a></span> <!--the glyphicon with popover at far left of row-->
+								<span class="input-group-addon"><a href="#" tabindex="-1" data-toggle="tooltip" title="Please enter the patient's full name."><i class="glyphicon glyphicon-user"></i></a></span> <!--the glyphicon with popover at far left of row-->
 								<span class="input-group-addon" style="width:210px;text-align:left"> Full name</span> <!--the text label for the input-->
 								<input id="name" type="text" autocomplete="off" class="form-control" name="name" onBlur="indexForm.inputs.name.blur()"/> <!--the input field itself, calls check function when focus leaves the input field-->
 								<div id="div_name_glyph"></div> <!--the div into which the tick or cross marker is placed after the check function for this input runs-->
@@ -85,7 +85,7 @@
 					<div class="row"> <!--DOB-->
 						<div class="col-sm-7">
 							<div id="div_dob" class="input-group has-feedback">
-								<span class="input-group-addon"><a href="#" tabindex="-1" data-toggle="tooltip" title="Please enter the patients date of birth using the date picker, or the format dd/mm/yyyy."><i class="glyphicon glyphicon-calendar"></i></a></span>
+								<span class="input-group-addon"><a href="#" tabindex="-1" data-toggle="tooltip" title="Please enter the patient's date of birth using the date picker, or the format dd/mm/yyyy."><i class="glyphicon glyphicon-calendar"></i></a></span>
 								<span class="input-group-addon" style="width:210px;text-align:left"> Date of birth</span>
 								<input id="dob" type="text" autocomplete="off" class="form-control datepicker-here" data-language="en" data-date-format="dd/mm/yyyy" name="dob" onBlur="indexForm.inputs.dob.blur()"/> <!--uses datepicker set for date only, check function for dob also calls check function for age-->
 								<div id="div_dob_glyph"></div>
@@ -96,7 +96,7 @@
 					<div class="row"> <!--Hospital/NHS-->
 						<div class="col-sm-7">
 							<div id="div_num" class="input-group has-feedback">
-								<span class="input-group-addon"><a href="#" tabindex="-1" data-toggle="tooltip" title="Please enter the patients hospital or NHS number."><i class="glyphicon glyphicon-tag"></i></a></span>
+								<span class="input-group-addon"><a href="#" tabindex="-1" data-toggle="tooltip" title="Please enter the patient's hospital or NHS number."><i class="glyphicon glyphicon-tag"></i></a></span>
 								<span class="input-group-addon" style="width:210px;text-align:left"> Hospital/NHS number</span>
 								<input id="num" type="text" autocomplete="off" class="form-control" name="num" onBlur="indexForm.inputs.num.blur()">
 								<div id="div_num_glyph"></div>
@@ -125,7 +125,7 @@
 					<div class="row"> <!--sex-->
 						<div class="col-sm-7">
 							<div id="div_sex" class="input-group has-feedback">
-								<span class="input-group-addon"><a href="#" tabindex="-1" data-toggle="tooltip" title="Please select the patients sex (for transgender patients use birth/physiological sex)"><i class="glyphicon glyphicon-unchecked"></i></a></span>
+								<span class="input-group-addon"><a href="#" tabindex="-1" data-toggle="tooltip" title="Please select the patient's sex (for transgender patients use birth/physiological sex)"><i class="glyphicon glyphicon-unchecked"></i></a></span>
 								<span class="input-group-addon" style="width:210px;text-align:left"> Sex</span>
 								<div class="form-group">
 								  <select class="form-control" autocomplete="off" id="sex" name="sex" onBlur="indexForm.inputs.sex.blur()">
@@ -142,7 +142,7 @@
 					<div class="row"> <!--Age-->
 						<div class="col-sm-7">
 							<div id="div_age" class="input-group has-feedback">
-								<span class="input-group-addon"><a href="#" tabindex="-1" data-toggle="tooltip" title="Patients age is calculated automatically from date of birth."><i class="glyphicon glyphicon-hourglass"></i></a></span>
+								<span class="input-group-addon"><a href="#" tabindex="-1" data-toggle="tooltip" title="Patient's age is calculated automatically from date of birth."><i class="glyphicon glyphicon-hourglass"></i></a></span>
 								<span class="input-group-addon" style="width:210px;text-align:left"> Age</span>
 								
 								<input id="age" type="text" autocomplete="off" class="form-control" name="age" readonly> <!-- is read-only as this value derived during check function for dob-->
@@ -154,7 +154,7 @@
 					<div class="row"> <!--Weight-->
 						<div class="col-sm-7">
 							<div id="div_weight" class="input-group has-feedback">
-								<span class="input-group-addon"><a href="#" tabindex="-1" data-toggle="tooltip" title="Please enter the patients weight in kilograms, for protocol calculations."><i class="glyphicon glyphicon-scale"></i></a></span>
+								<span class="input-group-addon"><a href="#" tabindex="-1" data-toggle="tooltip" title="Please enter the patient's weight in kilograms, for protocol calculations."><i class="glyphicon glyphicon-scale"></i></a></span>
 								<span class="input-group-addon" style="width:210px;text-align:left"> Weight (kg)</span>
 								<input id="weight" type="number" autocomplete="off" class="form-control" name="weight" onBlur="indexForm.inputs.weight.blur()">
 								<div id="div_weight_glyph"></div>
@@ -170,7 +170,7 @@
 					<div class="row"> <!--pH-->
 						<div class="col-sm-7">
 							<div id="div_pH" class="input-group has-feedback">
-								<span class="input-group-addon"><a href="#" tabindex="-1" data-toggle="tooltip" title="Please enter the patients blood pH for protocol calculations."><i class="glyphicon glyphicon-tint"></i></a></span>
+								<span class="input-group-addon"><a href="#" tabindex="-1" data-toggle="tooltip" title="Please enter the patient's blood pH for protocol calculations."><i class="glyphicon glyphicon-tint"></i></a></span>
 								<span class="input-group-addon" style="width:210px;text-align:left"> pH</span>
 								<input id="pH" type="number" autocomplete="off" class="form-control" name="pH" onBlur="indexForm.inputs.pH.blur()">
 								<div id="div_pH_glyph"></div>
