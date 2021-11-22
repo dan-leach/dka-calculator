@@ -46,7 +46,7 @@ const showWorking = {
         deficitVolume: {
             name: "Deficit volume",
             formula: function() {
-                return "[[Deficit percentage] x [Patient weight] x 10]";
+                return "[Deficit percentage] x [Patient weight (kg)] x 10";
             },
             limit: function() {
                 if (calcVars.deficit.percentage() == 5) return calcVars.settings.caps.deficit5 + "mL (for 5% deficit)";
@@ -65,7 +65,7 @@ const showWorking = {
         bolusVolume: {
             name: "Bolus volumes",
             formula: function() {
-                return "[10mL/kg] x [Patient weight]";
+                return "[10mL/kg] x [Patient weight (kg)]";
             },
             limit: function() {
                 return calcVars.bolus.volumeCapped() + "mL";
@@ -119,11 +119,11 @@ const showWorking = {
             },
             working: function() {
                 if (inputs.weight < 10){
-                    working = "[" + inputs.weight + "kg x 100mL]";
+                    working = "[" + inputs.weight + "kg] x 100mL";
                 } else if (inputs.weight <20){
-                    working = "[(("+inputs.weight+"kg - 10kg) x 50mL) + 1000mL]";
+                    working = "((["+inputs.weight+"kg] - 10kg) x 50mL) + 1000mL";
                 } else {
-                    working = "[(("+inputs.weight+"kg - 20kg) x 20mL) + 1500mL]";
+                    working = "((["+inputs.weight+"kg] - 20kg) x 20mL) + 1500mL";
                 }
                 working = working + " = " + calcVars.maintenance.volumeUncapped() + "mL";
                 if (calcVars.maintenance.isCapped()) working = working + " (exceeds cap)";
@@ -151,7 +151,7 @@ const showWorking = {
         startingFluidRate: {
             name: "Starting fluid rate",
             formula: function() {
-                return "Deficit replacement rate] + [Maintenance rate]";
+                return "[Deficit replacement rate] + [Maintenance rate]";
             },
             limit: function() {
                 return "";
@@ -166,7 +166,7 @@ const showWorking = {
         insulinRate: {
             name: "Insulin infusion rate",
             formula: function() {
-                return "[[Insulin rate (Units/kg/hour)] x [Patient weight]]";
+                return "[Insulin rate (Units/kg/hour)] x [Patient weight]";
             },
             limit: function() {
                 if (inputs.insulin == 0.05) return calcVars.settings.caps.insulin005 + " Units/hour (for 0.05 Units/kg/hour)";

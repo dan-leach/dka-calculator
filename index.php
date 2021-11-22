@@ -76,7 +76,7 @@
 							<div id="div_name" class="input-group has-feedback">
 								<span class="input-group-addon"><a href="#" tabindex="-1" data-toggle="tooltip" title="Please enter the patients full name."><i class="glyphicon glyphicon-user"></i></a></span> <!--the glyphicon with popover at far left of row-->
 								<span class="input-group-addon" style="width:210px;text-align:left"> Full name</span> <!--the text label for the input-->
-								<input id="name" type="text" autocomplete="off" class="form-control" name="name" onBlur="indexForm.inputs.name.blur()"/> <!--the input field itself, calls check function when focus leaves the input field-->
+								<input id="name" type="text" autocomplete="off" class="form-control" name="name" maxlength="60" onBlur="indexForm.inputs.name.blur()"/> <!--the input field itself, calls check function when focus leaves the input field-->
 								<div id="div_name_glyph"></div> <!--the div into which the tick or cross marker is placed after the check function for this input runs-->
 							</div>
 						</div>
@@ -98,7 +98,7 @@
 							<div id="div_num" class="input-group has-feedback">
 								<span class="input-group-addon"><a href="#" tabindex="-1" data-toggle="tooltip" title="Please enter the patients hospital or NHS number."><i class="glyphicon glyphicon-tag"></i></a></span>
 								<span class="input-group-addon" style="width:210px;text-align:left"> Hospital/NHS number</span>
-								<input id="num" type="text" autocomplete="off" class="form-control" name="num" onBlur="indexForm.inputs.num.blur()">
+								<input id="num" type="text" autocomplete="off" class="form-control" name="num" maxlength="16" onBlur="indexForm.inputs.num.blur()">
 								<div id="div_num_glyph"></div>
 							</div>
 						</div>
@@ -156,7 +156,7 @@
 							<div id="div_weight" class="input-group has-feedback">
 								<span class="input-group-addon"><a href="#" tabindex="-1" data-toggle="tooltip" title="Please enter the patients weight in kilograms, for protocol calculations."><i class="glyphicon glyphicon-scale"></i></a></span>
 								<span class="input-group-addon" style="width:210px;text-align:left"> Weight (kg)</span>
-								<input id="weight" type="number" autocomplete="off" class="form-control" name="weight" onBlur="indexForm.inputs.weight.blur()">
+								<input id="weight" type="number" autocomplete="off" class="form-control" name="weight" maxlength="5" onBlur="indexForm.inputs.weight.blur()">
 								<div id="div_weight_glyph"></div>
 							</div>
 						</div>
@@ -172,7 +172,7 @@
 							<div id="div_pH" class="input-group has-feedback">
 								<span class="input-group-addon"><a href="#" tabindex="-1" data-toggle="tooltip" title="Please enter the patients blood pH for protocol calculations."><i class="glyphicon glyphicon-tint"></i></a></span>
 								<span class="input-group-addon" style="width:210px;text-align:left"> pH</span>
-								<input id="pH" type="number" autocomplete="off" class="form-control" name="pH" onBlur="indexForm.inputs.pH.blur()">
+								<input id="pH" type="number" autocomplete="off" class="form-control" name="pH" maxlength="4" onBlur="indexForm.inputs.pH.blur()">
 								<div id="div_pH_glyph"></div>
 							</div>
 						</div>

@@ -26,11 +26,11 @@ function getCalcVars(inputs){
                 },
             },
             caps: {
-                weight: 75, //weight limit
-                maintenance: 2600, //maximum allowed daily maintenance volume
-                deficit10: 7500, //maximum allowed total deficit volume for 10% deficit
-                deficit5: 3750, //maximum allowed total deficit volume for 5% deficit
-                bolus: 750, //maximum allowed bolus volume
+                weight: 75, //upper weight limit for calculations (kg)
+                maintenance: 2600, //maximum allowed daily maintenance volume (mL)
+                deficit10: 7500, //maximum allowed total deficit volume for 10% deficit (mL)
+                deficit5: 3750, //maximum allowed total deficit volume for 5% deficit (mL)
+                bolus: 750, //maximum allowed bolus volume (mL)
                 insulin01: 7.5, //maximum allowed insulin rate in units/hour for 0.1 units/kg/hr
                 insulin005: 3.75, //maximum allowed insulin rate in units/hour for 0.05 units/kg/hr
             },
@@ -83,8 +83,8 @@ function getCalcVars(inputs){
             },
         },
         utilities: {
-            volumeToRate: function(volume, hours){//takes a volume in mL and divides by number of hours over which it should run to give a rate in mL/hour
-                return volume/hours;
+            volumeToRate: function(volume, unitTime){ //takes a volume and divides by number of unitTime over which it should run to give a rate in volumeUnit/unitTime
+                return volume/unitTime;
             },
             timing: {
                 time: function(addHours){ //returns time component of datetime; addHours after protocolStart
@@ -198,12 +198,12 @@ function getCalcVars(inputs){
             volumeLessBolus: function(){ //calculates volume of deficit that will be replaced over deficit replacement period by subtracting relevant bolus volumes
                 return this.volume() - this.bolusToSubtract(); //removed parseFloat
             },
-            rate: function(){ //returns rate of deficit volume replacement to run over 48 hours
+            rate: function(){ //returns rate of deficit volume replacement to run over 48 hours (mL/hour)
                 return calcVars.utilities.volumeToRate(this.volumeLessBolus(), 48);
             },
         },
         maintenance: {
-            volumeUncapped: function(){ //returns the daily fluid requirement using holliday-segar formula
+            volumeUncapped: function(){ //returns the daily fluid requirement using holliday-segar formula(mL)
                 if(inputs.weight<10) return ((inputs.weight)*100);
                 if(inputs.weight<20) return (((inputs.weight-10)*50)+1000);
                 return (((inputs.weight-20)*20)+1500);
@@ -219,7 +219,7 @@ function getCalcVars(inputs){
                 if(this.isCapped()) return this.volumeCapped();
                 return this.volumeUncapped();
             },
-            rate: function(){ //returns the maintenance fluid rate to run over 24 hours
+            rate: function(){ //returns the maintenance fluid rate to run over 24 hours (mL/hour)
                 return calcVars.utilities.volumeToRate(this.volume(), 24);
             },
         },
@@ -239,7 +239,7 @@ function getCalcVars(inputs){
                 if (this.rateUncapped() > this.rateCapped()) return true;
                 return false;
             },
-            rate: function(){
+            rate: function(){ // returns the starting insulin rate (Units/hour)
                 if (this.isCapped()) return this.rateCapped();
                 return this.rateUncapped();
             },
