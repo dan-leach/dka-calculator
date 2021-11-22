@@ -77,11 +77,11 @@ var indexForm = {
 				return false;
 			},
 			goodLength: function(){
-				if ((this.value().length > 4) && (this.value().length < 21)) return true;
+				if ((this.value().length > 4)) return true;
 				return false;
 			},
 			failMsg: function(){
-				if (!this.goodLength()) return "Enter full name.";
+				if (!this.goodLength()) return "Enter full name (minimum 5 characters).";
 				if (!this.goodChars()) return "Only characters A-Z, hyphen and apostrophe permitted.";
 				throw "Unable to select failMsg";
 			}
@@ -152,11 +152,11 @@ var indexForm = {
 				return false;
 			},
 			goodLength: function(){
-				if ((this.value().length > 4) && (this.value().length < 21)) return true;
+				if ((this.value().length > 4)) return true;
 				return false;
 			},
 			failMsg: function(){
-				if (!this.goodLength()) return "Enter full hospital/NHS number.";
+				if (!this.goodLength()) return "Enter full hospital/NHS number (minimum 5 characters).";
 				throw "Unable to select failMsg";
 			}
 		},
