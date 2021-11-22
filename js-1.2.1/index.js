@@ -77,7 +77,7 @@ var indexForm = {
 				return false;
 			},
 			goodLength: function(){
-				if ((this.value().length > 4)) return true;
+				if (this.value().length > 4) return true;
 				return false;
 			},
 			failMsg: function(){
@@ -152,7 +152,7 @@ var indexForm = {
 				return false;
 			},
 			goodLength: function(){
-				if ((this.value().length > 4)) return true;
+				if (this.value().length > 4) return true;
 				return false;
 			},
 			failMsg: function(){
