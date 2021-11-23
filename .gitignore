@@ -1,6 +1,9 @@
 error_log
 .htaccess
-externalDependencies/
 cgi-bin/
 .well-known
+
+images/
+externalDependencies/
+
 link.php

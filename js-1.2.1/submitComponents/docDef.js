@@ -1,5 +1,6 @@
-function getDocDef(inputs, calcVars){//returns the documentDefinition object
-    var docDef = {
+function getDocDef(inputs, calcVars){ //returns the object describing the protocol document
+    
+    const docDef = {
         
         pageSize: 'A4',
         pageOrientation: 'portrait',
@@ -26,9 +27,9 @@ function getDocDef(inputs, calcVars){//returns the documentDefinition object
             }
         },
 
-        watermark: {
+        /*watermark: {
             text: 'DKA Calculator Development Version - Not for clinical use', color: 'red', opacity: 0.3, bold: true, italics: false
-        },
+        },*/
         
         header: function(currentPage, pageCount) { // adds demographic, page number, generation datetime stamp and calculator URL to all headers except title page
             if(currentPage==1){
@@ -54,7 +55,7 @@ function getDocDef(inputs, calcVars){//returns the documentDefinition object
                             ],
                             [
                                 {text: ""},
-                                {text: "Hospital/NHS Number: "+inputs.num, alignment: 'left', style: 'header'},
+                                {text: "Number: "+inputs.num, alignment: 'left', style: 'header'},
                                 {text: ""},
                                 {text: "Protocol start: "+inputs.protocolStart, alignment: 'right', style: 'header'},
                                 {text: ""}
@@ -287,7 +288,7 @@ function getDocDef(inputs, calcVars){//returns the documentDefinition object
             },
             //page 3
             { //record initial values box
-                text: inputs.pH.toFixed(2),
+                text: inputs.pH,
                 fontSize: 12,
                 absolutePosition: {x: 222, y: 247},
                 pageBreak: 'after'
@@ -307,7 +308,7 @@ function getDocDef(inputs, calcVars){//returns the documentDefinition object
                 ]
             },
             { //patient weight box
-                text: inputs.weight.toFixed(1),
+                text: inputs.weight,
                 fontSize: 18,
                 absolutePosition: {x: 287, y: 240},
             },
@@ -399,14 +400,14 @@ function getDocDef(inputs, calcVars){//returns the documentDefinition object
                     }
                 ]
             },
-            //fluid deficit =
+            //fluid deficit
             {
-                text: inputs.weight.toFixed(1),
+                text: inputs.weight,
                 fontSize: 18,
                 absolutePosition: {x: 170, y: 280},
             },
             {       
-                text: calcVars.deficit.percentage().toFixed(),
+                text: calcVars.deficit.percentage(),
                 fontSize: 18,
                 absolutePosition: {x: 310, y: 280},
             },
@@ -427,7 +428,7 @@ function getDocDef(inputs, calcVars){//returns the documentDefinition object
                 absolutePosition: {x: 200, y: 322},
                 color: "red",
             },
-            //fluid deficit (less bolus volume) = 
+            //fluid deficit (less bolus volume)
             {
                 text: calcVars.deficit.volume().toFixed(),
                 fontSize: 18,
@@ -443,7 +444,7 @@ function getDocDef(inputs, calcVars){//returns the documentDefinition object
                 fontSize: 18,
                 absolutePosition: {x: 430, y: 390},
             },
-            //deficit replacement rate = 
+            //deficit replacement rate
             {
                 text: calcVars.deficit.volumeLessBolus().toFixed(),
                 fontSize: 18,
@@ -454,7 +455,7 @@ function getDocDef(inputs, calcVars){//returns the documentDefinition object
                 fontSize: 18,
                 absolutePosition: {x: 430, y: 470},
             },
-            //maintenance rate = 
+            //maintenance rate
             {
                 text: calcVars.maintenance.volume().toFixed(),
                 fontSize: 18,
@@ -477,7 +478,7 @@ function getDocDef(inputs, calcVars){//returns the documentDefinition object
                 fontSize: 18,
                 absolutePosition: {x: 395, y: 565},
             },
-            //starting fluid rate = 
+            //starting fluid rate
             {
                 text: calcVars.maintenance.rate().toFixed(1),
                 fontSize: 18,
@@ -508,14 +509,14 @@ function getDocDef(inputs, calcVars){//returns the documentDefinition object
                     }
                 ]
             },
-            //insulin hourly rate = 
+            //insulin hourly rate
             {
                 text: parseFloat(inputs.insulin),
                 fontSize: 18,
                 absolutePosition: {x: 170, y: 205},
             },
             {
-                text: inputs.weight.toFixed(1),
+                text: inputs.weight,
                 fontSize: 18,
                 absolutePosition: {x: 315, y: 205},
             },
@@ -1008,5 +1009,6 @@ function getDocDef(inputs, calcVars){//returns the documentDefinition object
             }
         ]
     };
+
     return docDef;
-}
+};

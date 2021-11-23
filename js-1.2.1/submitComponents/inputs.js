@@ -1,6 +1,4 @@
-//retrieves inputs from session storage ready for use in submit components
-
-var inputs = {
+const inputs = { //retrieves inputs from session storage ready for use in submit components
 	name: sessionStorage.getItem("name"), 
 	dob: sessionStorage.getItem("dob"), 
 	num: sessionStorage.getItem("num"),

@@ -19,7 +19,7 @@
 				<div class="panel-body">
 				    <div class="row">
 						<div class="col-sm-12">
-						    <p>The DKA Calculator was updated in response to the latest <a href="https://www.bsped.org.uk/clinical-resources/guidelines/#diabetes" _target="blank">BSPED DKA Guidelines</a>. This legacy version is provided for a 6 month transition period and will be removed in April 2022.<br><br><a href="/">Click here to access the most up to date version of the calculator</a>.
+						    <p>The DKA Calculator was updated in response to the latest <a href="https://www.bsped.org.uk/clinical-resources/guidelines/#diabetes" _target="blank" rel="noopener">BSPED DKA Guidelines</a>. This legacy version is provided for a 6 month transition period and will be removed in April 2022.<br><br><a href="/">Click here to access the most up to date version of the calculator</a>.
 						</div>
 					</div>
 				</div>

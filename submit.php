@@ -4,8 +4,8 @@
 	<title>Paediatric DKA Calculator</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<?php include 'php-1.2.1/submitDependencies.php';?>	<!--includes the dependencies required for this page including favicon, bootstrap, javascript files, moment, pdfmake and popovers-->
-	<?php include 'php-1.2.1/loader.php';?> <!--includes the loader which displays until page is ready-->
+	<?php include 'php-1.2.0/submitDependencies.php';?>	<!--includes the dependencies required for this page including favicon, bootstrap, javascript files, moment, pdfmake and popovers-->
+	<?php include 'php-1.2.0/loader.php';?> <!--includes the loader which displays until page is ready-->
 
 	<style>
 		table, th, td {
@@ -20,7 +20,7 @@
 <body>
 	<div class="loader"></div> <!--this div required for php/loader.php to work-->
 	<div class="container">
-		<?php include 'php-1.2.1/jumbotron.php';?> <!--includes the header file-->
+		<?php include 'php-1.2.0/jumbotron.php';?> <!--includes the header file-->
 		<div class="panel panel-default">
 			<div class="panel-heading">Your form has been submitted. <a href="#" tabindex="-1" data-toggle="popover" title="" data-content="If the audit data has stored successfully this should be indicated below."><span class="glyphicon glyphicon-info-sign"></span></a> </div>
 			<div class="panel-body">
@@ -79,7 +79,7 @@
 						*/
 
 						// Attempt MySQL server connection.
-						require 'php-1.2.1/link.php';
+						require 'php-1.2.0/link.php';
 						 
 						// Check connection
 						if($link === false){
@@ -101,12 +101,12 @@
 						?>
 						
 						<br><br><a href="/">Click here</a> to generate a new protocol.
-						<br><br>If you are encountering problems with the protocol generator, you can download a blank copy of the protocol by <a href="https://dka-calculator.co.uk/DKA-ICP-2020.pdf">clicking here</a>, or by visiting the <a href="https://www.bsped.org.uk/clinical-resources/guidelines/#diabetes">BSPED website</a>.
+						<br><br>If you are encountering problems with the protocol generator, you can download a blank copy of the protocol by <a href="https://dka-calculator.co.uk/DKA-ICP-2021.pdf">clicking here</a>, or by visiting the <a href="https://www.bsped.org.uk/clinical-resources/guidelines/#diabetes">BSPED website</a>.
 						
 					</div>
 				</div>
 			</div>
-			<?php include 'php-1.2.1/footer.php';?> <!-- includes the footer file-->
+			<?php include 'php-1.2.0/footer.php';?> <!-- includes the footer file-->
 		</div>
 	</div>
 </body>
