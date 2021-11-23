@@ -1,5 +1,11 @@
 Prelaunch:
-    Update version log, change unreleased to v1.2.0, add launch datetime
-    Update GitHub with launch version
-    Delete old files (including php/) on live server
-    Clear error log
+    1. Set .htaccess to direct all users to maintenance page, exception for my IP
+    2. Delete old files (including php/, excluding externalDependencies) on live server
+    3. Upload v1.2 files
+    4. Clear error log
+    5. Reset .htaccess
+    6. Update version log: change unreleased to v1.2.0, add launch datetime
+    7. Merge v1.2 into master branch and push to GitHub:
+        $ git checkout master
+        $ git merge v1.2
+       ?$ git push
