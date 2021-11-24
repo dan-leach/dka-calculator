@@ -3,9 +3,10 @@ Prelaunch:
     2. Delete old files (including php/, excluding externalDependencies) on live server
     3. Upload v1.2 files
     4. Clear error log
-    5. Reset .htaccess
-    6. Update version log: change unreleased to v1.2.0, add launch datetime
-    7. Merge v1.2 into master branch and push to GitHub:
+    5. Check legacy redirect working
+    6. Reset .htaccess
+    7. Update version log: change unreleased to v1.2.0, add launch datetime
+    8. Merge v1.2 into master branch and push to GitHub:
         $ git checkout master
         $ git merge v1.2
        ?$ git push
