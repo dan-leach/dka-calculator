@@ -300,12 +300,12 @@
 			</div>
 			<div id="warn"></div> <!--warning banner placed into this div if not all inputs pass their checks on clicking submit-->
 			
-			<!-- Joe Bloggs button-->
+			<!-- Joe Bloggs button
 			<div class="row">
 				<div class="col-sm-6 col-md-offset-3">
 					<button type="button" onClick="indexForm.joeBloggs()" class="btn btn-primary btn-block">Joe Bloggs</button>
 				</div>
-			</div>
+			</div>-->
 
 			<div class="row"> <!--Submit button-->
 				<div class="col-sm-6 col-md-offset-3">

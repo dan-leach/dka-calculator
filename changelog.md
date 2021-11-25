@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [v1.2.0] - 2021-11-25 18:36
 - v1.2.0 Development version live on sub-directory for testing purposes from 2021-11-05 13:26
 - More significant changes in anticipation of new BSPED guideline update
 ### Added
