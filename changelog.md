@@ -1,9 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
-- v1.2.0 Development version live on sub-directory for testing purposes from 2021-11-05 13:26
-- More significant changes in anticipation of new BSPED guideline update
+## [v1.2.0] - 2021-11-25 18:36
 ### Added
 - All calculated values now limited by maximum weight of 75kg
 -- Capped bolus volume to 750ml
@@ -25,6 +23,8 @@ All notable changes to this project will be documented in this file.
 - Check isset for protocolStart in submit.php to prevent non-fatal PHP errors
 - Force clear form on index page load to prevent weight checking error when navigated to using back
 - Access to legacy v1.1.10 (will be removed after 6 month transition period)
+- Commenting throughout
+- Error handling and logging for client side errors, plus user notification about errors
 ### Changed
 - Deficit percentage for moderate DKA reduced from 7% to 5%
 - 1st resus bolus volume reduced from 20ml/kg to 10ml/kg
@@ -35,8 +35,12 @@ All notable changes to this project will be documented in this file.
 - Old plain text version log replaced with new markdown changelog
 - Audit ID is added automatically to form, without needing to click 'generate audit id' button
 - Shape of DKA severity selector box changed to fit new flow chart shape that combines mild and moderate severity into a single deficit percentage
-- Refactored calcVars.js, docDef.js and showWorking.js
+- Refactored calcVars.js and docDef.js
+- Consolidated index components into index.js
+- Consolidated showWorking.js into submit.js
 - Improved appearance of protocol generation loading modal
+- Improved appearance of show working
+- Improve appearance of submit page action buttons
 ### Removed
 - Example calculation formulae on fluids page to allow space for capped volume warnings
 

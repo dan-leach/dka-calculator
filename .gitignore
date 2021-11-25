@@ -1,8 +1,8 @@
 error_log
 .htaccess
-externalDependencies/
 cgi-bin/
 .well-known
-regionHospitals.js
-weightLimits.js
+
+externalDependencies/
+
 link.php
