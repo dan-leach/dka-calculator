@@ -29,8 +29,17 @@ const regionHospitals = [ //each array is of the hospitals in that region
         "Ulster Hospital, Dundonald"
     ],
     scotland = [
-        //awaiting list
-        "Awaiting list of Scottish Hospitals..."
+        "Lothian",
+		"Greater Glasgow",
+		"Wishaw",
+		"Borders",
+		"Ayrshire & Arran",
+		"Dumfries",
+		"Highlands",
+		"Grampian",
+		"Tayside",
+		"Fife",
+		"Forth Valley"
     ],
     wales = [
         "Bronglais General Hospital",
@@ -1112,7 +1121,7 @@ const indexForm = { //all the functions relating to the checking, styling and su
 		},
 	    confirmOverride: function(){
     	    bootbox.confirm({
-    			message: '<div class="panel panel-danger"><div class="panel-heading" style="font-size:24px;">You are overriding the weight safety range</div><div class="panel-body">You should only continue if you are sure ' + indexForm.inputs.weight.value() + 'kg is the correct weight and you have considererd using a maximum weight of the 98th centile weight for age as per the care pathway.<br><br>You can proceed with a weight that is outside the expected range, however the calculator has upper limits that cannot be overriden. These are based on a maximum weight of ' + settings.caps.weight + 'kg as per the BSPED Guidelines. Any calculated values that exceed this will be capped as follows:<div class="well"><ul><li>Daily maintenance volume is capped at ' + settings.caps.maintenance + 'mL (Holliday-Segar formula for ' + settings.caps.weight + 'kg)</li><li>Deficit volume is capped at ' + settings.caps.deficit10 + 'mL for patients with severe DKA (10% dehydration for ' + settings.caps.weight + 'kg)</li><li>Deficit volume is capped at ' + settings.caps.deficit5 + 'mL for patients with mild or moderate DKA (5% dehydration for ' + settings.caps.weight + 'kg)</li><li>Bolus volumes are capped at ' + settings.caps.bolus + 'mL (10mL/kg for ' + settings.caps.weight + 'kg)</li><li>Insulin rate is capped at ' + settings.caps.insulin01 + ' Units/hour if insulin rate of 0.1 Units/kg/hour is selected (0.1 Units/kg/hour for ' + settings.caps.weight + 'kg patient)</li><li>Insulin rate is capped at ' + settings.caps.insulin005 + ' Units/hour if insulin rate of 0.05 Units/kg/hour is selected (0.05 Units/kg/hour for ' + settings.caps.weight + 'kg patient)</li></ul></div><strong>Calculations will based on ' + indexForm.inputs.weight.value() + 'kg and only capped if they exceed the values above.</strong><br>Bear in mind that these caps could still allow significantly excessive values especially if your patient is much smaller than ' + settings.caps.weight + 'kg.</div></div>',
+    			message: '<div class="panel panel-danger"><div class="panel-heading" style="font-size:24px;">You are overriding the weight safety range</div><div class="panel-body">You should only continue if you are sure ' + indexForm.inputs.weight.value() + 'kg is the correct weight and you have considererd using a maximum weight of the 98th centile weight for age as per the care pathway.<br><br>You can proceed with a weight that is outside the expected range, however the calculator has upper limits that cannot be overriden. These are based on a maximum weight of ' + settings.caps.weight + 'kg as per the BSPED Guidelines. Any calculated values that exceed this will be capped as follows:<div class="well"><ul><li>Daily maintenance volume is capped at ' + settings.caps.maintenance + 'mL (Holliday-Segar formula for ' + settings.caps.weight + 'kg)</li><li>Deficit volume is capped at ' + settings.caps.deficit10 + 'mL for patients with severe DKA (10% dehydration for ' + settings.caps.weight + 'kg)</li><li>Deficit volume is capped at ' + settings.caps.deficit5 + 'mL for patients with mild or moderate DKA (5% dehydration for ' + settings.caps.weight + 'kg)</li><li>Bolus volumes are capped at ' + settings.caps.bolus + 'mL (10mL/kg for ' + settings.caps.weight + 'kg)</li><li>Insulin rate is capped at ' + settings.caps.insulin01 + ' Units/hour if insulin rate of 0.1 Units/kg/hour is selected (0.1 Units/kg/hour for ' + settings.caps.weight + 'kg patient)</li><li>Insulin rate is capped at ' + settings.caps.insulin005 + ' Units/hour if insulin rate of 0.05 Units/kg/hour is selected (0.05 Units/kg/hour for ' + settings.caps.weight + 'kg patient)</li></ul></div><strong>Calculations will be based on ' + indexForm.inputs.weight.value() + 'kg and only capped if they exceed the values above.</strong><br>Bear in mind that these caps could still allow significantly excessive values especially if your patient is much smaller than ' + settings.caps.weight + 'kg.</div></div>',
     			buttons: {
     				cancel: {
     					label: '<i class="fa fa-times"></i> Go back and review'

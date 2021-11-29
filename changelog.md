@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v1.2.1] - 2021-11-29 11:23
+### Added
+- List of Scottish hospitals to centre list
+- Added error.php and now emails notification of any errors to admin
+## Changed
+- Grammar error corrected in weight safety limit override modal
+
 ## [v1.2.0] - 2021-11-25 18:36
 ### Added
 - All calculated values now limited by maximum weight of 75kg
