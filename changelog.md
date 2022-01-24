@@ -1,11 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v1.2.2] - 2022-01-24 09:00
+### Changed
+- Inserting audit data into database now uses prepared statements to fix bug when treating centre had apostraphe in name
+- Updated signpost documents to match 2021 guidance
+- Updated links to BSPED to new DKA guidelines page URL
+
 ## [v1.2.1] - 2021-11-29 11:23
 ### Added
 - List of Scottish hospitals to centre list
 - Added error.php and now emails notification of any errors to admin
-### Changed
+## Changed
 - Grammar error corrected in weight safety limit override modal
 
 ## [v1.2.0] - 2021-11-25 18:36

@@ -100,7 +100,7 @@
 						?>
 						
 						<br><br><a href="https://dka-calculator.co.uk">Click here</a> to generate a new protocol.
-						<br><br>If you are encountering problems with the protocol generator, you can download a blank copy of the protocol by <a href="https://dka-calculator.co.uk/DKA-ICP-2020.pdf">clicking here</a>, or by visiting the <a href="https://www.bsped.org.uk/clinical-resources/guidelines/">BSPED website</a>.</div>
+						<br><br>If you are encountering problems with the protocol generator, you can download a blank copy of the protocol by <a href="https://dka-calculator.co.uk/DKA-ICP-2020.pdf">clicking here</a>, or by visiting the <a href="https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/">BSPED website</a>.</div>
 						
 					</div>
 				</div>

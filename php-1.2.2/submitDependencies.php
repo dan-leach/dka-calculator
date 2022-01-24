@@ -24,13 +24,13 @@
 <script src="/externalDependencies/bootbox/bootbox.locales.min.js"></script>
 
 <!--my scripts-->
-<script src="js-1.2.1/errHandler.js"></script>
-<script src="js-1.2.1/settings.js"></script>
-<script src="js-1.2.1/submitComponents/imageStore.js"></script>
-<script src="js-1.2.1/submitComponents/inputs.js"></script>
-<script src="js-1.2.1/submitComponents/calcVars.js"></script>
-<script src="js-1.2.1/submitComponents/docDef.js"></script>
-<script src="js-1.2.1/submit.js"></script>
+<script src="js-1.2.2/errHandler.js"></script>
+<script src="js-1.2.2/settings.js"></script>
+<script src="js-1.2.2/submitComponents/imageStore.js"></script>
+<script src="js-1.2.2/submitComponents/inputs.js"></script>
+<script src="js-1.2.2/submitComponents/calcVars.js"></script>
+<script src="js-1.2.2/submitComponents/docDef.js"></script>
+<script src="js-1.2.2/submit.js"></script>
 
 <!--popovers and tooltips-->
 <script>

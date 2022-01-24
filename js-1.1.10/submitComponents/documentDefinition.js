@@ -276,8 +276,8 @@ function getDocumentDefinition(inputs, documentVariables){//returns the document
                 absolutePosition: {x: 325, y: 741}
             },
             {
-                text: "https://www.bsped.org.uk/clinical-resources/guidelines/",
-                link: "https://www.bsped.org.uk/clinical-resources/guidelines/",
+                text: "https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/",
+                link: "https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/",
                 fontSize: 10,
                 absolutePosition: {x: 250, y: 540},
                 pageBreak: 'after'
@@ -831,7 +831,7 @@ function getDocumentDefinition(inputs, documentVariables){//returns the document
                         width: 250,
                         alignment: 'center'
                     }, ''],
-                    [ '', { text: 'For worked examples, refer to the full guideline (https://www.bsped.org.uk/clinical-resources/guidelines/).', link: 'https://www.bsped.org.uk/clinical-resources/guidelines/' }, ''],
+                    [ '', { text: 'For worked examples, refer to the full guideline (https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/).', link: 'https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/' }, ''],
                     [ '', ' ', ''],
                     [ '', {
                         text: 'Hyperchloraemic metabolic acidosis',
@@ -860,7 +860,7 @@ function getDocumentDefinition(inputs, documentVariables){//returns the document
                         width: 250,
                         alignment: 'center'
                     }, ''],
-                    [ '', { text: 'For worked examples, refer to the full guideline (https://www.bsped.org.uk/clinical-resources/guidelines/).', link: 'https://www.bsped.org.uk/clinical-resources/guidelines/' }, ''],
+                    [ '', { text: 'For worked examples, refer to the full guideline (https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/).', link: 'https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/' }, ''],
                     [ '', ' ', ''],
                     [ '', {
                         text: 'Albumin',

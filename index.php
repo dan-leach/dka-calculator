@@ -4,13 +4,13 @@
 	<title>Paediatric DKA Calculator</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Paediatric DKA Calculator - Generate an integrated care pathway for managing paediatric diabetic ketoacidosis based on the BSPED 2021 Guidelines. It will pre-fill calculations in the pathway based on the values for your patient.">
-	<?php include 'php-1.2.1/indexDependencies.php';?> <!--includes the dependencies required for this page including favicon, bootstrap, javascript file, moment, date/time picker, popover and unique ID generator-->
-	<?php include 'php-1.2.1/loader.php';?> <!--includes the loader which displays until page is ready-->
+	<?php include 'php-1.2.2/indexDependencies.php';?> <!--includes the dependencies required for this page including favicon, bootstrap, javascript file, moment, date/time picker, popover and unique ID generator-->
+	<?php include 'php-1.2.2/loader.php';?> <!--includes the loader which displays until page is ready-->
 </head>
 <body>
 	<div class="loader"></div> <!--this div required for php/loader.php to work-->
 	<div class="container">
-		<?php include 'php-1.2.1/jumbotron.php';?> <!--includes the header-->
+		<?php include 'php-1.2.2/jumbotron.php';?> <!--includes the header-->
 		<form> <!--This first form contains confidential information that is not submitted to the server-->
 			<div class="panel panel-warning"> <!--panel for update notes - remove in April 2022-->
 		        <div class="panel-heading">
@@ -19,7 +19,7 @@
 				<div class="panel-body">
 				    <div class="row">
 						<div class="col-sm-12">
-						    <p>These updates are in response to <a href="https://www.bsped.org.uk/clinical-resources/guidelines/#diabetes" target="_blank" rel="noopener"> the 2021 update to the BSPED Guideline for the Management of Children and Young People under the age of 18 years with Diabetic Ketoacidosis</a>.</p>
+						    <p>These updates are in response to <a href="https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/" target="_blank" rel="noopener"> the 2021 update to the BSPED Guideline for the Management of Children and Young People under the age of 18 years with Diabetic Ketoacidosis</a>.</p>
 							<ul>
 								<li>Deficit percentage for moderate DKA reduced from 7% to 5%</li>
 								<li>1st resus bolus volume reduced from 20mL/kg to 10mL/kg</li>
@@ -300,7 +300,7 @@
 			</div>
 			<div id="warn"></div> <!--warning banner placed into this div if not all inputs pass their checks on clicking submit-->
 			
-			<!-- Joe Bloggs button
+			<!--Joe Bloggs button
 			<div class="row">
 				<div class="col-sm-6 col-md-offset-3">
 					<button type="button" onClick="indexForm.joeBloggs()" class="btn btn-primary btn-block">Joe Bloggs</button>
@@ -314,7 +314,7 @@
 			</div>		
 		</form>
 		<br>
-		<?php include 'php-1.2.1/footer.php';?> <!--includes footer file-->
+		<?php include 'php-1.2.2/footer.php';?> <!--includes footer file-->
 	</div>
 </body>
 </html>

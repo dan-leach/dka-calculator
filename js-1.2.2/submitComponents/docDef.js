@@ -42,7 +42,7 @@ function getDocDef(inputs, calcVars){ //returns the object describing the protoc
                             [
                                 {text: ""},
                                 {text: "Name: "+inputs.name, alignment: 'left', style: 'header'},
-                                {text: "www.dka-calculator.co.uk (v1.2.1)", alignment: 'center', style: 'header'},
+                                {text: "www.dka-calculator.co.uk (v1.2.2)", alignment: 'center', style: 'header'},
                                 {text: "Protocol Page "+currentPage+" of "+pageCount, alignment: 'right', style: 'header'},
                                 {text: ""}
                             ],
@@ -275,8 +275,8 @@ function getDocDef(inputs, calcVars){ //returns the object describing the protoc
                 absolutePosition: {x: 325, y: 741}
             },
             {
-                text: "https://www.bsped.org.uk/clinical-resources/guidelines/",
-                link: "https://www.bsped.org.uk/clinical-resources/guidelines/",
+                text: "https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/",
+                link: "https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/",
                 fontSize: 10,
                 absolutePosition: {x: 250, y: 540},
                 pageBreak: 'after'
@@ -913,7 +913,7 @@ function getDocDef(inputs, calcVars){ //returns the object describing the protoc
                         width: 250,
                         alignment: 'center'
                     }, ''],
-                    [ '', { text: 'For worked examples, refer to the full guideline (https://www.bsped.org.uk/clinical-resources/guidelines/).', link: 'https://www.bsped.org.uk/clinical-resources/guidelines/' }, ''],
+                    [ '', { text: 'For worked examples, refer to the full guideline (https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/).', link: 'https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/' }, ''],
                     [ '', ' ', ''],
                     [ '', {
                         text: 'Hyperchloraemic metabolic acidosis',
@@ -942,7 +942,7 @@ function getDocDef(inputs, calcVars){ //returns the object describing the protoc
                         width: 250,
                         alignment: 'center'
                     }, ''],
-                    [ '', { text: 'For worked examples, refer to the full guideline (https://www.bsped.org.uk/clinical-resources/guidelines/).', link: 'https://www.bsped.org.uk/clinical-resources/guidelines/' }, ''],
+                    [ '', { text: 'For worked examples, refer to the full guideline (https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/).', link: 'https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/' }, ''],
                     [ '', ' ', ''],
                     [ '', {
                         text: 'Albumin',
