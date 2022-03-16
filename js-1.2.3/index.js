@@ -1092,6 +1092,7 @@ const indexForm = { //all the functions relating to the checking, styling and su
 	submit: {
 	    click: function(){ //user clicks submit
 			try{
+			    if (indexForm.inputs.name.value() === "throw test error") this.throwTestError() //if I enter this value into the name field, on submit an error will occur - used to test error handling
 				if (!this.check()) return false; //if not all inputs pass then do not proceed
 				if (indexForm.inputs.weight.isOverridden()) { // if weight safety limit overriden, require confirmation
 					this.confirmOverride();
@@ -1101,6 +1102,10 @@ const indexForm = { //all the functions relating to the checking, styling and su
 			} catch (e) {
 				errHandler(e);
 			}
+	    },
+	    throwTestError: function(){ //used to test error handling
+	        console.error("Throwing test error")
+	        intentionally_throwing_a_test_error() //undefined function will throw an error
 	    },
 	    check: function(){
 			var failCount = 0;

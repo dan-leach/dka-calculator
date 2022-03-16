@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v1.2.3] - 2022-03-16 09:30
+### Changed
+- Updated error handler to test for local storage capability to investigate if occasional errors are caused by unavailability of local storage
+- Updated error.php to use htmlspecialchars() rather than FILTER_SANITIZE_STRING which is now deprecated
+### Removed
+- Removed debug page as functionality now included with error handler
+
 ## [v1.2.2] - 2022-01-24 09:00
 ### Changed
 - Inserting audit data into database now uses prepared statements to fix bug when treating centre had apostraphe in name
