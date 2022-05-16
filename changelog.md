@@ -1,6 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v1.3.0] - 2022-05-16 10:00
+### Added
+- Added history.replaceState to maintenance page so that refresh reattempts loading start page
+### Changed
+- Updated update notification panel
+- Replaced blank downloadable ICP document with v1.3
+- Updated calculator generated front page image with v1.3 and reposition superimposed text
+- Updated wording for making up IV fluids to match v1.3 ICP
+### Removed
+- Retired legacy version 1.1.10 (placeholder/redirect page remains for now)
+
 ## [v1.2.3] - 2022-03-16 09:30
 ### Changed
 - Updated error handler to test for local storage capability to investigate if occasional errors are caused by unavailability of local storage

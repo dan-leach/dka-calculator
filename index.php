@@ -4,13 +4,13 @@
 	<title>Paediatric DKA Calculator</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Paediatric DKA Calculator - Generate an integrated care pathway for managing paediatric diabetic ketoacidosis based on the BSPED 2021 Guidelines. It will pre-fill calculations in the pathway based on the values for your patient.">
-	<?php include 'php-1.2.3/indexDependencies.php';?> <!--includes the dependencies required for this page including favicon, bootstrap, javascript file, moment, date/time picker, popover and unique ID generator-->
-	<?php include 'php-1.2.3/loader.php';?> <!--includes the loader which displays until page is ready-->
+	<?php include 'php-1.3.0/indexDependencies.php';?> <!--includes the dependencies required for this page including favicon, bootstrap, javascript file, moment, date/time picker, popover and unique ID generator-->
+	<?php include 'php-1.3.0/loader.php';?> <!--includes the loader which displays until page is ready-->
 </head>
 <body>
 	<div class="loader"></div> <!--this div required for php/loader.php to work-->
 	<div class="container">
-		<?php include 'php-1.2.3/jumbotron.php';?> <!--includes the header-->
+		<?php include 'php-1.3.0/jumbotron.php';?> <!--includes the header-->
 		<form> <!--This first form contains confidential information that is not submitted to the server-->
 			<div class="panel panel-warning"> <!--panel for update notes - remove in April 2022-->
 		        <div class="panel-heading">
@@ -19,20 +19,7 @@
 				<div class="panel-body">
 				    <div class="row">
 						<div class="col-sm-12">
-						    <p>These updates are in response to <a href="https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/" target="_blank" rel="noopener"> the 2021 update to the BSPED Guideline for the Management of Children and Young People under the age of 18 years with Diabetic Ketoacidosis</a>.</p>
-							<ul>
-								<li>Deficit percentage for moderate DKA reduced from 7% to 5%</li>
-								<li>1st resus bolus volume reduced from 20mL/kg to 10mL/kg</li>
-								<li>Upper weight limit reduced from 80kg to 75kg</li>
-								<li>Bolus volumes now capped at 750mL</li>
-								<li>Deficit volume now capped at 7500mL for patients with 10% dehydration (severe DKA)</li>
-								<li>Deficit volume now capped at 3750mL for patients with 5% dehydration (mild and moderate DKA)</li>
-								<li>Maintenance volume now capped at 2600mL (reduced from 3000mL in previous version)</li>
-								<li>Insulin rate now capped at 7.5 Units/hour if 0.1 Units/kg/hour selected</li>
-								<li>Insulin rate now capped at 3.75 Units/hour if 0.05 Units/kg/hour selected</li>
-							</ul>
-							<p><a href="https://github.com/dan-leach/dka-calculator/blob/master/changelog.md" target="_blank" rel="noopener">View the full changelog on GitHub.</a></p>
-							<p>Access to the legacy version (v1.1.10) of the DKA Calculator will be supported until April 2022. <a href="/index-legacy.php"> Access the legacy version here.</a></p>
+							<p><strong>Latest update 16/05/2022.</strong> Integrated Care Pathway (ICP) appendix 3 "Making up IV fluids" procedure updated to match main guideline. <a href="https://github.com/dan-leach/dka-calculator/blob/master/changelog.md" target="_blank" rel="noopener">View the full changelog on GitHub.</a></p>
 						</div>
 					</div>
 				</div>
@@ -314,7 +301,7 @@
 			</div>		
 		</form>
 		<br>
-		<?php include 'php-1.2.3/footer.php';?> <!--includes footer file-->
+		<?php include 'php-1.3.0/footer.php';?> <!--includes footer file-->
 	</div>
 </body>
 </html>
