@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v1.3.1] - 2022-05-30 16:20
+## Changed
+- Custom errors now thrown as objects rather than strings to include stack for debugging
+
 ## [v1.3.0] - 2022-05-16 10:00
 ### Added
 - Added history.replaceState to maintenance page so that refresh reattempts loading start page

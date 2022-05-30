@@ -411,7 +411,7 @@ const indexForm = { //all the functions relating to the checking, styling and su
 				sessionStorage.setItem(this.name, this.value());
 			},
 			blur: function(){ //on input name losing focus update styling according to pass
-				try{
+			   try{
 					if (this.pass()) {
 						indexForm.style.setPass(this.name);
 					} else {
@@ -439,7 +439,7 @@ const indexForm = { //all the functions relating to the checking, styling and su
 			failMsg: function(){ //returns the advisory message if set value is not valid
 				if (!this.goodLength()) return "Enter full name (minimum 5 characters).";
 				if (!this.goodChars()) return "Only characters A-Z, hyphen and apostrophe permitted.";
-				throw "Unable to select failMsg";
+				throw new Error("Unable to select failMsg");
 			}
 		},
 		dob: { 
@@ -484,7 +484,7 @@ const indexForm = { //all the functions relating to the checking, styling and su
 			failMsg: function(){
 				if (!this.goodFormat()) return "Date must be in the format DD/MM/YYYY.";
 				if (!this.beforeToday()) return "Date of birth must be before today";
-				throw "Unable to select failMsg";
+				throw new Error("Unable to select failMsg");
 			}
 		},
 		num: {
@@ -521,7 +521,7 @@ const indexForm = { //all the functions relating to the checking, styling and su
 			},
 			failMsg: function(){
 				if (!this.goodLength()) return "Enter full hospital/NHS number (minimum 5 characters).";
-				throw "Unable to select failMsg";
+				throw new Error("Unable to select failMsg");
 			}
 		},
 		protocolStart: {
@@ -568,7 +568,7 @@ const indexForm = { //all the functions relating to the checking, styling and su
 				if (!this.goodFormat()) return "Protocol start date/time must be in the format DD/MM/YYYY HH:MM.";
 				if (!this.notFuture()) return "Protocol start date/time cannot be in the future.";
 				if (!this.isRecent()) return "Protocol start date/time must be within the last month.";
-				throw "Unable to select failMsg";
+				throw new Error("Unable to select failMsg");
 			}
 		},
 		sex: {
@@ -587,7 +587,7 @@ const indexForm = { //all the functions relating to the checking, styling and su
 					sessionStorage.setItem(this.name, "Female");
 					return;
 				}
-				throw "unable to store sex";
+				throw new Error("Unable to store sex");
 			},
 			isMale: function(){
 				if (this.value() == "3") return true;
@@ -621,7 +621,7 @@ const indexForm = { //all the functions relating to the checking, styling and su
 			},
 			failMsg: function(){
 				if (!this.notBlank()) return "Select an option from the drop-down menu.";
-				throw "Unable to select failMsg";
+				throw new Error("Unable to select failMsg");
 			}
 		},
 		age: {
@@ -664,7 +664,7 @@ const indexForm = { //all the functions relating to the checking, styling and su
 			failMsg: function(){
 				if (!this.setValid()) return "Enter valid date of birth and age will be calculated automatically.";
 				if (!this.inRange()) return "Age must be between 0 and 18 years.";
-				throw "Unable to select failMsg";
+				throw new Error("Unable to select failMsg");
 			}
 		},
 		weight: {
@@ -736,7 +736,7 @@ const indexForm = { //all the functions relating to the checking, styling and su
 				if (!this.canCheck()) return "Cannot check weight against acceptable range until patient's age and sex is set.";
 				if (!this.setValid()) return "Weight may only contain digits (0-9) and decimal(.).";
 				if (!this.inRange()) return "Weight must be within 2 standard deviations of the mean for age (upper limit " + settings.caps.weight + "kg) ("+this.limits().lower+"kg to "+this.limits().upper+"kg).";
-				throw "Unable to select failMsg";
+				throw new Error("Unable to select failMsg");
 			},
 			showOverride: function(){
 				document.getElementById("override").style.display = "block";
@@ -785,7 +785,7 @@ const indexForm = { //all the functions relating to the checking, styling and su
 			failMsg: function(){
 				if (!this.setValid()) return "pH must contain only digits (0-9) and decimal(.).";
 				if (!this.inRange()) return "pH must be in the range " + settings.severity.severe.range.lower + " to " + settings.severity.mild.range.upper + ".";
-				throw "Unable to select failMsg";
+				throw new Error("Unable to select failMsg");
 			}
 		},
 		shock: {
@@ -830,7 +830,7 @@ const indexForm = { //all the functions relating to the checking, styling and su
 			},
 			failMsg: function(){
 				if (!this.notBlank()) return "Select an option from the drop-down menu.";
-				throw "Unable to select failMsg";
+				throw new Error("Unable to select failMsg");
 			}
 		},
 		insulin: {
@@ -875,7 +875,7 @@ const indexForm = { //all the functions relating to the checking, styling and su
 			},
 			failMsg: function(){
 				if (!this.notBlank()) return "Select an option from the drop-down menu.";
-				throw "Unable to select failMsg";
+				throw new Error("Unable to select failMsg");
 			}
 		},
 		preDM: {
@@ -920,7 +920,7 @@ const indexForm = { //all the functions relating to the checking, styling and su
 			},
 			failMsg: function(){
 				if (!this.notBlank()) return "Select an option from the drop-down menu.";
-				throw "Unable to select failMsg";
+				throw new Error("Unable to select failMsg");
 			}
 		},
 		region: {
@@ -959,7 +959,7 @@ const indexForm = { //all the functions relating to the checking, styling and su
 			},
 			failMsg: function(){
 				if (!this.notBlank()) return "Select an option from the drop-down menu.";
-				throw "Unable to select failMsg";
+				throw new Error("Unable to select failMsg");
 			}
 		},
 		centre: {
@@ -1013,7 +1013,7 @@ const indexForm = { //all the functions relating to the checking, styling and su
 			},
 			failMsg: function(){
 				if (!this.notBlank()) return "Select an option from the drop-down menu.";
-				throw "Unable to select failMsg";
+				throw new Error("Unable to select failMsg");
 			}
 		},
 		episode: {
@@ -1050,7 +1050,7 @@ const indexForm = { //all the functions relating to the checking, styling and su
 			},
 			failMsg: function(){
 				if (!this.notBlank()) return "Select an option from the drop-down menu.";
-				throw "Unable to select failMsg";
+				throw new Error("Unable to select failMsg");
 			}
 		},
 	},
@@ -1105,7 +1105,8 @@ const indexForm = { //all the functions relating to the checking, styling and su
 	    },
 	    throwTestError: function(){ //used to test error handling
 	        console.error("Throwing test error")
-	        intentionally_throwing_a_test_error() //undefined function will throw an error
+	        //intentionally_throwing_a_test_error() //undefined function will throw an error
+			throw new Error("Test error") //or throw a custom error
 	    },
 	    check: function(){
 			var failCount = 0;

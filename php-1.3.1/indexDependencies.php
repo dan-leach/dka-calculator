@@ -16,9 +16,9 @@
 <script src="/externalDependencies/bootbox/bootbox.locales.min.js"></script>
 
 <!--my scripts-->
-<script src="js-1.3.0/errHandler.js"></script>
-<script src="js-1.3.0/settings.js"></script>
-<script src="js-1.3.0/index.js"></script>
+<script src="js-1.3.1/errHandler.js"></script>
+<script src="js-1.3.1/settings.js"></script>
+<script src="js-1.3.1/index.js"></script>
 
 <!--moment-->
 <script src="/externalDependencies/moment/moment.min.js"></script>

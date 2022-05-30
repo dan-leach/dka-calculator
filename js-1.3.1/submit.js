@@ -42,7 +42,7 @@ const showWorking = {
                 if (calcVars.patient.severity.isSevere()) return "[pH " + inputs.pH.toFixed(2) + "] is in range [" + settings.severity.severe.range.lower + " to " + settings.severity.severe.range.upper + "] ==> " + calcVars.deficit.percentage() + "%";
                 if (calcVars.patient.severity.isModerate()) return "[pH " + inputs.pH.toFixed(2) + "] is in range [" + settings.severity.moderate.range.lower + " to " + settings.severity.moderate.range.upper + "] ==> " + calcVars.deficit.percentage() + "%";
                 if (calcVars.patient.severity.isMild()) return "[pH " + inputs.pH.toFixed(2) + "] is in range [" + settings.severity.mild.range.lower + " to " + settings.severity.mild.range.upper + "] ==> " + calcVars.deficit.percentage() + "%";
-                throw "unable to show working";
+                throw new Error("Unable to show working");
             },
             output: function() {
                 return calcVars.deficit.percentage() + "%";
@@ -56,7 +56,7 @@ const showWorking = {
             limit: function() {
                 if (calcVars.deficit.percentage() == 5) return settings.caps.deficit5 + "mL (for 5% deficit)";
                 if (calcVars.deficit.percentage() == 10) return settings.caps.deficit10 + "mL (for 10% deficit)";
-                throw "unable to select limit";
+                throw new Error("Unable to select limit");
             },
             working: function() {
                 var working = "[" + calcVars.deficit.percentage() + "%] x [" + inputs.weight + "kg] x 10 = " + calcVars.deficit.volumeUncapped().toFixed() + "mL";
@@ -176,7 +176,7 @@ const showWorking = {
             limit: function() {
                 if (inputs.insulin == 0.05) return settings.caps.insulin005 + " Units/hour (for 0.05 Units/kg/hour)";
                 if (inputs.insulin == 0.1) return settings.caps.insulin01 + " Units/hour (for 0.1 Units/kg/hour)";
-                throw "unable to select limit";
+                throw new Error("Unable to select limit");
             },
             working: function() {
                 var working = "[" + inputs.insulin + " Units/kg/hour] x [" + inputs.weight + "kg] = " + calcVars.insulin.rateUncapped().toFixed(2) + " Units/hour";
@@ -225,7 +225,7 @@ const generate = {
 	},
 	startWebWorker: function(){ //launches the web worker that will generate the PDF blob
 		console.log('main: starting webWorker.js...');
-		const myWorker = new Worker('js-1.3.0/submitComponents/webWorker.js'); //start instance of webWorkerPDF.js
+		const myWorker = new Worker('js-1.3.1/submitComponents/webWorker.js'); //start instance of webWorkerPDF.js
         myWorker.postMessage(inputs); //passes input data to webWorkerPDF.js
 		console.log('main: request sent to webWorker.js...');
 		return myWorker;

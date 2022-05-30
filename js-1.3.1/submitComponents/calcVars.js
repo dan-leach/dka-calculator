@@ -4,12 +4,12 @@ function getCalcVars(inputs){ //recieves inputs and returns object with required
             isDiabetic: function(){ //if patient is had pre-existing diabetes returns true
                 if(inputs.preDM==="Yes") return true;
                 if(inputs.preDM==="No") return false;
-                throw new Error("unable to select isDiabetic");
+                throw new Error("Unable to select isDiabetic");
             },
             isShocked: function(){ //if patient is being managed on shocked arm of resusitation flow chart returns true
                 if(inputs.shock==="Yes") return true;
                 if(inputs.shock==="No") return false;
-                throw new Error("unable to select isShocked");
+                throw new Error("Unable to select isShocked");
             },
             severity: { //functions for each severity range that return true if patient is in that range
                 isSevere: function(){ //if patient's pH meets criteria for severe DKA returns true
@@ -47,7 +47,7 @@ function getCalcVars(inputs){ //recieves inputs and returns object with required
                     if(calcVars.patient.severity.isSevere()) return settings.indicatorCoordinates.yAxisSeverity.severe;
                     if(calcVars.patient.severity.isModerate()) return settings.indicatorCoordinates.yAxisSeverity.moderate;
                     if(calcVars.patient.severity.isMild()) return settings.indicatorCoordinates.yAxisSeverity.mild;
-                    throw new Error("unable to select yAxisSeverity");
+                    throw new Error("Unable to select yAxisSeverity");
                 },
                 xAxisDiabetic: function(){ //returns x-axis coordinate for the indicator box showing if patient had pre-existing diabetes
                     if(calcVars.patient.isDiabetic()) return settings.indicatorCoordinates.xAxisDiabetic.yes;
@@ -118,7 +118,7 @@ function getCalcVars(inputs){ //recieves inputs and returns object with required
                 if(calcVars.patient.severity.isSevere()) return settings.severity.severe.deficitPercentage;
                 if(calcVars.patient.severity.isModerate()) return settings.severity.moderate.deficitPercentage;
                 if(calcVars.patient.severity.isMild()) return settings.severity.mild.deficitPercentage;
-                throw new Error("unable to select deficit.percentage");
+                throw new Error("Unable to select deficit.percentage");
             },
             volumeUncapped: function(){ //returns literal deficit volume based on percentage dehydration and patient weight
                 return this.percentage()*inputs.weight*10;
@@ -126,7 +126,7 @@ function getCalcVars(inputs){ //recieves inputs and returns object with required
             volumeCapped: function(){ //returns the set limit of the bolus volume depending on dehydration percentage
                 if (this.percentage() == 5) return settings.caps.deficit5;
                 if (this.percentage() == 10) return settings.caps.deficit10;
-                throw new Error("unable to select deficit.volumeCapped");
+                throw new Error("Unable to select deficit.volumeCapped");
             },
             isCapped: function(){ //returns true if the uncapped deficit volume exceeds the cap
                 if (this.volumeUncapped() > this.volumeCapped()) return true;
@@ -178,7 +178,7 @@ function getCalcVars(inputs){ //recieves inputs and returns object with required
             rateCapped: function(){ //retuns the capped insulin rate for selected insulin rate option
                 if (inputs.insulin == 0.05) return settings.caps.insulin005;
                 if (inputs.insulin == 0.1) return settings.caps.insulin01; 
-                throw new Error("unable to seelect insulin.rateCapped");
+                throw new Error("Unable to seelect insulin.rateCapped");
             },
             isCapped: function(){ //returns true if uncapped rate exceeds cap
                 if (this.rateUncapped() > this.rateCapped()) return true;
