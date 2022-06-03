@@ -16,9 +16,9 @@
 <script src="/externalDependencies/bootbox/bootbox.locales.min.js"></script>
 
 <!--my scripts-->
-<script src="js-1.3.1/errHandler.js"></script>
-<script src="js-1.3.1/settings.js"></script>
-<script src="js-1.3.1/index.js"></script>
+<script src="js-1.3.2/errHandler.js"></script>
+<script src="js-1.3.2/settings.js"></script>
+<script src="js-1.3.2/index.js"></script>
 
 <!--moment-->
 <script src="/externalDependencies/moment/moment.min.js"></script>
@@ -70,4 +70,19 @@
 	function add_auditID(){
 		document.getElementById('auditID').value = "<?php echo $unique_id ?>";
 	}
+</script>
+
+<script>
+    //browser update prompter
+    var $buoop = {
+        required:{e:-6,f:-6,o:-6,s:-6,c:-6},insecure:true,unsupported:true,style:"corner",api:2022.06,
+        text: {'msgmore': 'Update your browser for a better experience using the DKA Calculator.'}
+    }; 
+    function $buo_f(){ 
+        var e = document.createElement("script"); 
+        e.src = "//browser-update.org/update.min.js"; 
+        document.body.appendChild(e);
+    };
+    try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
+    catch(e) {window.attachEvent("onload", $buo_f)}
 </script>

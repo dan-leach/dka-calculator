@@ -1,8 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v1.3.2] - 2022-06-03 09:00
+### Added
+- Added browser-update.org pop-up in consideration of forthcoming IE retirement date
+
 ## [v1.3.1] - 2022-05-30 16:20
-## Changed
+### Changed
 - Custom errors now thrown as objects rather than strings to include stack for debugging
 
 ## [v1.3.0] - 2022-05-16 10:00

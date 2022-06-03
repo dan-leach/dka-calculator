@@ -225,7 +225,7 @@ const generate = {
 	},
 	startWebWorker: function(){ //launches the web worker that will generate the PDF blob
 		console.log('main: starting webWorker.js...');
-		const myWorker = new Worker('js-1.3.1/submitComponents/webWorker.js'); //start instance of webWorkerPDF.js
+		const myWorker = new Worker('js-1.3.2/submitComponents/webWorker.js'); //start instance of webWorkerPDF.js
         myWorker.postMessage(inputs); //passes input data to webWorkerPDF.js
 		console.log('main: request sent to webWorker.js...');
 		return myWorker;
