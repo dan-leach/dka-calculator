@@ -42,7 +42,7 @@ function getDocDef(inputs, calcVars){ //returns the object describing the protoc
                             [
                                 {text: ""},
                                 {text: "Name: "+inputs.name, alignment: 'left', style: 'header'},
-                                {text: "www.dka-calculator.co.uk (v1.3.2)", alignment: 'center', style: 'header'},
+                                {text: "www.dka-calculator.co.uk (v1.3.3)", alignment: 'center', style: 'header'},
                                 {text: "Protocol Page "+currentPage+" of "+pageCount, alignment: 'right', style: 'header'},
                                 {text: ""}
                             ],

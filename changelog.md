@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v1.3.3] - 2022-06-13 12:40
+### Changed
+- Modified custom error for "unable to show working". Now includes additional details in effort to track down occasional error occuring here.
+
 ## [v1.3.2] - 2022-06-03 09:00
 ### Added
 - Added browser-update.org pop-up in consideration of forthcoming IE retirement date

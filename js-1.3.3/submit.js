@@ -42,7 +42,7 @@ const showWorking = {
                 if (calcVars.patient.severity.isSevere()) return "[pH " + inputs.pH.toFixed(2) + "] is in range [" + settings.severity.severe.range.lower + " to " + settings.severity.severe.range.upper + "] ==> " + calcVars.deficit.percentage() + "%";
                 if (calcVars.patient.severity.isModerate()) return "[pH " + inputs.pH.toFixed(2) + "] is in range [" + settings.severity.moderate.range.lower + " to " + settings.severity.moderate.range.upper + "] ==> " + calcVars.deficit.percentage() + "%";
                 if (calcVars.patient.severity.isMild()) return "[pH " + inputs.pH.toFixed(2) + "] is in range [" + settings.severity.mild.range.lower + " to " + settings.severity.mild.range.upper + "] ==> " + calcVars.deficit.percentage() + "%";
-                throw new Error("Unable to show working");
+                throw new Error("Unable to show working. inputs.pH check: [" + inputs.pH + "] isSevere check: [" + calcVars.patient.severity.isSevere() + "]. isModerate check: [" + calcVars.patient.severity.isModerate() + "]. isMild check: [" + calcVars.patient.severity.isMild() + "]. settings.severity check: [" + JSON.stringify(settings.severity) + "]");
             },
             output: function() {
                 return calcVars.deficit.percentage() + "%";
@@ -225,7 +225,7 @@ const generate = {
 	},
 	startWebWorker: function(){ //launches the web worker that will generate the PDF blob
 		console.log('main: starting webWorker.js...');
-		const myWorker = new Worker('js-1.3.2/submitComponents/webWorker.js'); //start instance of webWorkerPDF.js
+		const myWorker = new Worker('js-1.3.3/submitComponents/webWorker.js'); //start instance of webWorkerPDF.js
         myWorker.postMessage(inputs); //passes input data to webWorkerPDF.js
 		console.log('main: request sent to webWorker.js...');
 		return myWorker;
