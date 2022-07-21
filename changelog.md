@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v1.3.4] - 2022-07-21 16:20
+### Changed
+- Changed severity check function for mild severity from '<' to '<=' mild DKA range upper limit to prevent errors for accepted pH values (6.5 to 7.4).
+
 ## [v1.3.3] - 2022-06-13 12:40
 ### Changed
 - Modified custom error for "unable to show working". Now includes additional details in effort to track down occasional error occuring here.

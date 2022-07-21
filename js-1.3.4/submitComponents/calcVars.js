@@ -21,7 +21,7 @@ function getCalcVars(inputs){ //recieves inputs and returns object with required
                     return false;
                 },
                 isMild: function(){ //if patient's pH meets criteria for mild DKA returns true
-                    if((inputs.pH < settings.severity.mild.range.upper) && (inputs.pH >= settings.severity.mild.range.lower)) return true;
+                    if((inputs.pH <= settings.severity.mild.range.upper) && (inputs.pH >= settings.severity.mild.range.lower)) return true;
                     return false;
                 },
             },
