@@ -13,7 +13,7 @@ const showWorking = {
                 }   
                 workingDisplay = workingDisplay + '<div class="col-md-2"><div class="well well-sm bg-clear"><strong>Working:</strong></div></div><div class="col-md-10"><div class="well well-sm">' + this.calcs[calc].working() + '</div></div><div class="col-md-2"><div class="well well-sm bg-clear"><strong>Output:</strong></div></div><div class="col-md-10"><div class="well well-sm">' + this.calcs[calc].output() + '</div></div></div></div></div>';
             }
-            workingDisplay = workingDisplay + "*limits set based on weight of " + settings.caps.weight + "kg";
+            workingDisplay = workingDisplay + "*limits set based on weight of " + settings.caps.weight + "kg<br><br>N.B. Insulin should NOT be started immediately. Refer to the BSPED integrated care pathway for how to use these calculated values.";
             bootbox.dialog({ //show the modal
                 message: workingDisplay,
                 size: 'large',
@@ -225,7 +225,7 @@ const generate = {
 	},
 	startWebWorker: function(){ //launches the web worker that will generate the PDF blob
 		console.log('main: starting webWorker.js...');
-		const myWorker = new Worker('js-1.3.4/submitComponents/webWorker.js'); //start instance of webWorkerPDF.js
+		const myWorker = new Worker('js-1.3.5/submitComponents/webWorker.js'); //start instance of webWorkerPDF.js
         myWorker.postMessage(inputs); //passes input data to webWorkerPDF.js
 		console.log('main: request sent to webWorker.js...');
 		return myWorker;

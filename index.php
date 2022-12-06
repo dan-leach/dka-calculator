@@ -4,26 +4,14 @@
 	<title>Paediatric DKA Calculator</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Paediatric DKA Calculator - Generate an integrated care pathway for managing paediatric diabetic ketoacidosis based on the BSPED 2021 Guidelines. It will pre-fill calculations in the pathway based on the values for your patient.">
-	<?php include 'php-1.3.4/indexDependencies.php';?> <!--includes the dependencies required for this page including favicon, bootstrap, javascript file, moment, date/time picker, popover and unique ID generator-->
-	<?php include 'php-1.3.4/loader.php';?> <!--includes the loader which displays until page is ready-->
+	<?php include 'php-1.3.5/indexDependencies.php';?> <!--includes the dependencies required for this page including favicon, bootstrap, javascript file, moment, date/time picker, popover and unique ID generator-->
+	<?php include 'php-1.3.5/loader.php';?> <!--includes the loader which displays until page is ready-->
 </head>
 <body>
 	<div class="loader"></div> <!--this div required for php/loader.php to work-->
 	<div class="container">
-		<?php include 'php-1.3.4/jumbotron.php';?> <!--includes the header-->
+		<?php include 'php-1.3.5/jumbotron.php';?> <!--includes the header-->
 		<form> <!--This first form contains confidential information that is not submitted to the server-->
-			<div class="panel panel-warning"> <!--panel for update notes - remove in April 2022-->
-		        <div class="panel-heading">
-		            The DKA Calculator has been updated.
-		        </div>
-				<div class="panel-body">
-				    <div class="row">
-						<div class="col-sm-12">
-							<p><strong>Latest significant update 16/05/2022.</strong> Integrated Care Pathway (ICP) appendix 3 "Making up IV fluids" procedure updated to match main guideline. <a href="https://github.com/dan-leach/dka-calculator/blob/master/changelog.md" target="_blank" rel="noopener">View the full changelog on GitHub.</a></p>
-						</div>
-					</div>
-				</div>
-			</div>
 			<div class="panel panel-default"> <!--panel for advisory notes-->
 				<div class="panel-body">
 					<div class="row">
@@ -301,7 +289,7 @@
 			</div>		
 		</form>
 		<br>
-		<?php include 'php-1.3.4/footer.php';?> <!--includes footer file-->
+		<?php include 'php-1.3.5/footer.php';?> <!--includes footer file-->
 	</div>
 </body>
 </html>

@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v1.3.5] - 2022-12-06 08:55
+### Removed
+- Removed update panel from home page as no clinically significant recent updates
+### Added
+- Added message at bottom of 'show calculations' panel: "N.B. Insulin should NOT be started immediately. Refer to the BSPED integrated care pathway for how to use these calculated values." in response to feedback.
+- Added link to jumbotron 'BSPED 2021 Guidelines' now links to BSPED DKA Guidelines page
+
 ## [v1.3.4] - 2022-07-21 16:20
 ### Changed
 - Changed severity check function for mild severity from '<' to '<=' mild DKA range upper limit to prevent errors for accepted pH values (6.5 to 7.4).
