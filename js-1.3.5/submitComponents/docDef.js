@@ -278,7 +278,7 @@ function getDocDef(inputs, calcVars){ //returns the object describing the protoc
                 text: "https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/",
                 link: "https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/",
                 fontSize: 10,
-                absolutePosition: {x: 250, y: 540},
+                absolutePosition: {x: 250, y: 530},
                 pageBreak: 'after'
             },
             //page 2
