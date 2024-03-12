@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v1.3.6] - 2024-03-12 16:00
+### Changed
+- Security update to fix SQL injection vulnerabilities - with thanks to Mat Rollings
+
 ## [v1.3.5] - 2022-12-06 08:55
 ### Removed
 - Removed update panel from home page as no clinically significant recent updates

@@ -4,14 +4,27 @@
 	<title>Paediatric DKA Calculator</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Paediatric DKA Calculator - Generate an integrated care pathway for managing paediatric diabetic ketoacidosis based on the BSPED 2021 Guidelines. It will pre-fill calculations in the pathway based on the values for your patient.">
-	<?php include 'php-1.3.5/indexDependencies.php';?> <!--includes the dependencies required for this page including favicon, bootstrap, javascript file, moment, date/time picker, popover and unique ID generator-->
-	<?php include 'php-1.3.5/loader.php';?> <!--includes the loader which displays until page is ready-->
+	<?php include 'php-1.3.6/indexDependencies.php';?> <!--includes the dependencies required for this page including favicon, bootstrap, javascript file, moment, date/time picker, popover and unique ID generator-->
+	<?php include 'php-1.3.6/loader.php';?> <!--includes the loader which displays until page is ready-->
 </head>
 <body>
 	<div class="loader"></div> <!--this div required for php/loader.php to work-->
 	<div class="container">
-		<?php include 'php-1.3.5/jumbotron.php';?> <!--includes the header-->
+		<?php include 'php-1.3.6/jumbotron.php';?> <!--includes the header-->
 		<form> <!--This first form contains confidential information that is not submitted to the server-->
+			<!--<div class="panel panel-warning">
+		        <div class="panel-heading">
+		            Planned maintenance
+		        </div>
+				<div class="panel-body">
+				    <div class="row">
+						<div class="col-sm-12">
+							<strong>00:00 - 03:00 UTC, Friday 16th December 2022</strong><br>
+							<p>Due to server maintenance, during this time the DKA Calculator may not be able to generate care pathways. If you encounter problems you can download a blank care pathway from the link below.</p>
+						</div>
+					</div>
+				</div>
+			</div>-->
 			<div class="panel panel-default"> <!--panel for advisory notes-->
 				<div class="panel-body">
 					<div class="row">
@@ -289,7 +302,7 @@
 			</div>		
 		</form>
 		<br>
-		<?php include 'php-1.3.5/footer.php';?> <!--includes footer file-->
+		<?php include 'php-1.3.6/footer.php';?> <!--includes footer file-->
 	</div>
 </body>
 </html>

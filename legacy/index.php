@@ -38,7 +38,7 @@
 <body>
 	<div class="loader"></div> <!--this div required for php/loader.php to work-->
 	<div class="container">
-		<?php include '../php-1.3.5/jumbotron.php';?> <!--includes the header file-->
+		<?php include '../php-1.3.6/jumbotron.php';?> <!--includes the header file-->
 		<form> <!--This first form contains confidential information that is not submitted to the server-->
 			<div class="panel panel-danger"> 
 		        <div class="panel-heading">
@@ -54,7 +54,7 @@
 			</div>
 		</form>
 		</br>
-		<?php include '../php-1.3.5/footer.php';?> <!--includes footer file-->
+		<?php include '../php-1.3.6/footer.php';?> <!--includes footer file-->
 	</div>
 </body>
 </html>

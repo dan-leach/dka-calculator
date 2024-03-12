@@ -6,3 +6,5 @@ cgi-bin/
 externalDependencies/
 
 link.php
+
+node_modules/

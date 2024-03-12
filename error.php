@@ -11,7 +11,7 @@
     $msg .= " - stack: " . $stack;
     $msg .= " - storageSupported: " . $storageSupported;
     $msg .= " - client IP: " . $_SERVER['REMOTE_ADDR'];
-    $msg .= " - user agent: " .$_SERVER['HTTP_USER_AGENT'];
+    $msg .= " - user agent: " . htmlspecialchars($_SERVER['HTTP_USER_AGENT']);
     error_log($msg);
     $msg = wordwrap($msg,70);
     mail("admin@dka-calculator.co.uk","Client side error report",$msg);

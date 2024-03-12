@@ -4,13 +4,13 @@
 	<title>Paediatric DKA Calculator</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<?php include 'php-1.3.5/submitDependencies.php';?>	<!--includes the dependencies required for this page including favicon, bootstrap, javascript files, moment, pdfmake and popovers-->
-	<?php include 'php-1.3.5/loader.php';?> <!--includes the loader which displays until page is ready-->
+	<?php include 'php-1.3.6/submitDependencies.php';?>	<!--includes the dependencies required for this page including favicon, bootstrap, javascript files, moment, pdfmake and popovers-->
+	<?php include 'php-1.3.6/loader.php';?> <!--includes the loader which displays until page is ready-->
 </head>
 <body>
 	<div class="loader"></div> <!--this div required for php/loader.php to work-->
 	<div class="container">
-		<?php include 'php-1.3.5/jumbotron.php';?> <!--includes the header file-->
+		<?php include 'php-1.3.6/jumbotron.php';?> <!--includes the header file-->
 		<div class="panel panel-default">
 			<div class="panel-heading">Your form has been submitted. <a href="#" tabindex="-1" data-toggle="popover" title="" data-content="If the audit data has stored successfully this should be indicated below."><span class="glyphicon glyphicon-info-sign"></span></a> </div>
 			<div class="panel-body">
@@ -48,7 +48,7 @@
 							$pclient_uA = $_POST['client_uA'];
 							$pclient_IP = $_SERVER['REMOTE_ADDR'];
 							
-							$calc_Version = "'1.3.5'";
+							$calc_Version = "'1.3.6'";
 
 							//this section commented out but can be activated for debugging variables
 							/*
@@ -71,16 +71,33 @@
 							*/
 
 							// Attempt MySQL server connection.
-							require 'php-1.3.5/link.php';
+							require 'php-1.3.6/link.php';
 							
 							// Check connection
 							if($link === false) die("Audit data could not be logged. The server returned the following error message: " . mysqli_connect_error());
 
 							// Check audit ID not previously submitted
+							
 							$result = $link->query("SELECT auditID FROM calculator_table WHERE auditID = '$pauditID'");
 							if ($result->num_rows > 0){
 								die("Audit data could not be logged. The audit ID submitted already exists in the database.");
 							}
+							
+							$stmtA = $link->prepare("SELECT auditID FROM calculator_table WHERE auditID = ?");
+							if ( false===$stmtA ) die("Audit data could not be logged. The server returned the following error message: prepare() failed: " . mysqli_error($link));
+							
+							$rcA = $stmtA->bind_param("s", $pauditID);
+							if ( false===$rcA ) die("Audit data could not be logged. The server returned the following error message: bind_param() failed: " . mysqli_error($link));
+							
+							$rcA = $stmtA->execute();
+							if ( false===$rcA ) die("Audit data could not be logged. The server returned the following error message: execute() failed: " . mysqli_error($link));
+							
+							if ($rcA->num_rows > 0){
+								die("Audit data could not be logged. The audit ID submitted already exists in the database.");
+							}
+							
+							$stmtA->close();
+							
 
 							// Prepare insert 
 							$stmt = $link->prepare("INSERT INTO calculator_table (protocolStart, sex, age, weight, override, pH, shock, insulin, preDM, region, centre, episode, auditID, client_DT, client_uA, client_IP, calc_Version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -117,7 +134,7 @@
 					</div>
 				</div>
 			</div>
-			<?php include 'php-1.3.5/footer.php';?> <!-- includes the footer file-->
+			<?php include 'php-1.3.6/footer.php';?> <!-- includes the footer file-->
 		</div>
 	</div>
 </body>
