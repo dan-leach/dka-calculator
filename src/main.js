@@ -11,9 +11,12 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 /* import font awesome icon component */
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 /* import specific icons */
-import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faQuestionCircle,
+  faInfoCircle,
+} from "@fortawesome/free-solid-svg-icons";
 /* add icons to the library */
-library.add(faQuestionCircle);
+library.add(faQuestionCircle, faInfoCircle);
 
 const app = createApp(App);
 

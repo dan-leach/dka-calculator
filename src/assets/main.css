@@ -7,15 +7,15 @@
   background-color: #850000;
   color: white;
 }
-.btn-teal:hover {
+.btn-red:hover {
   background-color: #ff0000;
   color: white;
 }
-.btn-teal:disabled {
+.btn-red:disabled {
   background-color: #adadad;
   color: black;
 }
-.btn-teal:focus {
+.btn-red:focus {
   background-color: #ff0000;
   color: white;
 }

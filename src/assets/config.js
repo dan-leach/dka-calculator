@@ -5,6 +5,7 @@ export const config = reactive({
   author: "Dan Leach",
   web: "https://danleach.uk",
   repo: "https://github.com/dan-leach/dka-calculator",
+  bsped: "https://www.bsped.org.uk",
   email: "admin@dka-calculator.co.uk",
   client: {
     url: "https://dev.learnloop.co.uk",
