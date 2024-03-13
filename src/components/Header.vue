@@ -3,7 +3,7 @@ import { RouterLink } from "vue-router";
 </script>
 
 <template>
-  <nav id="header" class="navbar bg-red">
+  <nav id="header" class="navbar bg-grey">
     <div class="container-fluid m-1">
       <RouterLink
         to="/"
@@ -13,9 +13,7 @@ import { RouterLink } from "vue-router";
           class="logo"
           src="@/assets/logo.png"
         />
-        <h1 class="site-title text-white">
-          Paediatric DKA Calculator
-        </h1></RouterLink
+        <h1 class="site-title">Paediatric DKA Calculator</h1></RouterLink
       >
     </div>
   </nav>

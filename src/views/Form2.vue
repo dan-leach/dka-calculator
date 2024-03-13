@@ -60,7 +60,7 @@ onMounted(() => {});
     </div>
     <!--next-->
     <div class="text-center">
-      <button type="button" @click="next" class="btn btn-lg btn-red">
+      <button type="button" @click="next" class="btn btn-lg btn-primary">
         Continue
       </button>
     </div>

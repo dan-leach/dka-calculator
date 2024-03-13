@@ -39,7 +39,7 @@ const optOutClick = (i) => {
   if (input.optOut.msg.show)
     Swal.fire({
       text: input.optOut.msg.text,
-      confirmButtonColor: "#850000",
+      confirmButtonColor: "#0d6efd",
     });
   input.optOut.msg.show = false;
   if (input.optOut.val) input.val = "";
@@ -328,7 +328,7 @@ onMounted(() => {
     </div>
     <!--next-->
     <div class="text-center">
-      <button type="button" @click="next" class="btn btn-lg btn-red">
+      <button type="button" @click="next" class="btn btn-lg btn-primary">
         Continue
       </button>
     </div>

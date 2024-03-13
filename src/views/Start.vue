@@ -8,7 +8,7 @@
       <button
         type="button"
         @click="$router.push('/form-part-1')"
-        class="btn btn-lg btn-red"
+        class="btn btn-lg btn-primary"
       >
         Start
       </button>

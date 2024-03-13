@@ -1,27 +1,11 @@
 /*colors*/
-.bg-red {
-  background-color: #850000;
-  color: white;
-}
-.btn-red {
-  background-color: #850000;
-  color: white;
-}
-.btn-red:hover {
-  background-color: #ff0000;
-  color: white;
-}
-.btn-red:disabled {
-  background-color: #adadad;
-  color: black;
-}
-.btn-red:focus {
-  background-color: #ff0000;
+.bg-grey {
+  background-color: #eeeeee;
   color: white;
 }
 
 body {
-  background-color: #17a3b813;
+  background-color: #f8f9fa;
 }
 
 .bg-transparent {
