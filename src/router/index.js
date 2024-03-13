@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
-import StartView from "../views/StartView.vue";
-import PrivacyPolicyView from "../views/PrivacyPolicyView.vue";
+import Start from "../views/Start.vue";
+import PrivacyPolicyView from "../views/PrivacyPolicy.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -8,12 +8,22 @@ const router = createRouter({
     {
       path: "/",
       name: "start",
-      component: StartView,
+      component: Start,
+    },
+    {
+      path: "/form-part-1",
+      name: "form-part-1",
+      component: () => import("../views/Form1.vue"),
+    },
+    {
+      path: "/form-part-2",
+      name: "form-part-2",
+      component: () => import("../views/Form2.vue"),
     },
     {
       path: "/privacy-policy",
       name: "privacy-policy",
-      component: () => import("../views/PrivacyPolicyView.vue"),
+      component: () => import("../views/PrivacyPolicy.vue"),
     },
   ],
 });

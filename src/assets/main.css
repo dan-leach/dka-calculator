@@ -28,6 +28,10 @@ body {
   background-color: transparent;
 }
 
+a {
+  color: black;
+}
+
 /*transitions*/
 .fade-enter-active,
 .fade-leave-active {

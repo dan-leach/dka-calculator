@@ -1,0 +1,345 @@
+<script setup>
+import { ref, onMounted } from "vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { data } from "../assets/data.js";
+import Swal from "sweetalert2";
+import router from "../router";
+
+let showErrors = ref(false);
+
+const next = () => {
+  showErrors.value = true;
+  document.getElementById("form1").classList.add("was-validated");
+  let formValid = true;
+  for (let i in data.value.inputs)
+    if (!data.value.inputs[i].isValid()) formValid = false;
+  if (!formValid) return false;
+  router.push("/form-part-2");
+};
+
+const setMinMaxPatientDOB = () => {
+  //set the max date to today
+  const today = new Date();
+  document.getElementById("patientDOB").max = today
+    .toISOString()
+    .substring(0, 10);
+  //set the min date to (ata.value.inputs.patientDOB.withinYears) prior to today
+  const minDate = new Date(
+    today.getFullYear() - data.value.inputs.patientDOB.withinYears,
+    today.getMonth(),
+    today.getDate()
+  );
+  document.getElementById("patientDOB").min = minDate
+    .toISOString()
+    .substring(0, 10);
+};
+
+const optOutClick = (i) => {
+  let input = data.value.inputs[i];
+  if (input.optOut.msg.show)
+    Swal.fire({
+      text: input.optOut.msg.text,
+      confirmButtonColor: "#850000",
+    });
+  input.optOut.msg.show = false;
+  if (input.optOut.val) input.val = "";
+  if (!input.optOut.val && i == "patientNHS")
+    data.value.inputs.patientHospNum.val = "";
+};
+
+onMounted(() => {
+  setMinMaxPatientDOB();
+});
+</script>
+
+<template>
+  <form id="form1" class="container my-4 needs-validation">
+    <h2 class="display-3">Patient details</h2>
+    <p class="mx-1">
+      To generate a care pathway for your patient please complete the form
+      below. For more information about how this data is used click the
+      <font-awesome-icon :icon="['fas', 'circle-info']" /> icon by each field or
+      refer to the
+      <RouterLink to="/privacy-policy" class="">privacy policy</RouterLink>.
+    </p>
+    <!--patientName-->
+    <div class="mb-4">
+      <div class="input-group">
+        <div class="form-floating">
+          <input
+            type="text"
+            class="form-control"
+            id="patientName"
+            v-model="data.inputs.patientName.val"
+            @change="data.inputs.patientName.isValid()"
+            placeholder="x"
+            :minlength="data.inputs.patientName.minLength"
+            :maxlength="data.inputs.patientName.maxLength"
+            required
+            autocomplete="off"
+          />
+          <label for="patientName">{{ data.inputs.patientName.label }}</label>
+        </div>
+        <span
+          class="input-group-text"
+          data-bs-toggle="collapse"
+          data-bs-target="#patientNameInfo"
+          ><font-awesome-icon :icon="['fas', 'circle-info']"
+        /></span>
+      </div>
+      <div
+        v-if="showErrors"
+        class="form-text text-danger mx-1"
+        id="patientNameErrors"
+      >
+        {{ data.inputs.patientName.errors }}
+      </div>
+      <div class="collapse form-text mx-1" id="patientNameInfo">
+        {{ data.inputs.patientName.info }}
+      </div>
+    </div>
+    <!--patientDOB-->
+    <div class="mb-4">
+      <div class="input-group">
+        <div class="form-floating">
+          <input
+            type="date"
+            class="form-control"
+            id="patientDOB"
+            v-model="data.inputs.patientDOB.val"
+            @change="data.inputs.patientDOB.isValid()"
+            placeholder="x"
+            max=""
+            min=""
+            required
+            autocomplete="off"
+          />
+          <label for="patientDOB">{{ data.inputs.patientDOB.label }}</label>
+        </div>
+        <span
+          class="input-group-text"
+          data-bs-toggle="collapse"
+          data-bs-target="#patientDOBInfo"
+          ><font-awesome-icon :icon="['fas', 'circle-info']"
+        /></span>
+      </div>
+      <div
+        v-if="showErrors"
+        class="form-text text-danger mx-1"
+        id="patientDOBErrors"
+      >
+        {{ data.inputs.patientDOB.errors }}
+      </div>
+      <div class="collapse form-text mx-1" id="patientDOBInfo">
+        {{ data.inputs.patientDOB.info }}
+      </div>
+    </div>
+    <!--patientSex-->
+    <div class="mb-4">
+      <div class="d-flex justify-content-center">
+        <div>
+          <input
+            type="radio"
+            class="btn-check"
+            name="options"
+            id="male"
+            value="male"
+            v-model="data.inputs.patientSex.val"
+            @change="data.inputs.patientSex.isValid()"
+            autocomplete="off"
+            required
+          />
+          <label class="btn btn-outline-secondary me-2" for="male">Male</label>
+
+          <input
+            type="radio"
+            class="btn-check"
+            name="options"
+            id="female"
+            value="female"
+            v-model="data.inputs.patientSex.val"
+            @change="data.inputs.patientSex.isValid()"
+            autocomplete="off"
+          />
+          <label class="btn btn-outline-secondary" for="female">Female</label>
+          <font-awesome-icon
+            :icon="['fas', 'circle-info']"
+            data-bs-toggle="collapse"
+            data-bs-target="#patientSexInfo"
+            class="ms-2"
+          />
+        </div>
+      </div>
+      <div
+        v-if="showErrors"
+        class="form-text text-danger mx-1"
+        id="patientSexErrors"
+      >
+        {{ data.inputs.patientSex.errors }}
+      </div>
+      <div class="collapse form-text mx-1" id="patientSexInfo">
+        {{ data.inputs.patientSex.info }}
+      </div>
+    </div>
+    <!--patientNHS-->
+    <div class="mb-4">
+      <div class="input-group">
+        <div class="form-floating">
+          <input
+            type="number"
+            class="form-control"
+            id="patientNHS"
+            v-model="data.inputs.patientNHS.val"
+            @change="data.inputs.patientNHS.isValid()"
+            placeholder="x"
+            :minlength="data.inputs.patientNHS.minLength"
+            :maxlength="data.inputs.patientNHS.maxLength"
+            :disabled="data.inputs.patientNHS.optOut.val"
+            autocomplete="off"
+          />
+          <label for="patientNHS">{{ data.inputs.patientNHS.label }}</label>
+        </div>
+        <span
+          class="input-group-text"
+          data-bs-toggle="collapse"
+          data-bs-target="#patientNHSInfo"
+          ><font-awesome-icon :icon="['fas', 'circle-info']"
+        /></span>
+      </div>
+      <div
+        v-if="showErrors && !data.inputs.patientNHS.optOut.val"
+        class="form-text text-danger mx-1"
+        id="patientNHSErrors"
+      >
+        {{ data.inputs.patientNHS.errors }}
+      </div>
+      <div class="form-check form-switch ms-1 my-1">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          v-model="data.inputs.patientNHS.optOut.val"
+          data-bs-toggle="collapse"
+          data-bs-target="#patientHospNumCollapse"
+          @change="optOutClick('patientNHS')"
+          id="optOutNHS"
+        />
+        <label class="form-check-label" for="flexSwitchCheckDefault">{{
+          data.inputs.patientNHS.optOut.label
+        }}</label>
+      </div>
+      <div
+        class="collapse form-text mx-1"
+        id="patientNHSInfo"
+        v-html="data.inputs.patientNHS.info"
+        v-if="!data.inputs.patientNHS.optOut.val"
+      ></div>
+    </div>
+    <!--hospital number alternative-->
+    <div class="collapse mb-4" id="patientHospNumCollapse">
+      <div class="input-group">
+        <div class="form-floating">
+          <input
+            type="text"
+            class="form-control"
+            id="patientHospNum"
+            v-model="data.inputs.patientHospNum.val"
+            @change="data.inputs.patientHospNum.isValid()"
+            placeholder="x"
+            :minlength="data.inputs.patientHospNum.minLength"
+            :maxlength="data.inputs.patientHospNum.maxLength"
+            autocomplete="off"
+            required
+          />
+          <label for="patientHospNum">{{
+            data.inputs.patientHospNum.label
+          }}</label>
+        </div>
+        <span
+          class="input-group-text"
+          data-bs-toggle="collapse"
+          data-bs-target="#patientHospNumInfo"
+          ><font-awesome-icon :icon="['fas', 'circle-info']"
+        /></span>
+      </div>
+      <div
+        v-if="showErrors"
+        class="form-text text-danger mx-1"
+        id="patientHospNum"
+      >
+        {{ data.inputs.patientHospNum.errors }}
+      </div>
+      <div
+        class="collapse form-text mx-1"
+        id="patientHospNumInfo"
+        v-html="data.inputs.patientHospNum.info"
+      ></div>
+    </div>
+    <!--patientPostcode-->
+    <div class="mb-4">
+      <div class="input-group">
+        <div class="form-floating">
+          <input
+            type="text"
+            class="form-control"
+            id="patientName"
+            v-model="data.inputs.patientPostcode.val"
+            @change="data.inputs.patientPostcode.isValid()"
+            placeholder="x"
+            :minlength="data.inputs.patientPostcode.minLength"
+            :maxlength="data.inputs.patientPostcode.maxLength"
+            :pattern="data.inputs.patientPostcode.pattern"
+            required
+            :disabled="data.inputs.patientPostcode.optOut.val"
+            autocomplete="off"
+          />
+          <label for="patientPostcode">{{
+            data.inputs.patientPostcode.label
+          }}</label>
+        </div>
+        <span
+          class="input-group-text"
+          data-bs-toggle="collapse"
+          data-bs-target="#patientPostcodeInfo"
+          ><font-awesome-icon :icon="['fas', 'circle-info']"
+        /></span>
+      </div>
+      <div class="form-check form-switch ms-1 my-1">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          v-model="data.inputs.patientPostcode.optOut.val"
+          @change="optOutClick('patientPostcode')"
+          id="optOutPostcode"
+        />
+        <label class="form-check-label" for="flexSwitchCheckDefault">{{
+          data.inputs.patientPostcode.optOut.label
+        }}</label>
+      </div>
+      <div
+        v-if="showErrors"
+        class="form-text text-danger mx-1"
+        id="patientPostcodeErrors"
+      >
+        {{ data.inputs.patientPostcode.errors }}
+      </div>
+      <div class="collapse form-text mx-1" id="patientPostcodeInfo">
+        {{ data.inputs.patientPostcode.info }}
+      </div>
+    </div>
+    <!--next-->
+    <div class="text-center">
+      <button type="button" @click="next" class="btn btn-lg btn-red">
+        Continue
+      </button>
+    </div>
+  </form>
+</template>
+
+<style scoped>
+.container {
+  max-width: 750px;
+}
+.btn-outline-secondary {
+  width: 150px;
+}
+</style>
