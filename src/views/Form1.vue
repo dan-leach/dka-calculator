@@ -13,8 +13,12 @@ const next = () => {
   let formValid = true;
   for (let i in data.value.inputs)
     if (!data.value.inputs[i].isValid()) formValid = false;
-  if (!formValid) return false;
-  router.push("/form-part-2");
+  if (formValid) {
+    data.value.forms.part1.isValid = true;
+    router.push("/form-part-2");
+  } else {
+    data.value.forms.part1.isValid = false;
+  }
 };
 
 const setMinMaxPatientDOB = () => {
@@ -192,8 +196,8 @@ onMounted(() => {
             v-model="data.inputs.patientNHS.val"
             @change="data.inputs.patientNHS.isValid()"
             placeholder="x"
-            :minlength="data.inputs.patientNHS.minLength"
-            :maxlength="data.inputs.patientNHS.maxLength"
+            :min="data.inputs.patientNHS.min"
+            :max="data.inputs.patientNHS.max"
             :disabled="data.inputs.patientNHS.optOut.val"
             autocomplete="off"
           />

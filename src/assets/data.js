@@ -1,6 +1,14 @@
 import { ref } from "vue";
 
 export const data = ref({
+  forms: {
+    part1: {
+      isValid: false,
+    },
+    part2: {
+      isValid: false,
+    },
+  },
   inputs: {
     patientName: {
       val: "",
@@ -74,23 +82,22 @@ export const data = ref({
       val: "",
       label: "NHS number",
       info: "Patient NHS number is printed onto the generated care pathway document in the patient demographics area. It is not stored directly by the DKA Calculator. To allow linkage of audit data between episodes the NHS number is used to generate a unique patient ID which is stored. The patient's NHS number cannot be found from the calculated unique patient ID (<a href='https://www.codecademy.com/resources/blog/what-is-hashing/' target='_blank'>read more about secure hashing</a>).",
-      minLength: 10,
-      maxLength: 10,
+      min: 1000000000,
+      max: 9999999999,
       isValid: function () {
         this.errors = "";
-
         if (this.optOut.val) return true;
 
-        if (this.val.length < this.minLength)
+        if (this.val < this.min)
           this.errors +=
             "NHS number must be at least " +
-            this.minLength +
+            this.min.toString().length +
             " characters in length. ";
 
-        if (this.val.length > this.maxLength)
+        if (this.val > this.max)
           this.errors +=
             "NHS number must be no more than " +
-            this.maxLength +
+            this.max.toString().length +
             " characters in length. ";
 
         if (this.errors) return false;

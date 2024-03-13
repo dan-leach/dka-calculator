@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { data } from "../assets/data.js";
 import Swal from "sweetalert2";
+import router from "../router";
 
 let showErrors = ref(false);
 
@@ -16,7 +17,9 @@ const next = () => {
   console.log("form validation passed");
 };
 
-onMounted(() => {});
+onMounted(() => {
+  if (!data.value.forms.part1.isValid) router.push("/form-part-1");
+});
 </script>
 
 <template>
