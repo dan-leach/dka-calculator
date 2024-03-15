@@ -14,18 +14,12 @@ const continueClick = () => {
 };
 
 const setMinMaxPatientDOB = () => {
-  //set the max date to today
   const today = new Date();
   document.getElementById("patientDOB").max = today
     .toISOString()
     .substring(0, 10);
-  //set the min date to (ata.value.inputs.patientDOB.withinYears) prior to today
-  const minDate = new Date(
-    today.getFullYear() - data.value.inputs.patientDOB.withinYears,
-    today.getMonth(),
-    today.getDate()
-  );
-  document.getElementById("patientDOB").min = minDate
+  document.getElementById("patientDOB").min = data.value.inputs.patientDOB
+    .minDate()
     .toISOString()
     .substring(0, 10);
 };

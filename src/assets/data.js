@@ -63,6 +63,15 @@ export const data = ref({
       form: 1,
       info: "Patient date of birth is printed onto the generated care pathway document in the patient demographics area. It is not stored directly by the DKA Calculator, but is used to calculate a patient age (in years) which is stored for audit purposes.",
       withinYears: 19, //date of birth must be between today and 19 years ago - allowance for adult patients not yet transitioned to adult services
+      minDate: function () {
+        const today = new Date();
+        const minDate = new Date(
+          today.getFullYear() - this.withinYears,
+          today.getMonth(),
+          today.getDate()
+        );
+        return minDate;
+      },
       isValid: function () {
         this.errors = "";
         if (isNaN(Date.parse(this.val))) {
@@ -73,12 +82,8 @@ export const data = ref({
         const today = new Date();
         if (dateVal > today)
           this.errors += "Date of birth cannot be after today. ";
-        const minDate = new Date(
-          today.getFullYear() - this.withinYears,
-          today.getMonth(),
-          today.getDate()
-        );
-        if (dateVal < minDate)
+
+        if (dateVal < this.minDate)
           this.errors +=
             "Date of birth cannot be more than " +
             this.withinYears +
@@ -221,14 +226,7 @@ export const data = ref({
       form: 2,
       info: "The protocol start date/time is used to calculated recommended review date/times on the serial data sheet on the care pathway. It is stored by the DKA Calculator for audit purposes.",
       withinHours: 24,
-      isValid: function () {
-        this.errors = "";
-        if (isNaN(Date.parse(this.val))) {
-          this.errors +=
-            "A valid date/time must be entered for protocol start date/time. ";
-          return false;
-        }
-        const dateVal = new Date(this.val);
+      minDate: function () {
         const today = new Date();
         const minDate = new Date(
           today.getFullYear(),
@@ -237,6 +235,10 @@ export const data = ref({
           today.getHours() - this.withinHours,
           today.getMinutes()
         );
+        return minDate;
+      },
+      maxDate: function () {
+        const today = new Date();
         const maxDate = new Date(
           today.getFullYear(),
           today.getMonth(),
@@ -244,7 +246,18 @@ export const data = ref({
           today.getHours() + this.withinHours,
           today.getMinutes()
         );
-        if (dateVal < minDate || dateVal > maxDate)
+        return maxDate;
+      },
+      isValid: function () {
+        this.errors = "";
+        if (isNaN(Date.parse(this.val))) {
+          this.errors +=
+            "A valid date/time must be entered for protocol start date/time. ";
+          return false;
+        }
+        const dateVal = new Date(this.val);
+
+        if (dateVal < this.minDate || dateVal > this.maxDate)
           this.errors +=
             "Protocol start must be within " +
             this.withinHours +

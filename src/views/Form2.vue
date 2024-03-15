@@ -8,7 +8,6 @@ import router from "../router";
 let showErrors = ref(false);
 
 const continueClick = () => {
-  console.log(data.value.inputs.protocolStartDatetime.val);
   showErrors.value = true;
   document.getElementById("form2").classList.add("was-validated");
   if (data.value.forms.part2.isValid()) router.push("/form-part-3");
@@ -21,9 +20,29 @@ const setProtocolStartDatetime = () => {
     .substring(0, 16);
 };
 
+const setMinMaxProtocolStartDatetime = () => {
+  console.log(
+    data.value.inputs.protocolStartDatetime
+      .maxDate()
+      .toISOString()
+      .substring(0, 16)
+  );
+  document.getElementById("protocolStartDatetime").max =
+    data.value.inputs.protocolStartDatetime
+      .maxDate()
+      .toISOString()
+      .substring(0, 16);
+  document.getElementById("protocolStartDatetime").min =
+    data.value.inputs.protocolStartDatetime
+      .minDate()
+      .toISOString()
+      .substring(0, 16);
+};
+
 onMounted(() => {
   //if (!data.value.forms.part1.isValid) router.push("/form-part-1");
   setProtocolStartDatetime();
+  setMinMaxProtocolStartDatetime();
 });
 </script>
 
@@ -41,6 +60,8 @@ onMounted(() => {
             v-model="data.inputs.protocolStartDatetime.val"
             @change="data.inputs.protocolStartDatetime.isValid()"
             placeholder="x"
+            min=""
+            max=""
             required
             autocomplete="off"
           />

@@ -17,7 +17,6 @@ const continueClick = () => {
 onMounted(() => {
   //if (!data.value.forms.part1.isValid) router.push("/form-part-1");
   //if (!data.value.forms.part2.isValid) router.push("/form-part-2");
-  setProtocolStartDatetime();
 });
 </script>
 
