@@ -3,16 +3,37 @@ import { ref } from "vue";
 export const data = ref({
   forms: {
     part1: {
-      isValid: false,
+      isValid: function () {
+        let formValid = true;
+        for (let i in data.value.inputs)
+          if (
+            data.value.inputs[i].form === 1 &&
+            !data.value.inputs[i].isValid()
+          )
+            formValid = false;
+        if (formValid) return true;
+        return false;
+      },
     },
     part2: {
-      isValid: false,
+      isValid: function () {
+        let formValid = true;
+        for (let i in data.value.inputs)
+          if (
+            data.value.inputs[i].form === 2 &&
+            !data.value.inputs[i].isValid()
+          )
+            formValid = false;
+        if (formValid) return true;
+        return false;
+      },
     },
   },
   inputs: {
     patientName: {
       val: "",
       label: "Full name",
+      form: 1,
       info: "Patient name is printed onto the generated care pathway document in the patient demographics area. It is not stored by the DKA Calculator.",
       minLength: 5,
       maxLength: 80,
@@ -39,6 +60,7 @@ export const data = ref({
     patientDOB: {
       val: "",
       label: "Date of birth",
+      form: 1,
       info: "Patient date of birth is printed onto the generated care pathway document in the patient demographics area. It is not stored directly by the DKA Calculator, but is used to calculate a patient age (in years) which is stored for audit purposes.",
       withinYears: 19, //date of birth must be between today and 19 years ago - allowance for adult patients not yet transitioned to adult services
       isValid: function () {
@@ -69,6 +91,7 @@ export const data = ref({
     },
     patientSex: {
       val: "",
+      form: 1,
       info: "Patient sex is stored by the DKA Calculator for audit purposes.",
       isValid: function () {
         this.errors = "";
@@ -81,6 +104,7 @@ export const data = ref({
     patientNHS: {
       val: "",
       label: "NHS number",
+      form: 1,
       info: "Patient NHS number is printed onto the generated care pathway document in the patient demographics area. It is not stored directly by the DKA Calculator. To allow linkage of audit data between episodes the NHS number is used to generate a unique patient ID which is stored. The patient's NHS number cannot be found from the calculated unique patient ID (<a href='https://www.codecademy.com/resources/blog/what-is-hashing/' target='_blank'>read more about secure hashing</a>).",
       min: 1000000000,
       max: 9999999999,
@@ -116,6 +140,7 @@ export const data = ref({
     patientHospNum: {
       val: "",
       label: "Hospital number",
+      form: 1,
       info: "Patient hospital number is printed onto the generated care pathway document in the patient demographics area. It is not stored by the DKA Calculator.",
       minLength: 4,
       maxLength: 20,
@@ -144,6 +169,7 @@ export const data = ref({
     patientPostcode: {
       val: "",
       label: "Postcode",
+      form: 1,
       info: "The patient postcode is not stored by the DKA Calculator. It is used to find an Index of Multiple Deprivation (IMD) decile which is stored for audit purposes.",
       minLength: 5,
       maxLength: 8,
@@ -189,6 +215,46 @@ export const data = ref({
         },
       },
     },
+    protocolStartDatetime: {
+      val: "",
+      label: "Protocol start date/time",
+      form: 2,
+      info: "The protocol start date/time is used to calculated recommended review date/times on the serial data sheet on the care pathway. It is stored by the DKA Calculator for audit purposes.",
+      withinHours: 24,
+      isValid: function () {
+        this.errors = "";
+        if (isNaN(Date.parse(this.val))) {
+          this.errors +=
+            "A valid date/time must be entered for protocol start date/time. ";
+          return false;
+        }
+        const dateVal = new Date(this.val);
+        const today = new Date();
+        const minDate = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate(),
+          today.getHours() - this.withinHours,
+          today.getMinutes()
+        );
+        const maxDate = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate(),
+          today.getHours() + this.withinHours,
+          today.getMinutes()
+        );
+        if (dateVal < minDate || dateVal > maxDate)
+          this.errors +=
+            "Protocol start must be within " +
+            this.withinHours +
+            " hours of the current date/time. ";
+
+        if (this.errors) return false;
+        return true;
+      },
+      errors: "",
+    },
   },
-  calculated: {},
+  calculations: {},
 });

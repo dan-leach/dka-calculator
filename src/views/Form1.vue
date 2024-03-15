@@ -7,18 +7,10 @@ import router from "../router";
 
 let showErrors = ref(false);
 
-const next = () => {
+const continueClick = () => {
   showErrors.value = true;
   document.getElementById("form1").classList.add("was-validated");
-  let formValid = true;
-  for (let i in data.value.inputs)
-    if (!data.value.inputs[i].isValid()) formValid = false;
-  if (formValid) {
-    data.value.forms.part1.isValid = true;
-    router.push("/form-part-2");
-  } else {
-    data.value.forms.part1.isValid = false;
-  }
+  if (data.value.forms.part1.isValid()) router.push("/form-part-2");
 };
 
 const setMinMaxPatientDOB = () => {
@@ -332,7 +324,11 @@ onMounted(() => {
     </div>
     <!--next-->
     <div class="text-center">
-      <button type="button" @click="next" class="btn btn-lg btn-primary">
+      <button
+        type="button"
+        @click="continueClick"
+        class="btn btn-lg btn-primary"
+      >
         Continue
       </button>
     </div>

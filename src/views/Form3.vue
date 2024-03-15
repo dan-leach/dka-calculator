@@ -10,26 +10,20 @@ let showErrors = ref(false);
 const continueClick = () => {
   console.log(data.value.inputs.protocolStartDatetime.val);
   showErrors.value = true;
-  document.getElementById("form2").classList.add("was-validated");
+  document.getElementById("form3").classList.add("was-validated");
   if (data.value.forms.part2.isValid()) router.push("/form-part-3");
-};
-
-const setProtocolStartDatetime = () => {
-  const today = new Date();
-  data.value.inputs.protocolStartDatetime.val = today
-    .toISOString()
-    .substring(0, 16);
 };
 
 onMounted(() => {
   //if (!data.value.forms.part1.isValid) router.push("/form-part-1");
+  //if (!data.value.forms.part2.isValid) router.push("/form-part-2");
   setProtocolStartDatetime();
 });
 </script>
 
 <template>
-  <form id="form2" class="container my-4 needs-validation">
-    <h2 class="display-3">Clinical details</h2>
+  <form id="form3" class="container my-4 needs-validation">
+    <h2 class="display-3">Additional details</h2>
     <!--protocolStartDatetime-->
     <div class="mb-4">
       <div class="input-group">
