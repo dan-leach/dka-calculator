@@ -257,11 +257,59 @@ export const data = ref({
         }
         const dateVal = new Date(this.val);
 
-        if (dateVal < this.minDate || dateVal > this.maxDate)
+        if (dateVal <= this.minDate() || dateVal >= this.maxDate())
           this.errors +=
             "Protocol start must be within " +
             this.withinHours +
             " hours of the current date/time. ";
+
+        if (this.errors) return false;
+        return true;
+      },
+      errors: "",
+    },
+    pH: {
+      val: null,
+      label: "pH",
+      form: 2,
+      info: "pH is used to determine DKA severity which is used in fluid deficit calculations. It is stored by the DKA Calculator for audit purposes.",
+      min: 6.2,
+      max: 7.5,
+      step: 0.01,
+      isValid: function () {
+        this.errors = "";
+        this.val = Number.parseFloat(this.val).toFixed(2);
+
+        if (this.val < this.min)
+          this.errors += "pH must be at least " + this.min + ". ";
+
+        if (this.val > this.max)
+          this.errors += "pH must be no more than " + this.max + ". ";
+
+        if (this.errors) return false;
+        return true;
+      },
+      errors: "",
+    },
+    bicarbonate: {
+      val: null,
+      label: "Bicarbonate",
+      form: 2,
+      info: "Bicarbonate is used to determine DKA severity which is used in fluid deficit calculations. It is stored by the DKA Calculator for audit purposes.",
+      min: 0,
+      max: 35,
+      step: 0.1,
+      isValid: function () {
+        this.errors = "";
+        this.val = Number.parseFloat(this.val).toFixed(1);
+
+        if (this.val < this.min)
+          this.errors +=
+            "Bicarbonate must be at least " + this.min + " mmol/L. ";
+
+        if (this.val > this.max)
+          this.errors +=
+            "Bicarbonate must be no more than " + this.max + " mmol/L. ";
 
         if (this.errors) return false;
         return true;

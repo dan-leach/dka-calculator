@@ -186,6 +186,7 @@ onMounted(() => {
             :max="data.inputs.patientNHS.max"
             :disabled="data.inputs.patientNHS.optOut.val"
             autocomplete="off"
+            required
           />
           <label for="patientNHS">{{ data.inputs.patientNHS.label }}</label>
         </div>
