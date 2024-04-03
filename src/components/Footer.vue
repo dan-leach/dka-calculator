@@ -7,7 +7,7 @@ import { config } from "../assets/config.js";
     <nav
       class="navbar bg-grey d-flex flex-column align-items-start justify-content-start"
     >
-      <div class="m-2 d-none d-md-block">
+      <div class="mb-3 mx-4 d-none d-md-block">
         <p class="footer-text">
           <span
             ><strong>{{ config.appName }}&nbsp;</strong>
@@ -27,21 +27,21 @@ import { config } from "../assets/config.js";
           <a :href="config.author.url" target="_blank">{{
             config.author.name
           }}</a>
-          with the <a :href="config.bsped" target="_blank">BSPED</a> DKA special
-          interest group.
-          <span v-if="config.author.acknowledgement">
+          with the <a :href="config.bsped.main" target="_blank">BSPED</a> DKA
+          special interest group.
+          <span class="ms-4" v-if="config.author.acknowledgement">
             {{ config.author.acknowledgement }}
           </span>
         </p>
       </div>
-      <div class="d-flex align-items-center m-2">
+      <div class="mb-3 mx-4 d-flex align-items-center">
         <img class="ukca me-2" src="@/assets/UKCA.png" />
         <p class="footer-text">
-          The <a :href="config.bsped" target="_blank">BSPED</a>
+          The <a :href="config.bsped.main" target="_blank">BSPED</a>
           {{ config.appName }} is registered as a medical device in the UK.
         </p>
       </div>
-      <div class="m-2">
+      <div class="mx-4">
         <div class="footer-text">
           {{ config.disclaimer }}
         </div>

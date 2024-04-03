@@ -25,9 +25,14 @@ const router = createRouter({
       component: () => import("../views/FormClinicalDetails.vue"),
     },
     {
-      path: "/form-part-3",
-      name: "form-part-3",
-      component: () => import("../views/Form3.vue"),
+      path: "/form-audit-details",
+      name: "form-audit-details",
+      component: () => import("../views/FormAuditDetails.vue"),
+    },
+    {
+      path: "/generate-protocol",
+      name: "generate-protocol",
+      component: () => import("../views/GenerateProtocol.vue"),
     },
     {
       path: "/privacy-policy",

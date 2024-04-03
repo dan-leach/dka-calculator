@@ -1,4 +1,5 @@
 import { ref } from "vue";
+import { config } from "./config.js";
 
 export const data = ref({
   form: {
@@ -272,14 +273,17 @@ export const data = ref({
       step: 0.01,
       isValid: function () {
         this.errors = "";
-        this.val = Number.parseFloat(this.val).toFixed(2);
+        if (!this.val) {
+          this.errors += "pH must be provided. ";
+        } else {
+          this.val = Number.parseFloat(this.val).toFixed(2);
 
-        if (this.val < this.min)
-          this.errors += "pH must be at least " + this.min + ". ";
+          if (this.val < this.min)
+            this.errors += "pH must be at least " + this.min + ". ";
 
-        if (this.val > this.max)
-          this.errors += "pH must be no more than " + this.max + ". ";
-
+          if (this.val > this.max)
+            this.errors += "pH must be no more than " + this.max + ". ";
+        }
         if (this.errors) return false;
         return true;
       },
@@ -295,16 +299,164 @@ export const data = ref({
       step: 0.1,
       isValid: function () {
         this.errors = "";
-        this.val = Number.parseFloat(this.val).toFixed(1);
+        if (!this.val) {
+          this.errors += "Bicarbonate must be provided. ";
+        } else {
+          this.val = Number.parseFloat(this.val).toFixed(1);
 
-        if (this.val < this.min)
+          if (this.val < this.min)
+            this.errors +=
+              "Bicarbonate must be at least " + this.min + " mmol/L. ";
+
+          if (this.val > this.max)
+            this.errors +=
+              "Bicarbonate must be no more than " + this.max + " mmol/L. ";
+        }
+
+        if (this.errors) return false;
+        return true;
+      },
+      errors: "",
+    },
+    weight: {
+      val: null,
+      label: "Weight",
+      form: 2,
+      info: "Weight is used to calculate fluid volumes for boluses, deficit replacement and maintenance. It is stored by the DKA Calculator for audit purposes.",
+      min: 2,
+      max: 150,
+      step: 0.1,
+      isValid: function () {
+        this.errors = "";
+        if (!this.val) {
+          this.errors += "Weight must be provided. ";
+        } else {
+          this.val = Number.parseFloat(this.val).toFixed(1);
+
+          if (this.val < this.min)
+            this.errors += "Weight must be at least " + this.min + " kg. ";
+
+          if (this.val > this.max)
+            this.errors += "Weight must be no more than " + this.max + " kg. ";
+        }
+
+        if (this.errors) return false;
+        return true;
+      },
+      errors: "x",
+    },
+    shockPresent: {
+      val: "",
+      label: "Is the patient clinically shocked?",
+      form: 2,
+      info: "Clinical shock status is stored by the DKA Calculator for audit purposes.",
+      isValid: function () {
+        this.errors = "";
+        if (!this.val)
+          this.errors += "Clinical shock status must be selected. ";
+        if (this.errors) return false;
+        return true;
+      },
+      errors: "",
+    },
+    insulinRate: {
+      val: "",
+      label: "What starting rate of insulin is required?",
+      form: 2,
+      info: "Insulin starting rate is stored by the DKA Calculator for audit purposes.",
+      isValid: function () {
+        this.errors = "";
+        if (!this.val)
+          this.errors += "Insulin starting rate must be selected. ";
+        if (this.errors) return false;
+        return true;
+      },
+      errors: "",
+    },
+    preExistingDiabetes: {
+      val: "",
+      label:
+        "Was the patient known to have diabetes prior to the current episode of DKA?",
+      form: 2,
+      info: "If the patient has pre-existing diabetes is stored by the DKA Calculator for audit purposes.",
+      isValid: function () {
+        this.errors = "";
+        if (!this.val)
+          this.errors += "Pre-existing diabetes status must be selected. ";
+        if (this.errors) return false;
+        return true;
+      },
+      errors: "",
+    },
+    episodeType: {
+      val: "",
+      label: "What is this protocol being used for?",
+      form: 3,
+      info: "Episode type is stored by the DKA Calculator for audit purposes.",
+      isValid: function () {
+        this.errors = "";
+        if (!this.val) this.errors += "Episode type must be selected. ";
+        if (this.errors) return false;
+        return true;
+      },
+      errors: "",
+    },
+    region: {
+      val: "",
+      label: "Please select your region",
+      form: 3,
+      info: "Region is stored by the DKA Calculator for audit purposes.",
+      isValid: function () {
+        console.log("region.isValid...");
+        this.errors = "";
+        if (!this.val) {
+          this.errors += "Region must be selected. ";
+        } else {
+          for (let region of config.client.regions) {
+            if (region.name == this.val)
+              data.value.inputs.centre.options = region.centres;
+          }
+        }
+        if (this.errors) return false;
+        return true;
+      },
+      errors: "",
+    },
+    centre: {
+      val: "",
+      label: "Please select the treating centre",
+      options: [],
+      form: 3,
+      info: "Treating centre is stored by the DKA Calculator for audit purposes.",
+      isValid: function () {
+        this.errors = "";
+        if (!this.val) this.errors += "Treating centre must be selected. ";
+        if (this.errors) return false;
+        return true;
+      },
+      errors: "",
+    },
+    preventableFactors: {
+      val: [],
+      label:
+        "Were there any preventable factors which may have contributed to this episode of DKA?",
+      options: [
+        "Missed diagnosis in primary care",
+        "Missed diagnosis in hospital",
+        "Failure to refer for same day treatment",
+        "Delay in seeking treatment by patient/family",
+        "Pump failure",
+        "Sensor/CGMS failure",
+        "Failure of patient/family to administer insulin",
+        "Failure of patient/family to check blood ketones",
+      ],
+      form: 3,
+      info: "Preventable factors are stored by the DKA Calculator for audit purposes.",
+      isValid: function () {
+        this.errors = "";
+        if (!this.val)
           this.errors +=
-            "Bicarbonate must be at least " + this.min + " mmol/L. ";
-
-        if (this.val > this.max)
-          this.errors +=
-            "Bicarbonate must be no more than " + this.max + " mmol/L. ";
-
+            "Preventable factors must be selected, or choose 'None of these'. ";
         if (this.errors) return false;
         return true;
       },

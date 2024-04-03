@@ -1,6 +1,9 @@
 Currently building form
 
-1. fix min/max for time element of protocolStartDatetime (both input min and max limiters, and form validation)
-2. create other form steps and initial landing page
-3. one step of the form to include legal
-4. transitions between form steps
+1. Add ethnicity
+2. Create weight SDS checker with override
+3. Add 'other' options for region/centre
+
+4. fix min/max for time element of protocolStartDatetime (both input min and max limiters, and form validation)
+5. create other form steps and initial landing page
+6. transitions between form steps

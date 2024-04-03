@@ -14,7 +14,11 @@ export const config = reactive({
     changelog:
       "https://github.com/dan-leach/dka-calculator/blob/master/changelog.md",
   },
-  bsped: "https://www.bsped.org.uk",
+  bsped: {
+    main: "https://www.bsped.org.uk",
+    dkaGuidelines:
+      "https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/",
+  },
   disclaimer:
     "Decisions about patient care remain the treating clinician's responsibility.",
   client: {
@@ -24,7 +28,7 @@ export const config = reactive({
       //each array is of the hospitals in that region
       {
         name: "Northern Ireland",
-        organisations: [
+        centres: [
           "Altnagelvin Area Hospital, Londonderry",
           "Antrim Area Hospital, Antrim",
           "Causeway Hospital, Coleraine",
@@ -37,7 +41,7 @@ export const config = reactive({
       },
       {
         name: "Scotland",
-        organisations: [
+        centres: [
           "Lothian",
           "Greater Glasgow",
           "Wishaw",
@@ -53,7 +57,7 @@ export const config = reactive({
       },
       {
         name: "Wales",
-        organisations: [
+        centres: [
           "Bronglais General Hospital",
           "Glan Clwyd Hospital",
           "Glangwili General Hospital",
@@ -71,7 +75,7 @@ export const config = reactive({
       },
       {
         name: "East Midlands",
-        organisations: [
+        centres: [
           "Boston Pilgrim Hospital",
           "Chesterfield Royal",
           "Derby Hospitals",
@@ -86,7 +90,7 @@ export const config = reactive({
       },
       {
         name: "East of England",
-        organisations: [
+        centres: [
           "Addenbrookes Hospital",
           "Basildon and Thurrock University Hospital",
           "Bedford Hospital",
@@ -109,7 +113,7 @@ export const config = reactive({
       },
       {
         name: "North East and North Cumbria",
-        organisations: [
+        centres: [
           "Bishop Aukland Hospital",
           "Darlington Memorial Hospital",
           "Friarage Hospital",
@@ -128,7 +132,7 @@ export const config = reactive({
       },
       {
         name: "North West",
-        organisations: [
+        centres: [
           "Alder Hey Children’s",
           "Blackpool Teaching Hospitals",
           "Bolton",
@@ -153,7 +157,7 @@ export const config = reactive({
       },
       {
         name: "South East Coast and London Partnership",
-        organisations: [
+        centres: [
           "Barnet General Hospital",
           "Buckland Hospital",
           "Central Middlesex",
@@ -205,7 +209,7 @@ export const config = reactive({
       },
       {
         name: "South West",
-        organisations: [
+        centres: [
           "Gloucestershire Hospitals",
           "Great Western Hospitals",
           "North Bristol",
@@ -222,7 +226,7 @@ export const config = reactive({
       },
       {
         name: "Thames Valley",
-        organisations: [
+        centres: [
           "Frimley Health",
           "John Radcliffe Hospital",
           "Milton Keynes Hospital",
@@ -233,7 +237,7 @@ export const config = reactive({
       },
       {
         name: "Wessex",
-        organisations: [
+        centres: [
           "Basingstoke and North Hampshire Hospital",
           "Dorset County Hospital",
           "Poole Hospital",
@@ -246,7 +250,7 @@ export const config = reactive({
       },
       {
         name: "West Midlands",
-        organisations: [
+        centres: [
           "Alexandra Hospital",
           "Birmingham Children’s Hospital",
           "Birmingham City Hospital",
@@ -273,7 +277,7 @@ export const config = reactive({
       },
       {
         name: "Yorkshire and Humber",
-        organisations: [
+        centres: [
           "Airedale General Hospital",
           "Barnsley Hospital",
           "Bassetlaw Hospital",

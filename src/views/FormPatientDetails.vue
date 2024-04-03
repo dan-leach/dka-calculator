@@ -40,7 +40,7 @@ const optOutClick = (i) => {
 };
 
 onMounted(() => {
-  if (!data.value.form.isValid(0)) router.push("/form-disclaimer");
+  //if (!data.value.form.isValid(0)) router.push("/form-disclaimer");
   setMinMaxPatientDOB();
 });
 </script>
@@ -134,7 +134,7 @@ onMounted(() => {
           <input
             type="radio"
             class="btn-check"
-            name="options"
+            name="patientSex"
             id="male"
             value="male"
             v-model="data.inputs.patientSex.val"
@@ -147,7 +147,7 @@ onMounted(() => {
           <input
             type="radio"
             class="btn-check"
-            name="options"
+            name="patientSex"
             id="female"
             value="female"
             v-model="data.inputs.patientSex.val"
@@ -165,12 +165,12 @@ onMounted(() => {
       </div>
       <div
         v-if="showErrors"
-        class="form-text text-danger mx-1"
+        class="form-text text-danger text-center mx-1"
         id="patientSexErrors"
       >
         {{ data.inputs.patientSex.errors }}
       </div>
-      <div class="collapse form-text mx-1" id="patientSexInfo">
+      <div class="collapse form-text text-center mx-1" id="patientSexInfo">
         {{ data.inputs.patientSex.info }}
       </div>
     </div>
@@ -339,5 +339,9 @@ onMounted(() => {
 }
 .btn-outline-secondary {
   width: 150px;
+  background-color: white;
+}
+.episode-type-btn {
+  height: 62px;
 }
 </style>
