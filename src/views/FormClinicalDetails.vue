@@ -9,8 +9,10 @@ let showErrors = ref(false);
 
 const continueClick = () => {
   showErrors.value = true;
-  document.getElementById("form2").classList.add("was-validated");
-  if (data.value.forms.part2.isValid()) router.push("/form-part-3");
+  document
+    .getElementById("form-clinical-details")
+    .classList.add("was-validated");
+  if (data.value.forms.clinicalDetails.isValid()) router.push("/form-part-3");
 };
 
 const setProtocolStartDatetime = () => {
@@ -34,14 +36,14 @@ const setMinMaxProtocolStartDatetime = () => {
 };
 
 onMounted(() => {
-  //if (!data.value.forms.part1.isValid) router.push("/form-part-1");
+  if (!data.value.form.isValid(1)) router.push("/form-patient-details");
   setProtocolStartDatetime();
   setMinMaxProtocolStartDatetime();
 });
 </script>
 
 <template>
-  <form id="form2" class="container my-4 needs-validation">
+  <form id="form-clinical-details" class="container my-4 needs-validation">
     <h2 class="display-3">Clinical details</h2>
     <!--protocolStartDatetime-->
     <div class="mb-4">

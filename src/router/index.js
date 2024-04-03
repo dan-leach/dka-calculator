@@ -10,14 +10,19 @@ const router = createRouter({
       component: Start,
     },
     {
-      path: "/form-part-1",
-      name: "form-part-1",
-      component: () => import("../views/Form1.vue"),
+      path: "/form-disclaimer",
+      name: "form-disclaimer",
+      component: () => import("../views/FormDisclaimer.vue"),
     },
     {
-      path: "/form-part-2",
-      name: "form-part-2",
-      component: () => import("../views/Form2.vue"),
+      path: "/form-patient-details",
+      name: "form-patient-details",
+      component: () => import("../views/FormPatientDetails.vue"),
+    },
+    {
+      path: "/form-clinical-details",
+      name: "form-clinical-details",
+      component: () => import("../views/FormClinicalDetails.vue"),
     },
     {
       path: "/form-part-3",

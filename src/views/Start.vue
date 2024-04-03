@@ -7,7 +7,7 @@
     <div class="text-center">
       <button
         type="button"
-        @click="$router.push('/form-part-1')"
+        @click="$router.push('/form-disclaimer')"
         class="btn btn-lg btn-primary"
       >
         Start

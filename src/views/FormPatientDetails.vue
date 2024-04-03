@@ -9,8 +9,10 @@ let showErrors = ref(false);
 
 const continueClick = () => {
   showErrors.value = true;
-  document.getElementById("form1").classList.add("was-validated");
-  if (data.value.forms.part1.isValid()) router.push("/form-part-2");
+  document
+    .getElementById("form-patient-details")
+    .classList.add("was-validated");
+  if (data.value.forms.part1.isValid()) router.push("/form-clinical-details");
 };
 
 const setMinMaxPatientDOB = () => {
@@ -38,12 +40,13 @@ const optOutClick = (i) => {
 };
 
 onMounted(() => {
+  if (!data.value.form.isValid(0)) router.push("/form-disclaimer");
   setMinMaxPatientDOB();
 });
 </script>
 
 <template>
-  <form id="form1" class="container my-4 needs-validation">
+  <form id="form-patient-details" class="container my-4 needs-validation">
     <h2 class="display-3">Patient details</h2>
     <p class="mx-1">
       To generate a care pathway for your patient please complete the form

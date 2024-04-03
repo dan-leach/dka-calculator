@@ -1,35 +1,29 @@
 import { ref } from "vue";
 
 export const data = ref({
-  forms: {
-    part1: {
-      isValid: function () {
-        let formValid = true;
-        for (let i in data.value.inputs)
-          if (
-            data.value.inputs[i].form === 1 &&
-            !data.value.inputs[i].isValid()
-          )
-            formValid = false;
-        if (formValid) return true;
-        return false;
-      },
-    },
-    part2: {
-      isValid: function () {
-        let formValid = true;
-        for (let i in data.value.inputs)
-          if (
-            data.value.inputs[i].form === 2 &&
-            !data.value.inputs[i].isValid()
-          )
-            formValid = false;
-        if (formValid) return true;
-        return false;
-      },
+  form: {
+    isValid: function (formIndex) {
+      let formValid = true;
+      for (let i in data.value.inputs)
+        if (
+          data.value.inputs[i].form === formIndex &&
+          !data.value.inputs[i].isValid()
+        )
+          formValid = false;
+
+      if (formValid) return true;
+      return false;
     },
   },
   inputs: {
+    legalAgreement: {
+      val: false,
+      form: 0,
+      isValid: function () {
+        if (!this.val) return false;
+        return true;
+      },
+    },
     patientName: {
       val: "",
       label: "Full name",
