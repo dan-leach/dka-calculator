@@ -1,5 +1,4 @@
 <script setup>
-import { RouterLink } from "vue-router";
 import { config } from "../assets/config.js";
 </script>
 
@@ -28,7 +27,8 @@ import { config } from "../assets/config.js";
           <a :href="config.author.url" target="_blank">{{
             config.author.name
           }}</a>
-          with the BSPED DKA special interest group.
+          with the <a :href="config.bsped" target="_blank">BSPED</a> DKA special
+          interest group.
           <span v-if="config.author.acknowledgement">
             {{ config.author.acknowledgement }}
           </span>
@@ -37,13 +37,13 @@ import { config } from "../assets/config.js";
       <div class="d-flex align-items-center m-2">
         <img class="ukca me-2" src="@/assets/UKCA.png" />
         <p class="footer-text">
-          The BSPED Paediatric DKA Calculator is registered as a medical device
-          in the UK.
+          The <a :href="config.bsped" target="_blank">BSPED</a>
+          {{ config.appName }} is registered as a medical device in the UK.
         </p>
       </div>
       <div class="m-2">
         <div class="footer-text">
-          <strong>{{ config.disclaimer }}</strong>
+          {{ config.disclaimer }}
         </div>
       </div>
     </nav>

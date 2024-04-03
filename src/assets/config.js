@@ -16,7 +16,7 @@ export const config = reactive({
   },
   bsped: "https://www.bsped.org.uk",
   disclaimer:
-    "Important: Decisions about patient care remains the treating clinician's responsibility. By using this website you confirm that you accept in full the terms of the disclaimer. If you do not agree to the terms, you must not use this site.",
+    "Decisions about patient care remain the treating clinician's responsibility.",
   client: {
     url: "https://dev.learnloop.co.uk",
     showApiConsole: false,

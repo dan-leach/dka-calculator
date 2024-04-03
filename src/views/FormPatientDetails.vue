@@ -12,7 +12,7 @@ const continueClick = () => {
   document
     .getElementById("form-patient-details")
     .classList.add("was-validated");
-  if (data.value.forms.part1.isValid()) router.push("/form-clinical-details");
+  if (data.value.form.isValid(1)) router.push("/form-clinical-details");
 };
 
 const setMinMaxPatientDOB = () => {

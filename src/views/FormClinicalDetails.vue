@@ -12,7 +12,7 @@ const continueClick = () => {
   document
     .getElementById("form-clinical-details")
     .classList.add("was-validated");
-  if (data.value.forms.clinicalDetails.isValid()) router.push("/form-part-3");
+  if (data.value.form.isValid(2)) router.push("/form-part-3");
 };
 
 const setProtocolStartDatetime = () => {
