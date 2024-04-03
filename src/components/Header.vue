@@ -8,11 +8,7 @@ import { RouterLink } from "vue-router";
       <RouterLink
         to="/"
         class="navbar-brand d-flex flex-row flex-wrap align-items-center"
-        ><img
-          alt="Paediatric DKA Calculator logo"
-          class="logo"
-          src="@/assets/logo.png"
-        />
+        ><img alt="BSPED logo" class="logo me-4" src="@/assets/bsped.png" />
         <h1 class="site-title">Paediatric DKA Calculator</h1></RouterLink
       >
     </div>
@@ -21,11 +17,14 @@ import { RouterLink } from "vue-router";
 
 <style scoped>
 .logo {
-  width: 50px;
+  width: 20vw;
 }
 .site-title {
-  font-size: 3vw;
+  font-size: 4vw;
   margin: 0;
   margin-left: 10px;
+}
+.navbar {
+  padding: 0;
 }
 </style>

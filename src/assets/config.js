@@ -1,12 +1,22 @@
 import { reactive } from "vue";
 
 export const config = reactive({
+  appName: "Paediatric DKA Calculator",
   version: "2.0",
-  author: "Dan Leach",
-  web: "https://danleach.uk",
-  repo: "https://github.com/dan-leach/dka-calculator",
+  author: {
+    name: "Dan Leach",
+    url: "https://danleach.uk",
+    email: "admin@dka-calculator.co.uk",
+    acknowledgement: "With thanks to X for peer-review of the current version",
+  },
+  repo: {
+    main: "https://github.com/dan-leach/dka-calculator",
+    changelog:
+      "https://github.com/dan-leach/dka-calculator/blob/master/changelog.md",
+  },
   bsped: "https://www.bsped.org.uk",
-  email: "admin@dka-calculator.co.uk",
+  disclaimer:
+    "Important: Decisions about patient care remains the treating clinician's responsibility. By using this website you confirm that you accept in full the terms of the disclaimer. If you do not agree to the terms, you must not use this site.",
   client: {
     url: "https://dev.learnloop.co.uk",
     showApiConsole: false,
