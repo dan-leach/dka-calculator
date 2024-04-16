@@ -188,11 +188,23 @@ onMounted(() => {
         /></span>
       </div>
       <div
-        v-if="showErrors"
+        v-if="showErrors || data.inputs.weight.limit.exceeded"
         class="form-text text-danger mx-1"
         id="weightErrors"
       >
         {{ data.inputs.weight.errors }}
+      </div>
+      <div class="form-check form-switch ms-1 my-1" v-if="data.inputs.weight.limit.exceeded">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          v-model="data.inputs.weight.limit.override"
+          @change="data.inputs.weight.isValid()"
+          id="weightLimitOverride"
+        />
+        <label class="form-check-label" for="weightLimitOverride">{{
+          data.inputs.weight.limit.overrideLabel
+        }}</label>
       </div>
       <div
         class="collapse form-text mx-1"

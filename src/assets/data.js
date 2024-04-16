@@ -67,6 +67,15 @@ export const data = ref({
         );
         return minDate;
       },
+      ageMonths: function() {
+        let months;
+        let today = new Date()
+        let dob = new Date(data.value.inputs.patientDOB.val)
+        months = (today.getFullYear() - dob.getFullYear()) * 12;
+        months -= dob.getMonth();
+        months += today.getMonth();
+        return months <= 0 ? 0 : months;
+      },
       isValid: function () {
         this.errors = "";
         if (isNaN(Date.parse(this.val))) {
@@ -326,20 +335,39 @@ export const data = ref({
       min: 2,
       max: 150,
       step: 0.1,
+      limit: {
+        lower: function () {
+          return config.client.weightLimits[data.value.inputs.patientSex.val].lower[data.value.inputs.patientDOB.ageMonths()]
+        },
+        upper: function () {
+          let upper = config.client.weightLimits[data.value.inputs.patientSex.val].upper[data.value.inputs.patientDOB.ageMonths()]
+          if (upper>config.client.weightLimits.max) upper = config.client.weightLimits.max;
+          return upper
+        },
+        exceeded: false,
+        override: false,
+        overrideLabel: "Override weight limit"
+      },
       isValid: function () {
         this.errors = "";
         if (!this.val) {
           this.errors += "Weight must be provided. ";
-        } else {
-          this.val = Number.parseFloat(this.val).toFixed(1);
-
-          if (this.val < this.min)
-            this.errors += "Weight must be at least " + this.min + " kg. ";
-
-          if (this.val > this.max)
-            this.errors += "Weight must be no more than " + this.max + " kg. ";
+          return false
         }
 
+        this.val = Number.parseFloat(this.val).toFixed(1);
+
+        if (this.val < this.min) this.errors += "Weight must be at least " + this.min + " kg. ";
+        if (this.val > this.max) this.errors += "Weight must be no more than " + this.max + " kg. ";
+        if (this.errors) return false;
+
+        if ((this.val < this.limit.lower() || this.val > this.limit.upper())) {
+          if (!this.limit.override) this.errors += "Weight must be within 2 standard deviations of the mean for age (upper limit " + config.client.weightLimits.max + "kg) (range " + this.limit.lower() + "kg to " + this.limit.upper() + "kg)."
+          this.limit.exceeded = true
+        } else {
+          this.limit.exceeded = false
+          this.limit.override = false
+        }
         if (this.errors) return false;
         return true;
       },
