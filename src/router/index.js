@@ -25,6 +25,11 @@ const router = createRouter({
       component: () => import("../views/FormClinicalDetails.vue"),
     },
     {
+      path: "/form-override-confirm",
+      name: "form-override-confirm",
+      component: () => import("../views/FormOverrideConfirm.vue"),
+    },
+    {
       path: "/form-audit-details",
       name: "form-audit-details",
       component: () => import("../views/FormAuditDetails.vue"),

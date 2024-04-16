@@ -12,7 +12,13 @@ const continueClick = () => {
   document
     .getElementById("form-patient-details")
     .classList.add("was-validated");
-  if (data.value.form.isValid(1)) router.push("/form-clinical-details");
+  if (data.value.form.isValid(1)) {
+    if (data.value.inputs.weight.limit.override) {
+      router.push("/form-override-confirm");
+    } else {
+      router.push("/form-clinical-details");
+    }
+  }
 };
 
 const setMinMaxPatientDOB = () => {
@@ -320,15 +326,28 @@ onMounted(() => {
         {{ data.inputs.patientPostcode.info }}
       </div>
     </div>
-    <!--next-->
-    <div class="text-center">
-      <button
-        type="button"
-        @click="continueClick"
-        class="btn btn-lg btn-primary"
-      >
-        Continue
-      </button>
+
+    <div class="d-flex flex-row justify-content-evenly">
+      <!--back-->
+      <div class="text-center">
+        <button
+          type="button"
+          @click="router.push('/form-disclaimer')"
+          class="btn btn-lg btn-secondary"
+        >
+          Back
+        </button>
+      </div>
+      <!--next-->
+      <div class="text-center">
+        <button
+          type="button"
+          @click="continueClick"
+          class="btn btn-lg btn-primary"
+        >
+          Continue
+        </button>
+      </div>
     </div>
   </form>
 </template>

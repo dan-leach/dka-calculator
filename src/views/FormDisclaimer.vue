@@ -7,9 +7,7 @@ let showErrors = ref(false);
 
 const continueClick = () => {
   data.value.inputs.legalAgreement.val = true;
-  showErrors.value = true;
-  document.getElementById("form-disclaimer").classList.add("was-validated");
-  if (data.value.form.isValid(0)) router.push("/form-patient-details");
+  router.push("/form-patient-details");
 };
 </script>
 

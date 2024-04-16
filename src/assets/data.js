@@ -346,6 +346,7 @@ export const data = ref({
         },
         exceeded: false,
         override: false,
+        overrideConfirm: false,
         overrideLabel: "Override weight limit"
       },
       isValid: function () {

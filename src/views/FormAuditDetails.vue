@@ -16,6 +16,7 @@ const continueClick = () => {
 
 onMounted(() => {
   //if (!data.value.form.isValid(2)) router.push("/form-clinical-details");
+  //if (data.value.inputs.weight.limit.override && !data.value.inputs.weight.limit.overrideConfirm) router.push("/form-override-confirm")
 });
 </script>
 
@@ -31,7 +32,7 @@ onMounted(() => {
             type="radio"
             class="btn-check"
             name="episodeType"
-            id="real"
+            id="episodeTypeReal"
             value="real"
             v-model="data.inputs.episodeType.val"
             @change="data.inputs.episodeType.isValid()"
@@ -40,7 +41,7 @@ onMounted(() => {
           />
           <label
             class="btn btn-outline-secondary me-2 episode-type-btn py-3"
-            for="real"
+            for="episodeTypeReal"
             >For a real patient</label
           >
 
@@ -48,13 +49,13 @@ onMounted(() => {
             type="radio"
             class="btn-check"
             name="episodeType"
-            id="test"
+            id="episodeTypeTest"
             value="test"
             v-model="data.inputs.episodeType.val"
             @change="data.inputs.episodeType.isValid()"
             autocomplete="off"
           />
-          <label class="btn btn-outline-secondary" for="test"
+          <label class="btn btn-outline-secondary" for="episodeTypeTest"
             >For testing or training purposes</label
           >
           <font-awesome-icon
@@ -199,15 +200,27 @@ onMounted(() => {
         {{ data.inputs.preventableFactors.info }}
       </div>
     </div>
-    <!--next-->
-    <div class="text-center">
-      <button
-        type="button"
-        @click="continueClick"
-        class="btn btn-lg btn-primary"
-      >
-        Continue
-      </button>
+    <div class="d-flex flex-row justify-content-evenly">
+      <!--back-->
+      <div class="text-center">
+        <button
+          type="button"
+          @click="router.push('/form-clinical-details')"
+          class="btn btn-lg btn-secondary"
+        >
+          Back
+        </button>
+      </div>
+      <!--next-->
+      <div class="text-center">
+        <button
+          type="button"
+          @click="continueClick"
+          class="btn btn-lg btn-primary"
+        >
+          Continue
+        </button>
+      </div>
     </div>
   </form>
 </template>

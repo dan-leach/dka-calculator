@@ -12,7 +12,13 @@ const continueClick = () => {
   document
     .getElementById("form-clinical-details")
     .classList.add("was-validated");
-  if (data.value.form.isValid(2)) router.push("/form-audit-details");
+  if (data.value.form.isValid(2)) {
+    if (data.value.inputs.weight.limit.override) {
+      router.push("/form-override-confirm");
+    } else {
+      router.push("/form-audit-details");
+    }
+  }
 };
 
 const setProtocolStartDatetime = () => {
@@ -221,26 +227,26 @@ onMounted(() => {
             type="radio"
             class="btn-check"
             name="shockPresent"
-            id="yes"
+            id="shockPresentTrue"
             value="true"
             v-model="data.inputs.shockPresent.val"
             @change="data.inputs.shockPresent.isValid()"
             autocomplete="off"
             required
           />
-          <label class="btn btn-outline-secondary me-2" for="yes">Yes</label>
+          <label class="btn btn-outline-secondary me-2" for="shockPresentTrue">Yes</label>
 
           <input
             type="radio"
             class="btn-check"
             name="shockPresent"
-            id="no"
+            id="shockPresentFalse"
             value="false"
             v-model="data.inputs.shockPresent.val"
             @change="data.inputs.shockPresent.isValid()"
             autocomplete="off"
           />
-          <label class="btn btn-outline-secondary" for="no">No</label>
+          <label class="btn btn-outline-secondary" for="shockPresentFalse">No</label>
           <font-awesome-icon
             :icon="['fas', 'circle-info']"
             data-bs-toggle="collapse"
@@ -324,26 +330,26 @@ onMounted(() => {
             type="radio"
             class="btn-check"
             name="preExistingDiabetes"
-            id="yes"
+            id="preExistingDiabetesTrue"
             value="true"
             v-model="data.inputs.preExistingDiabetes.val"
             @change="data.inputs.preExistingDiabetes.isValid()"
             autocomplete="off"
             required
           />
-          <label class="btn btn-outline-secondary me-2" for="yes">Yes</label>
+          <label class="btn btn-outline-secondary me-2" for="preExistingDiabetesTrue">Yes</label>
 
           <input
             type="radio"
             class="btn-check"
             name="preExistingDiabetes"
-            id="no"
+            id="preExistingDiabetesFalse"
             value="false"
             v-model="data.inputs.preExistingDiabetes.val"
             @change="data.inputs.preExistingDiabetes.isValid()"
             autocomplete="off"
           />
-          <label class="btn btn-outline-secondary" for="no">No</label>
+          <label class="btn btn-outline-secondary" for="preExistingDiabetesFalse">No</label>
           <font-awesome-icon
             :icon="['fas', 'circle-info']"
             data-bs-toggle="collapse"
@@ -366,30 +372,28 @@ onMounted(() => {
         {{ data.inputs.preExistingDiabetes.info }}
       </div>
     </div>
-    <!--next-->
-    <div class="text-center">
-      <button
-        type="button"
-        @click="continueClick"
-        class="btn btn-lg btn-primary"
-      >
-        Continue
-      </button>
-    </div>
-    <!--notes-->
-    <div class="d-none">
-      Clinical features:<br />
-      Weight<br />
-      Shock<br />
-      Pre-existing diabetes<br />
-      Insulin rate<br />
-      <hr />
-      Region<br />
-      Centre<br />
-      Training/real<br />
-      Audit ID - patient(auto)<br />
-      Audit ID - episode(auto)<br />
-      IMD(auto)<br />
+
+    <div class="d-flex flex-row justify-content-evenly">
+      <!--back-->
+      <div class="text-center">
+        <button
+          type="button"
+          @click="router.push('/form-patient-details')"
+          class="btn btn-lg btn-secondary"
+        >
+          Back
+        </button>
+      </div>
+      <!--next-->
+      <div class="text-center">
+        <button
+          type="button"
+          @click="continueClick"
+          class="btn btn-lg btn-primary"
+        >
+          Continue
+        </button>
+      </div>
     </div>
   </form>
 </template>
