@@ -81,7 +81,7 @@ onMounted(() => {
       <div class="input-group">
         <select
           name="region"
-          class="form-control"
+          class="form-select"
           v-model="data.inputs.region.val"
           @change="data.inputs.region.isValid()"
           autocomplete="off"
@@ -91,6 +91,7 @@ onMounted(() => {
           <option v-for="region in config.client.regions" :value="region.name">
             {{ region.name }}
           </option>
+          <option value="Other">Other</option>
         </select>
 
         <span
@@ -116,7 +117,7 @@ onMounted(() => {
       <div class="input-group">
         <select
           name="centre"
-          class="form-control"
+          class="form-select"
           v-model="data.inputs.centre.val"
           @change="data.inputs.centre.isValid()"
           autocomplete="off"
@@ -130,6 +131,7 @@ onMounted(() => {
           >
             {{ centreOption }}
           </option>
+          <option value="Other">Other</option>
         </select>
 
         <span
@@ -155,7 +157,7 @@ onMounted(() => {
       <div class="input-group">
         <select
           name="ethnicGroup"
-          class="form-control"
+          class="form-select"
           v-model="data.inputs.ethnicGroup.val"
           @change="data.inputs.ethnicGroup.isValid()"
           autocomplete="off"
