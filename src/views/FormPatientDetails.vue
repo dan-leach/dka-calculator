@@ -22,7 +22,17 @@ const continueClick = () => {
         data.value.inputs.patientHash.val = res.patientHash
       },
       function(error){
-        console.error(error)
+        console.error('getPatientHash failed')
+      }
+    )
+    api('getImdDecile', {
+      patientPostcode: data.value.inputs.patientPostcode.val
+    }).then(
+      function(res){
+        data.value.inputs.imd.val = res.imd
+      },
+      function(error){
+        console.error('getImdDecile failed')
       }
     )
     router.push("/form-clinical-details");

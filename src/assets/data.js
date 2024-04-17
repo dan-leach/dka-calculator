@@ -436,7 +436,6 @@ export const data = ref({
       form: 3,
       info: "Region is stored by the DKA Calculator for audit purposes.",
       isValid: function () {
-        console.log("region.isValid...");
         this.errors = "";
         if (!this.val) {
           this.errors += "Region must be selected. ";
@@ -483,37 +482,19 @@ export const data = ref({
       info: "Preventable factors are stored by the DKA Calculator for audit purposes.",
       isValid: function () {
         this.errors = "";
-        if (!this.val)
+        if (!this.val.length)
           this.errors +=
-            "Preventable factors must be selected, or choose 'None of these'. ";
+            "Preventable factors must be selected, or choose 'No preventable factors'. ";
         if (this.errors) return false;
         return true;
       },
       errors: "",
     },
     imd: {
-      val: null,
-      label: "Index of Multiple Deprivation (IMD) decile",
-      form: 3,
-      info: "Index of Multiple Deprivation (IMD) decile is derived from the patient's postcode. It is stored by the DKA Calculator for audit purposes.",
-      isValid: function () {
-        this.errors = "";
-        if (!this.val) this.errors += "Optional: Index of Multiple Deprivation (IMD) decile has not been derived. To fix this provide a postcode in the Patient Details section of this form. ";
-        return true;
-      },
-      errors: "",
+      val: null
     },
     patientHash: {
       val: '',
-      label: "Patient unique hash",
-      form: 3,
-      info: "Patient unique hash is derived from the patient's NHS number and date of birth. It is stored by the DKA Calculator for audit purposes.",
-      isValid: function () {
-        this.errors = "";
-        if (!this.val) this.errors += "Optional: patient unique hash has not been derived. To fix this provide an NHS number and date of birth in the Patient Details section of this form. ";
-        return true;
-      },
-      errors: "",
     },
   },
   calculations: {},

@@ -8,7 +8,6 @@ import router from "../router";
 let showErrors = ref(false);
 
 const continueClick = () => {
-  console.log(data.value.inputs.protocolStartDatetime.val);
   showErrors.value = true;
   document.getElementById("form-audit-details").classList.add("was-validated");
   if (data.value.form.isValid(3)) router.push("/generate-protocol");
@@ -162,7 +161,7 @@ onMounted(() => {
           class="ms-2"
         />
       </p>
-      <div class="d-flex justify-content-center">
+      <div v-if="data.inputs.preventableFactors.val != 'nil'">
         <div class="d-flex flex-wrap justify-content-center">
           <div
             v-for="factor in data.inputs.preventableFactors.options"
@@ -177,6 +176,7 @@ onMounted(() => {
               @change="data.inputs.preventableFactors.isValid()"
               autocomplete="off"
               required
+              :disabled="data.inputs.preventableFactors.val == 'nil'"
             />
             <label
               class="btn btn-outline-secondary me-2 preventable-factors-btn"
@@ -185,6 +185,25 @@ onMounted(() => {
             >
           </div>
         </div>
+        <p class="text-center m-2">or</p>
+      </div>
+      <div class="d-flex justify-content-center">
+        <input
+          type="checkbox"
+          class="btn-check"
+          id="nilFactor"
+          value="nil"
+          v-model="data.inputs.preventableFactors.val"
+          @change="data.inputs.preventableFactors.isValid()"
+          autocomplete="off"
+          required
+          :disabled="data.inputs.preventableFactors.val != '' && data.inputs.preventableFactors.val != 'nil'" 
+        />
+        <label
+          class="btn btn-outline-success me-2 "
+          for="nilFactor"
+          >No preventable factors</label
+        >
       </div>
       <div
         v-if="showErrors"
