@@ -115,7 +115,7 @@ onMounted(() => {
     <div class="mb-4">
       <div class="input-group">
         <select
-          name="region"
+          name="centre"
           class="form-control"
           v-model="data.inputs.centre.val"
           @change="data.inputs.centre.isValid()"
@@ -148,6 +148,46 @@ onMounted(() => {
       </div>
       <div class="collapse form-text mx-1" id="centreInfo">
         {{ data.inputs.centre.info }}
+      </div>
+    </div>
+    <!--ethnicGroup-->
+    <div class="mb-4">
+      <div class="input-group">
+        <select
+          name="ethnicGroup"
+          class="form-control"
+          v-model="data.inputs.ethnicGroup.val"
+          @change="data.inputs.ethnicGroup.isValid()"
+          autocomplete="off"
+          required
+        >
+          <option value="" disabled>{{ data.inputs.ethnicGroup.label }}</option>
+          <option
+            v-for="ethnicGroup, index in config.client.ethnicGroups.groups"
+            :value="ethnicGroup"
+            :disabled="config.client.ethnicGroups.headingIndexes.includes(index)"
+          >
+            <span v-if="config.client.ethnicGroups.headingIndexes.includes(index)">-----{{ethnicGroup}}-----</span>
+            <span v-else>{{ethnicGroup}}</span>
+          </option>
+        </select>
+
+        <span
+          class="input-group-text"
+          data-bs-toggle="collapse"
+          data-bs-target="#ethnicGroupInfo"
+          ><font-awesome-icon :icon="['fas', 'circle-info']"
+        /></span>
+      </div>
+      <div
+        v-if="showErrors"
+        class="form-text text-danger mx-1"
+        id="ethnicGroupErrors"
+      >
+        {{ data.inputs.ethnicGroup.errors }}
+      </div>
+      <div class="collapse form-text mx-1" id="ethnicGroupInfo">
+        {{ data.inputs.ethnicGroup.info }}
       </div>
     </div>
     <!--preventableFactors-->

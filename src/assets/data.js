@@ -464,6 +464,19 @@ export const data = ref({
       },
       errors: "",
     },
+    ethnicGroup: {
+      val: "",
+      label: "Please select patient ethnic group",
+      form: 3,
+      info: "Patient ethnic group is stored by the DKA Calculator for audit purposes.",
+      isValid: function () {
+        this.errors = "";
+        if (!this.val) this.errors += "Patient ethnic group must be selected. ";
+        if (this.errors) return false;
+        return true;
+      },
+      errors: "",
+    },
     preventableFactors: {
       val: [],
       label:
