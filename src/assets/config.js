@@ -3,6 +3,7 @@ import { reactive } from "vue";
 export const config = reactive({
   appName: "Paediatric DKA Calculator",
   version: "2.0",
+  url: "https://dev.dka-calculator.co.uk",
   author: {
     name: "Dan Leach",
     url: "https://danleach.uk",
@@ -22,8 +23,6 @@ export const config = reactive({
   disclaimer:
     "Decisions about patient care remain the treating clinician's responsibility.",
   client: {
-    url: "https://dev.learnloop.co.uk",
-    showApiConsole: false,
     regions: [
       //each array is of the hospitals in that region
       {
@@ -394,6 +393,8 @@ export const config = reactive({
     }
   },
   api: {
+    url: 'https://api.dka-calculator.co.uk',
     timeoutDuration: 15000,
+    showConsole: true,
   },
 });

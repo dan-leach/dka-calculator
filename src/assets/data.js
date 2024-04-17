@@ -491,6 +491,30 @@ export const data = ref({
       },
       errors: "",
     },
+    imd: {
+      val: null,
+      label: "Index of Multiple Deprivation (IMD) decile",
+      form: 3,
+      info: "Index of Multiple Deprivation (IMD) decile is derived from the patient's postcode. It is stored by the DKA Calculator for audit purposes.",
+      isValid: function () {
+        this.errors = "";
+        if (!this.val) this.errors += "Optional: Index of Multiple Deprivation (IMD) decile has not been derived. To fix this provide a postcode in the Patient Details section of this form. ";
+        return true;
+      },
+      errors: "",
+    },
+    patientHash: {
+      val: '',
+      label: "Patient unique hash",
+      form: 3,
+      info: "Patient unique hash is derived from the patient's NHS number and date of birth. It is stored by the DKA Calculator for audit purposes.",
+      isValid: function () {
+        this.errors = "";
+        if (!this.val) this.errors += "Optional: patient unique hash has not been derived. To fix this provide an NHS number and date of birth in the Patient Details section of this form. ";
+        return true;
+      },
+      errors: "",
+    },
   },
   calculations: {},
 });

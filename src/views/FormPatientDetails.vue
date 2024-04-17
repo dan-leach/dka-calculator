@@ -2,6 +2,7 @@
 import { ref, onMounted } from "vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { data } from "../assets/data.js";
+import { api } from "../assets/api.js";
 import Swal from "sweetalert2";
 import router from "../router";
 
@@ -13,11 +14,18 @@ const continueClick = () => {
     .getElementById("form-patient-details")
     .classList.add("was-validated");
   if (data.value.form.isValid(1)) {
-    if (data.value.inputs.weight.limit.override) {
-      router.push("/form-override-confirm");
-    } else {
-      router.push("/form-clinical-details");
-    }
+    api('getPatientHash', {
+      patientNHS: data.value.inputs.patientNHS.val,
+      patientDOB: data.value.inputs.patientDOB.val
+    }).then(
+      function(res){
+        data.value.inputs.patientHash.val = res.patientHash
+      },
+      function(error){
+        console.error(error)
+      }
+    )
+    router.push("/form-clinical-details");
   }
 };
 
