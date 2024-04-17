@@ -1,5 +1,3 @@
 Currently building form
 
-4. fix min/max for time element of protocolStartDatetime (both input min and max limiters, and form validation)
-5. create other form steps and initial landing page
-6. transitions between form steps
+2. transitions between form steps

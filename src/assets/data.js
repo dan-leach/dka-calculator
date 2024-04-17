@@ -230,27 +230,69 @@ export const data = ref({
       form: 2,
       info: "The protocol start date/time is used to calculated recommended review date/times on the serial data sheet on the care pathway. It is stored by the DKA Calculator for audit purposes.",
       withinHours: 24,
-      minDate: function () {
-        const today = new Date();
-        const minDate = new Date(
-          today.getFullYear(),
-          today.getMonth(),
-          today.getDate(),
-          today.getHours() - this.withinHours,
-          today.getMinutes()
-        );
-        return minDate;
+      todayString: {
+        build: function () {
+          const today = new Date();
+          let todayString = today.getFullYear()
+          todayString += '-' + ((today.getMonth()<9) ? '0' : '') + (today.getMonth()+1)
+          todayString += '-' + ((today.getDate()<10) ? '0' : '') + today.getDate()
+          todayString += 'T' + ((today.getHours()<10) ? '0' : '') + today.getHours()
+          todayString += ':' + ((today.getMinutes()<10) ? '0' : '') + today.getMinutes()
+          this.val = todayString
+        },
+        val: ''
       },
-      maxDate: function () {
-        const today = new Date();
-        const maxDate = new Date(
-          today.getFullYear(),
-          today.getMonth(),
-          today.getDate(),
-          today.getHours() + this.withinHours,
-          today.getMinutes()
-        );
-        return maxDate;
+      minDate: {
+        build: function () {
+          const today = new Date();
+          const minDate = new Date(
+            today.getFullYear(),
+            today.getMonth(),
+            today.getDate(),
+            today.getHours() - data.value.inputs.protocolStartDatetime.withinHours,
+            today.getMinutes()
+          );
+          this.val = minDate;
+        },
+        val: null
+      },
+      minDateString: {
+        build: function () {
+          let minDate = data.value.inputs.protocolStartDatetime.minDate.val
+          let minDateString = minDate.getFullYear()
+          minDateString += '-' + ((minDate.getMonth()<9) ? '0' : '') + (minDate.getMonth()+1)
+          minDateString += '-' + ((minDate.getDate()<10) ? '0' : '') + minDate.getDate()
+          minDateString += 'T' + ((minDate.getHours()<10) ? '0' : '') + minDate.getHours()
+          minDateString += ':' + ((minDate.getMinutes()<10) ? '0' : '') + minDate.getMinutes()
+          this.val = minDateString
+        },
+        val: ''
+      },
+      maxDate: {
+        build: function () {
+          const today = new Date();
+          const maxDate = new Date(
+            today.getFullYear(),
+            today.getMonth(),
+            today.getDate(),
+            today.getHours() + data.value.inputs.protocolStartDatetime.withinHours,
+            today.getMinutes()
+          );
+          this.val = maxDate;
+        },
+        val: null
+      },
+      maxDateString: {
+        build: function () {
+          let maxDate = data.value.inputs.protocolStartDatetime.maxDate.val
+          let maxDateString = maxDate.getFullYear()
+          maxDateString += '-' + ((maxDate.getMonth()<9) ? '0' : '') + (maxDate.getMonth()+1)
+          maxDateString += '-' + ((maxDate.getDate()<10) ? '0' : '') + maxDate.getDate()
+          maxDateString += 'T' + ((maxDate.getHours()<10) ? '0' : '') + maxDate.getHours()
+          maxDateString += ':' + ((maxDate.getMinutes()<10) ? '0' : '') + maxDate.getMinutes()
+          this.val = maxDateString
+        },
+        val: ''
       },
       isValid: function () {
         this.errors = "";
@@ -260,8 +302,7 @@ export const data = ref({
           return false;
         }
         const dateVal = new Date(this.val);
-
-        if (dateVal <= this.minDate() || dateVal >= this.maxDate())
+        if (dateVal <= this.minDate.val || dateVal >= this.maxDate.val)
           this.errors +=
             "Protocol start must be within " +
             this.withinHours +

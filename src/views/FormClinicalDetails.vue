@@ -21,30 +21,17 @@ const continueClick = () => {
   }
 };
 
-const setProtocolStartDatetime = () => {
-  const today = new Date();
-  data.value.inputs.protocolStartDatetime.val = today
-    .toISOString()
-    .substring(0, 16);
-};
-
-const setMinMaxProtocolStartDatetime = () => {
-  document.getElementById("protocolStartDatetime").max =
-    data.value.inputs.protocolStartDatetime
-      .maxDate()
-      .toISOString()
-      .substring(0, 16);
-  document.getElementById("protocolStartDatetime").min =
-    data.value.inputs.protocolStartDatetime
-      .minDate()
-      .toISOString()
-      .substring(0, 16);
-};
 
 onMounted(() => {
   //if (!data.value.form.isValid(1)) router.push("/form-patient-details");
-  setProtocolStartDatetime();
-  setMinMaxProtocolStartDatetime();
+  data.value.inputs.protocolStartDatetime.todayString.build()
+  data.value.inputs.protocolStartDatetime.val = data.value.inputs.protocolStartDatetime.todayString.val
+  data.value.inputs.protocolStartDatetime.minDate.build()
+  data.value.inputs.protocolStartDatetime.minDateString.build()
+  document.getElementById("protocolStartDatetime").min = data.value.inputs.protocolStartDatetime.minDateString.val
+  data.value.inputs.protocolStartDatetime.maxDate.build()
+  data.value.inputs.protocolStartDatetime.maxDateString.build()
+  document.getElementById("protocolStartDatetime").max = data.value.inputs.protocolStartDatetime.maxDateString.val
 });
 </script>
 
