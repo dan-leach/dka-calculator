@@ -23,9 +23,8 @@ const fetchCalculations = () => {
   api('fetchCalculations', data.value.demoInputs)
     .then(
       function (res) {
-        Swal.fire({
-          html: res
-        })
+        data.value.auditID = res.auditID
+        data.value.calculations = res.calculations
       },
       function (error) {
         Swal.fire({

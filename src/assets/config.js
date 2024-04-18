@@ -395,7 +395,22 @@ export const config = reactive({
       groups: ['Asian or Asian British', 'Indian', 'Pakistani', 'Bangladeshi', 'Chinese', 'Any other Asian background', 'Black, Black British, Caribbean or African', 'Caribbean', 'African', 'Any other Black, Black British, or Caribbean background','Mixed or multiple ethnic groups', 'White and Black Caribbean', 'White and Black African', 'White and Asian', 'Any other Mixed or multiple ethnic background', 'White', 'English, Welsh, Scottish, Northern Irish or British', 'Irish', 'Gypsy or Irish Traveller', 'Roma', 'Any other White background', 'Other ethnic group', 'Arab', 'Any other ethnic group'],
       headingIndexes: [0, 6, 10, 15, 21]
     },
-    ageLimit: 18
+    ageLimit: 18,
+    indicatorCoordinates: { //this contains static constants that can be altered to change the position of the indicator boxes
+      xAxisShock: {
+          yes: 205, //the x-axis position for the indicator box showing patient is shocked
+          no: 358, //the x-axis position for the indicator box showing patient is not shocked
+      },
+      yAxisSeverity: {
+          severe: 68, //the y-axis position for the indicator box showing patient has severe DKA
+          moderate: 103, //the y-axis position for the indicator box showing patient has moderate DKA
+          mild: 138, //the y-axis position for the indicator box showing patient has mild DKA
+      },
+      xAxisDiabetic: {
+          yes: 200, //the x-axis position for the indicator box showing patient has pre-existing diabetes
+          no: 358, //the x-axis position for the indicator box showing patient does not have pre-existing diabetes
+      },
+    },
   },
   api: {
     url: 'https://api.dka-calculator.co.uk',

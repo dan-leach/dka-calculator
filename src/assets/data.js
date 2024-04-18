@@ -567,6 +567,62 @@ export const data = ref({
     },
   },
   calculations: {},
+  indicatorCoordinates: { //functions that return the variable coordinates for indicator boxes on the protocol document
+    xAxisShock: function(){ //returns x-axis coordinate for the indicator box showing if patient is shocked or not
+        if(data.value.inputs.shockPresent.val) return config.client.indicatorCoordinates.xAxisShock.yes;
+        return config.client.indicatorCoordinates.xAxisShock.no;
+    },
+    yAxisSeverity: function(){ //returns y-axis coordinate for the indicator box showing severity of DKA
+        if(data.value.calculations.severity == "severe") return config.client.indicatorCoordinates.yAxisSeverity.severe;
+        if(data.value.calculations.severity == "moderate") return config.client.indicatorCoordinates.yAxisSeverity.moderate;
+        if(data.value.calculations.severity == "mild") return config.client.indicatorCoordinates.yAxisSeverity.mild;
+        throw new Error("Unable to select yAxisSeverity");
+    },
+    xAxisDiabetic: function(){ //returns x-axis coordinate for the indicator box showing if patient had pre-existing diabetes
+        if(data.value.inputs.preExistingDiabetes.val) return config.client.indicatorCoordinates.xAxisDiabetic.yes;
+        return config.client.indicatorCoordinates.xAxisDiabetic.no;
+    },
+  },
+  capAlert: { //if a calculated variable is capped, returns asterisks and message to appear on protocol
+    bolus: {
+        asterisk: function(){ //asterisk for capped bolus
+            if (data.value.calculations.bolus.isCapped) return "*";
+            return "";
+        },
+        message: function(){ //message for capped bolus
+            if (data.value.calculations.bolus.isCapped) return "*Bolus capped to 10mL/kg for " + data.value.client.caps.weight + "kg.";
+            return "";
+        },
+    },
+    deficit: {
+        asterisk: function(){ //asterisk for capped deficit
+            if (data.value.calculations.deficit.isCapped) return "*";
+        },
+        message: function(){ //message for capped deficit
+            if (data.value.calculations.deficit.isCapped) return "*Deficit capped to volume for " + settings.caps.weight + "kg with " + calcVars.deficit.percentage() + "% dehydration.";
+            return "";
+        },
+    },
+    maintenance: {
+        asterisk: function(){ //asterisk for capped maintenance
+            if (data.value.calculations.maintenance.isCapped) return "*";
+        },
+        message: function(){ //message for capped maintenance
+            if (data.value.calculations.maintenance.isCapped) return "*Maintenance capped to volume for " + settings.caps.weight + "kg.";
+            return "";
+        },
+    },
+    insulin: {
+        asterisk: function(){ //asterisk for capped insulin
+            if (data.value.calculations.insulin.isCapped) return "*";
+        },
+        message: function(){ //message for capped insulin
+            if (data.value.calculations.insulin.isCapped) return "*Insulin rate capped to " + inputs.insulin + " Units/kg/hour for " + settings.caps.weight + "kg.";
+            return "";
+        },
+    },
+},
+  auditID: '',
   demoInputs: {
     "legalAgreement": true,
     "patientDOB": "2022-02-01",

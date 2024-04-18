@@ -1,3 +1,8 @@
 Currently building form
-
+1. fixing variables on docDef up to line 400
 2. transitions between form steps
+
+Docdef:
+220 generated time
+226 start time
+231 start date
