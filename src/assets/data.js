@@ -544,12 +544,28 @@ export const data = ref({
       },
       errors: "",
     },
-    imd: {
-      val: null
-    },
-    patientHash: {
-      val: '',
-    },
   },
   calculations: {},
+  demoInputs: {
+    "legalAgreement": true,
+    "patientDOB": "2022-02-01",
+    "patientSex": "male",
+    "patientNHS": 1234567890,
+    "patientPostcode": "BS419DL",
+    "protocolStartDatetime": "2024-04-18T03:04",
+    "pH": "7.10",
+    "bicarbonate": "5.0",
+    "weight": "10.0",
+    "shockPresent": "false",
+    "insulinRate": "0.05",
+    "preExistingDiabetes": "false",
+    "episodeType": "test",
+    "region": "Wales",
+    "centre": "Bronglais General Hospital",
+    "ethnicGroup": "Indian",
+    "preventableFactors": [
+        "nil"
+    ],
+    "weightLimitOverride": true
+  }
 });

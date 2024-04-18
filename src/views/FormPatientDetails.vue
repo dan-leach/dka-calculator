@@ -2,7 +2,6 @@
 import { ref, onMounted } from "vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { data } from "../assets/data.js";
-import { api } from "../assets/api.js";
 import Swal from "sweetalert2";
 import router from "../router";
 
@@ -13,30 +12,7 @@ const continueClick = () => {
   document
     .getElementById("form-patient-details")
     .classList.add("was-validated");
-  if (data.value.form.isValid(1)) {
-    api('getPatientHash', {
-      patientNHS: data.value.inputs.patientNHS.val,
-      patientDOB: data.value.inputs.patientDOB.val
-    }).then(
-      function(res){
-        data.value.inputs.patientHash.val = res.patientHash
-      },
-      function(error){
-        console.error('getPatientHash failed')
-      }
-    )
-    api('getImdDecile', {
-      patientPostcode: data.value.inputs.patientPostcode.val
-    }).then(
-      function(res){
-        data.value.inputs.imd.val = res.imd
-      },
-      function(error){
-        console.error('getImdDecile failed')
-      }
-    )
-    router.push("/form-clinical-details");
-  }
+  if (data.value.form.isValid(1)) router.push("/form-clinical-details");
 };
 
 const setMinMaxPatientDOB = () => {
@@ -64,8 +40,11 @@ const optOutClick = (i) => {
 };
 
 onMounted(() => {
-  //if (!data.value.form.isValid(0)) router.push("/form-disclaimer");
-  setMinMaxPatientDOB();
+  if (!data.value.form.isValid(0)) {
+    router.push("/form-disclaimer");
+  } else {
+    setMinMaxPatientDOB();
+  }
 });
 </script>
 

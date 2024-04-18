@@ -1,9 +1,7 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { onMounted } from "vue";
 import { data } from "../assets/data.js";
 import router from "../router";
-
-let showErrors = ref(false);
 
 const continueClick = () => {
   data.value.inputs.weight.limit.overrideConfirm = true;
@@ -11,7 +9,7 @@ const continueClick = () => {
 };
 
 onMounted(() => {
-  //if (!data.value.form.isValid(2)) router.push("/form-clinical-details");
+  if (!data.value.form.isValid(2)) router.push("/form-clinical-details");
 });
 </script>
 

@@ -4,9 +4,41 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { data } from "../assets/data.js";
 import Swal from "sweetalert2";
 import router from "../router";
+import { api } from "@/assets/api.js";
+
+const fetchCalculations = () => {
+  let payload = {}
+  for (let input in data.value.inputs) payload[input] = data.value.inputs[input].val
+  delete payload.patientName
+  if (payload.patientNHS) {
+    delete payload.patientHospNum
+  } else {
+    delete payload.patientNHS
+  }
+  payload.weightLimitOverride = data.value.inputs.weight.limit.override
+  //replace data.value.demoInputs with payload
+  api('fetchCalculations', data.value.demoInputs)
+    .then(
+      function (res) {
+        Swal.fire({
+          html: res
+        })
+      },
+      function (error) {
+        Swal.fire({
+          html: error
+        })
+      }
+    )
+}
 
 onMounted(() => {
-  if (!data.value.form.isValid(3)) router.push("/form-audit-details");
+  /*if (!data.value.form.isValid(3)) {
+    router.push("/form-audit-details");
+  } else {
+    fetchCalculations()
+  }*/
+  fetchCalculations()
 });
 </script>
 

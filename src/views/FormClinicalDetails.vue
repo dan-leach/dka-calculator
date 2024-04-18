@@ -2,7 +2,6 @@
 import { ref, onMounted } from "vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { data } from "../assets/data.js";
-import Swal from "sweetalert2";
 import router from "../router";
 
 let showErrors = ref(false);
@@ -21,9 +20,8 @@ const continueClick = () => {
   }
 };
 
-
 onMounted(() => {
-  //if (!data.value.form.isValid(1)) router.push("/form-patient-details");
+  if (!data.value.form.isValid(1)) router.push("/form-patient-details");
   data.value.inputs.protocolStartDatetime.todayString.build()
   data.value.inputs.protocolStartDatetime.val = data.value.inputs.protocolStartDatetime.todayString.val
   data.value.inputs.protocolStartDatetime.minDate.build()

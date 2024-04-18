@@ -14,8 +14,11 @@ const continueClick = () => {
 };
 
 onMounted(() => {
-  //if (!data.value.form.isValid(2)) router.push("/form-clinical-details");
-  //if (data.value.inputs.weight.limit.override && !data.value.inputs.weight.limit.overrideConfirm) router.push("/form-override-confirm")
+  if (!data.value.form.isValid(2)) {
+    router.push("/form-clinical-details");
+  } else if (data.value.inputs.weight.limit.override && !data.value.inputs.weight.limit.overrideConfirm) {
+    router.push("/form-override-confirm")
+  }
 });
 </script>
 
