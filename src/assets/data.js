@@ -58,6 +58,20 @@ export const data = ref({
       form: 1,
       info: "Patient date of birth is printed onto the generated care pathway document in the patient demographics area. It is not stored directly by the DKA Calculator, but is used to calculate a patient age (in years) which is stored for audit purposes.",
       withinYears: 19, //date of birth must be between today and 19 years ago - allowance for adult patients not yet transitioned to adult services
+      patientAge: {
+        build: function () {
+          const today = new Date();
+          const birthDate = new Date(data.value.inputs.patientDOB.val);
+          let age = today.getFullYear() - birthDate.getFullYear();
+          const m = today.getMonth() - birthDate.getMonth();
+        
+          if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
+        
+          this.val = age;
+        }
+        
+        },
+        val: null,
       minDate: function () {
         const today = new Date();
         const minDate = new Date(
@@ -94,6 +108,13 @@ export const data = ref({
             " years ago. ";
 
         if (this.errors) return false;
+
+        this.patientAge.build()
+        if (this.patientAge.val > config.client.ageLimit) {
+          this.errors += "Patient age cannot be greater than " + config.client.ageLimit + " years. ";
+          return false
+        }
+
         return true;
       },
       errors: "",
@@ -549,6 +570,7 @@ export const data = ref({
   demoInputs: {
     "legalAgreement": true,
     "patientDOB": "2022-02-01",
+    "patientAge": 2,
     "patientSex": "male",
     "patientNHS": 1234567890,
     "patientPostcode": "BS419DL",
@@ -566,6 +588,9 @@ export const data = ref({
     "preventableFactors": [
         "nil"
     ],
-    "weightLimitOverride": true
+    "weightLimitOverride": true,
+    "appVersion": "2.0",
+    "clientDatetime": "2024-04-18T04:46:32.057Z",
+    "clientUseragent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0"
   }
 });

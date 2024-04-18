@@ -2,6 +2,7 @@
 import { ref, onMounted } from "vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { data } from "../assets/data.js";
+import { config } from "../assets/config.js";
 import Swal from "sweetalert2";
 import router from "../router";
 import { api } from "@/assets/api.js";
@@ -15,7 +16,12 @@ const fetchCalculations = () => {
   } else {
     delete payload.patientNHS
   }
+  payload.patientAge = data.value.inputs.patientDOB.patientAge.val
   payload.weightLimitOverride = data.value.inputs.weight.limit.override
+  payload.appVersion = config.version
+  payload.clientDatetime = new Date();
+  payload.clientUseragent = navigator.userAgent
+  console.log(payload)
   //replace data.value.demoInputs with payload
   api('fetchCalculations', data.value.demoInputs)
     .then(
