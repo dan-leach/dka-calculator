@@ -11,11 +11,8 @@ const fetchCalculations = () => {
   let payload = {}
   for (let input in data.value.inputs) payload[input] = data.value.inputs[input].val
   delete payload.patientName
-  if (payload.patientNHS) {
-    delete payload.patientHospNum
-  } else {
-    delete payload.patientNHS
-  }
+  delete payload.patientHospNum
+  
   payload.patientAge = data.value.inputs.patientDOB.patientAge.val
   payload.weightLimitOverride = data.value.inputs.weight.limit.override
   payload.appVersion = config.version
