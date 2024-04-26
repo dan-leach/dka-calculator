@@ -1,8 +1,12 @@
-Currently building form
-1. fixing variables on docDef up to line 400
+Currently working on pdf generation:
+docDef successfully generated. Now need to send to pdfMake - ?install as npm module
+
+Later will need to move from old IE method to webworker method
+
 2. transitions between form steps
 
 Docdef:
 220 generated time
 226 start time
 231 start date
+560+ times

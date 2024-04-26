@@ -566,7 +566,7 @@ export const data = ref({
       errors: "",
     },
   },
-  calculations: {},
+  Xcalculations: {},
   indicatorCoordinates: { //functions that return the variable coordinates for indicator boxes on the protocol document
     xAxisShock: function(){ //returns x-axis coordinate for the indicator box showing if patient is shocked or not
         if(data.value.inputs.shockPresent.val) return config.client.indicatorCoordinates.xAxisShock.yes;
@@ -622,7 +622,33 @@ export const data = ref({
         },
     },
 },
-  auditID: '',
+  XauditID: '',
+  auditID: 'AWU1BP',
+  calculations: {
+    "severity": "moderate",
+    "bolus": {
+        "volume": 100,
+        "isCapped": false
+    },
+    "deficit": {
+        "percentage": 5,
+        "volume": 500,
+        "isCapped": false,
+        "bolusToSubtract": 0,
+        "volumeLessBolus": 500,
+        "rate": 10.416666666666666
+    },
+    "maintenance": {
+        "volume": 1000,
+        "isCapped": false,
+        "rate": 41.666666666666664
+    },
+    "startingFluidRate": 52.08333333333333,
+    "insulin": {
+        "rate": 0.5,
+        "isCapped": false
+    }
+  },
   demoInputs: {
     "legalAgreement": true,
     "patientDOB": "2022-02-01",

@@ -5,7 +5,6 @@ document = { createElementNS: function () { return {}; } };
 
 importScripts('/externalDependencies/pdfmake/pdfmake.min.js'); //required for PDF generation
 importScripts('/externalDependencies/pdfmake/vfs_fonts.js'); //required for PDF generation
-importScripts('/externalDependencies/moment/moment.min.js'); //required for calcVars and docDef
 importScripts('../settings.js');
 importScripts('imageStore.js');
 importScripts('calcVars.js');
