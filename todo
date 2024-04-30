@@ -1,8 +1,9 @@
 Currently working on pdf generation:
-docDef successfully generated. Now need to send to pdfMake - ?install as npm module
+Add review times generation
+Clean up whole process
+Add UI updates
 
-Later will need to move from old IE method to webworker method
-
+1. Hash NHS number+DOB before transmission
 2. transitions between form steps
 
 Docdef:

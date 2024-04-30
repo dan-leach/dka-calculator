@@ -7,19 +7,18 @@ import Swal from "sweetalert2";
 import router from "../router";
 import { api } from "@/assets/api.js";
 
+let payload = {}
+
 const generate = {
-	click: function() { //runs on user clicking generate protocol
+	start: function() {
     try{
-        console.log("main: browser is not IE: will use webWorker method.");
-        var dialog = this.showLoading();
-        var myWorker = this.startWebWorker();
+        let myWorker = this.startWebWorker();
         myWorker.onmessage = function(res) { //once response received from webWorker triggers download of pdf
             if(res.data.stack){ //if res.data.stack is defined then it's an error being returned by web worker so pass res.data to errHandler
                 console.error(res.data);
             } else { //otherwise use the returned blob to create the download
                 try{
                     generate.handleWorkerResponse(res);
-                    dialog.modal('hide');
                 } catch (error) {
                     console.error(error);
                 }
@@ -29,14 +28,27 @@ const generate = {
         console.error(error);
     }
 	},
-	showLoading: function() { //shows a loading modal until the PDF generation is finished
-		console.log('to do - show loading')
-	},
 	startWebWorker: function(){ //launches the web worker that will generate the PDF blob
 		console.log('main: starting webWorker.js...');
 		const myWorker = new Worker(new URL('@/assets/webWorker.js', import.meta.url),{type: 'module'}); //start instance of webWorkerPDF.js
-  
-    myWorker.postMessage('message'); //passes input data to webWorkerPDF.js
+    myWorker.postMessage(JSON.parse(JSON.stringify(
+      {
+        patientName: data.value.inputs.patientName.val,
+        patientDOB: data.value.inputs.patientDOB.val,
+        patientNHS: data.value.inputs.patientNHS.val,
+        patientHospNum: data.value.inputs.patientHospNum.val,
+        weight: data.value.inputs.weight.val,
+        override: data.value.inputs.weight.limit.override,
+        pH: data.value.inputs.pH.val,
+        shockPresent: data.value.inputs.shockPresent.val,
+        preExistingDiabetes: data.value.inputs.preExistingDiabetes.val,
+        patientSex: data.value.inputs.patientSex.val,
+        insulinRate: data.value.inputs.insulinRate.val,
+        protocolStartDatetime: data.value.inputs.protocolStartDatetime.val,
+        calculations: data.value.calculations,
+        auditID: data.value.auditID
+      }
+    ))); 
 		console.log('main: request sent to webWorker.js...');
 		return myWorker;
 	},
@@ -57,7 +69,6 @@ const generate = {
 }
 
 const fetchCalculations = () => {
-  let payload = {}
   for (let input in data.value.inputs) payload[input] = data.value.inputs[input].val
   delete payload.patientName
   delete payload.patientHospNum
@@ -68,22 +79,19 @@ const fetchCalculations = () => {
   payload.clientDatetime = new Date();
   payload.clientUseragent = navigator.userAgent
   console.log(payload)
-  //replace data.value.demoInputs with payload
-  data.value.inputs.patientName.val = "Joe Bloggs"
-  /*api('fetchCalculations', data.value.demoInputs)
+  api('fetchCalculations', payload)
     .then(
       function (res) {
         data.value.auditID = res.auditID
         data.value.calculations = res.calculations
+        generate.start()
       },
       function (error) {
         Swal.fire({
           html: error
         })
       }
-    )*/
-  generate.click()
-
+    )
 }
 
 onMounted(() => {
@@ -99,6 +107,7 @@ onMounted(() => {
 <template>
   <div class="container my-4 needs-validation">
     <h2 class="display-3">Generate protocol</h2>
+    <p><span class="spinner-border" role="status"></span>Please wait whilst the care pathway for {{data.inputs.patientName.val}} is generated...</p>
   </div>
 </template>
 

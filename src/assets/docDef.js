@@ -1,8 +1,83 @@
 import { config } from "./config.js";
-import { data } from "./data.js";
 import { imageStore } from "./imageStore.js";
 
-function getDocDef(){
+const indicatorCoordinates = { //functions that return the variable coordinates for indicator boxes on the protocol document
+    xAxisShock: function(req){ //returns x-axis coordinate for the indicator box showing if patient is shocked or not
+        if(req.shockPresent) return config.client.indicatorCoordinates.xAxisShock.yes;
+        return config.client.indicatorCoordinates.xAxisShock.no;
+    },
+    yAxisSeverity: function(req){ //returns y-axis coordinate for the indicator box showing severity of DKA
+        if(req.calculations.severity == "severe") return config.client.indicatorCoordinates.yAxisSeverity.severe;
+        if(req.calculations.severity == "moderate") return config.client.indicatorCoordinates.yAxisSeverity.moderate;
+        if(req.calculations.severity == "mild") return config.client.indicatorCoordinates.yAxisSeverity.mild;
+        throw new Error("Unable to select yAxisSeverity");
+    },
+    xAxisDiabetic: function(req){ //returns x-axis coordinate for the indicator box showing if patient had pre-existing diabetes
+        if(req.preExistingDiabetes) return config.client.indicatorCoordinates.xAxisDiabetic.yes;
+        return config.client.indicatorCoordinates.xAxisDiabetic.no;
+    },
+}
+
+const capAlert = { //if a calculated variable is capped, returns asterisks and message to appear on protocol
+    bolus: {
+        asterisk: function(req){ //asterisk for capped bolus
+            if (req.calculations.bolus.isCapped) return "*";
+            return "";
+        },
+        message: function(req){ //message for capped bolus
+            if (req.calculations.bolus.isCapped) return "*Bolus capped to 10mL/kg for " + config.value.client.weightLimits.max + "kg.";
+            return "";
+        },
+    },
+    deficit: {
+        asterisk: function(req){ //asterisk for capped deficit
+            if (req.calculations.deficit.isCapped) return "*";
+        },
+        message: function(req){ //message for capped deficit
+            if (req.calculations.deficit.isCapped) return "*Deficit capped to volume for " + config.value.weightLimits.max + "kg with " + req.calculations.deficit.percentage + "% dehydration.";
+            return "";
+        },
+    },
+    maintenance: {
+        asterisk: function(req){ //asterisk for capped maintenance
+            if (req.calculations.maintenance.isCapped) return "*";
+        },
+        message: function(req){ //message for capped maintenance
+            if (req.calculations.maintenance.isCapped) return "*Maintenance capped to volume for " + config.value.client.weightLimits.max + "kg.";
+            return "";
+        },
+    },
+    insulin: {
+        asterisk: function(req){ //asterisk for capped insulin
+            if (req.calculations.insulin.isCapped) return "*";
+        },
+        message: function(req){ //message for capped insulin
+            if (req.calculations.insulin.isCapped) return "*Insulin rate capped to " + req.inputs.insulinRate + " Units/kg/hour for " + config.value.client.weightLimits.max + "kg.";
+            return "";
+        },
+    },
+}
+
+const datetimes = {
+    protocolStart: {
+        time: function(str) {
+            let protocolStartDatetime = new Date(str)
+            let output = ((protocolStartDatetime.getHours()<10) ? '0' : '') + protocolStartDatetime.getHours()
+            output += ':' + ((protocolStartDatetime.getMinutes()<10) ? '0' : '') + (protocolStartDatetime.getMinutes())
+            return output
+        },
+        date: function(str) {
+            let protocolStartDatetime = new Date(str)
+            let output = ((protocolStartDatetime.getDate()<10) ? '0' : '') + protocolStartDatetime.getDate()
+            output += '/' + ((protocolStartDatetime.getMonth()<9) ? '0' : '') + (protocolStartDatetime.getMonth()+1)
+            output += '/' + protocolStartDatetime.getFullYear()
+            return output
+        }
+    }
+}
+
+function getDocDef(req){
+    console.log(req)
     const docDef = {
         
         pageSize: 'A4',
@@ -48,23 +123,23 @@ function getDocDef(){
                         body: [
                             [
                                 {text: ""},
-                                {text: "Name: "+data.value.inputs.patientName.val, alignment: 'left', style: 'header'},
-                                {text: config.url + "(v" + config.version + ")", alignment: 'center', style: 'header'},
+                                {text: "Name: "+req.patientName, alignment: 'left', style: 'header'},
+                                {text: config.url.replace('https://', '') + " (v" + config.version + ")", alignment: 'center', style: 'header'},
                                 {text: "Protocol Page "+currentPage+" of "+pageCount, alignment: 'right', style: 'header'},
                                 {text: ""}
                             ],
                             [
                                 {text: ""},
-                                {text: "Date of Birth: "+data.value.inputs.patientDOB.val, alignment: 'left', style: 'header'},
+                                {text: "Date of Birth: "+req.patientDOB, alignment: 'left', style: 'header'},
                                 {text: ""},
-                                {text: "Audit ID: "+data.value.auditID, alignment: 'right', style: 'header'},
+                                {text: "Audit ID: "+req.auditID, alignment: 'right', style: 'header'},
                                 {text: ""}
                             ],
                             [
                                 {text: ""},
-                                {text: "Number: "+data.value.inputs.patientNHS.val+data.value.inputs.patientHospNum.val, alignment: 'left', style: 'header'},
+                                {text: "Number: "+req.patientNHS+req.patientHospNum, alignment: 'left', style: 'header'},
                                 {text: ""},
-                                {text: "Protocol start: "+data.value.inputs.protocolStartDatetime, alignment: 'right', style: 'header'},
+                                {text: "Protocol start: "+datetimes.protocolStart.time(req.protocolStartDatetime)+" "+datetimes.protocolStart.date(req.protocolStartDatetime), alignment: 'right', style: 'header'},
                                 {text: ""}
                             ]
                         ]
@@ -198,22 +273,22 @@ function getDocDef(){
             //page 1
             //patient demographics box
             {
-                text: "Name: "+data.value.inputs.patientName.val,
+                text: "Name: "+req.patientName,
                 fontSize: 12,
                 absolutePosition: {x: 60, y: 306},
             },
             {
-                text: "Date of Birth: "+data.value.inputs.patientDOB.val,
+                text: "Date of Birth: "+req.patientDOB,
                 fontSize: 12,
                 absolutePosition: {x: 60, y: 324},
             },
             {
-                text: "Hospital/NHS Number: "+data.value.inputs.patientNHS+data.value.inputs.patientHospNum.val,
+                text: "Hospital/NHS Number: "+req.patientNHS+req.patientHospNum,
                 fontSize: 12,
                 absolutePosition: {x: 60, y: 342},
             },
             {
-                text: "Audit linkage ID: " +data.value.auditID,
+                text: "Audit linkage ID: " +req.auditID,
                 fontSize: 12,
                 absolutePosition: {x: 60, y: 360},
             },
@@ -224,12 +299,12 @@ function getDocDef(){
             },
             //Protocol start datetime box
             {
-                text:"HH:mm",
+                text: datetimes.protocolStart.time(req.protocolStartDatetime),
                 fontSize: 12,
                 absolutePosition: {x: 410, y: 328},
             },
             {
-                text: "DD/MM/YYYY",
+                text: datetimes.protocolStart.date(req.protocolStartDatetime),
                 fontSize: 12,
                 absolutePosition: {x: 400, y: 372},
             },
@@ -252,32 +327,32 @@ function getDocDef(){
                 absolutePosition: {x: 65, y: 677},
             },
             {
-                text: "Weight: "+data.value.inputs.weight.val+"kg (Weight safety limit override? "+data.value.inputs.weight.limit.override+")",
+                text: "Weight: "+req.weight+"kg (Weight safety limit override? "+req.override+")",
                 fontSize: 10,
                 absolutePosition: {x: 65, y: 709},
             },
             {
-                text: "pH: "+data.value.inputs.pH.val,
+                text: "pH: "+req.pH,
                 fontSize: 10,
                 absolutePosition: {x: 325, y: 709},
             },
             {
-                text: "Patient clinically shocked? "+data.value.inputs.shockPresent.val,
+                text: "Patient clinically shocked? "+req.shockPresent,
                 fontSize: 10,
                 absolutePosition: {x: 65, y: 725},
             },
             {
-                text: "Starting insulin infusion rate: "+data.value.calculations.insulin.rate+" Units/kg/hour",
+                text: "Starting insulin infusion rate: "+req.calculations.insulin.rate+" Units/kg/hour",
                 fontSize: 10,
                 absolutePosition: {x: 325	, y: 725},
             },
             {
-                text: "Pre-existing diabetes? "+data.value.inputs.preExistingDiabetes.val,
+                text: "Pre-existing diabetes? "+req.preExistingDiabetes,
                 fontSize: 10,
                 absolutePosition: {x: 65, y: 741},
             },
             {
-                text: "Sex: "+data.value.inputs.patientSex,
+                text: "Sex: "+req.patientSex,
                 fontSize: 10,
                 absolutePosition: {x: 325, y: 741}
             },
@@ -295,7 +370,7 @@ function getDocDef(){
             },
             //page 3
             { //record initial values box
-                text: data.value.inputs.pH.val,
+                text: req.pH,
                 fontSize: 12,
                 absolutePosition: {x: 222, y: 247},
                 pageBreak: 'after'
@@ -305,7 +380,7 @@ function getDocDef(){
                 canvas: [
                     {
                         type: 'rect',
-                        x: data.value.indicatorCoordinates.xAxisShock(),
+                        x: indicatorCoordinates.xAxisShock(req),
                         y: 332,
                         w: 40,
                         h: 40,
@@ -315,74 +390,74 @@ function getDocDef(){
                 ]
             },
             { //patient weight box
-                text: data.value.inputs.weight.val,
+                text: req.weight,
                 fontSize: 18,
                 absolutePosition: {x: 287, y: 240},
             },
             // bolus volumes
             //1st 10ml/kg resus bolus
             {
-                text: data.value.calculations.bolus.volume.toFixed(),
+                text: req.calculations.bolus.volume.toFixed,
                 fontSize: 18,
                 absolutePosition: {x: 95, y: 453},
             },
             //* if bolus capped
             {
-                text: data.value.capAlert.bolus.asterisk(),
+                text: capAlert.bolus.asterisk(req),
                 fontSize: 18,
                 absolutePosition: {x: 128, y: 453},
                 color: "red",
             },
             //2nd 10ml/kg resus bolus
             {
-                text: data.value.calculations.bolus.volume.toFixed(),
+                text: req.calculations.bolus.volume.toFixed(),
                 fontSize: 18,
                 absolutePosition: {x: 95, y: 538},
             },
             {
-                text: data.value.capAlert.bolus.asterisk(),
+                text: capAlert.bolus.asterisk(req),
                 fontSize: 18,
                 absolutePosition: {x: 128, y: 538},
                 color: "red",
             },
             //3rd 10ml/kg resus bolus
             {
-                text: data.value.calculations.bolus.volume.toFixed(),
+                text: req.calculations.bolus.volume.toFixed(),
                 fontSize: 18,
                 absolutePosition: {x: 95, y: 568},
             },
             {
-                text: data.value.capAlert.bolus.asterisk(),
+                text: capAlert.bolus.asterisk(req),
                 fontSize: 18,
                 absolutePosition: {x: 128, y: 568},
                 color: "red",
             },
             //4th 10ml/kg resus bolus
             {
-                text: data.value.calculations.bolus.volume.toFixed(),
+                text: req.calculations.bolus.volume.toFixed(),
                 fontSize: 18,
                 absolutePosition: {x: 95, y: 598},
             },
             {
-                text: data.value.capAlert.bolus.asterisk(),
+                text: capAlert.bolus.asterisk(req),
                 fontSize: 18,
                 absolutePosition: {x: 128, y: 598},
                 color: "red",
             },
             //10ml/kg slow bolus - non-shocked arm
             {
-                text: data.value.calculations.bolus.volume.toFixed(),
+                text: req.calculations.bolus.volume.toFixed(),
                 fontSize: 18,
                 absolutePosition: {x: 375, y: 462},
             },
             {
-                text: data.value.capAlert.bolus.asterisk(),
+                text: capAlert.bolus.asterisk(req),
                 fontSize: 18,
                 absolutePosition: {x: 408, y: 462},
                 color: "red",
             },
             {
-                text: data.value.capAlert.bolus.message(),
+                text: capAlert.bolus.message(req),
                 fontSize: 14,
                 absolutePosition: {x: 40, y: 640},
                 color: "red",
@@ -399,7 +474,7 @@ function getDocDef(){
                     {
                         type: 'rect',
                         x: 190,
-                        y: data.value.indicatorCoordinates.yAxisSeverity(),
+                        y: indicatorCoordinates.yAxisSeverity(req),
                         w: 170,
                         h: 40,
                         lineColor: '#00ff2e',
@@ -409,95 +484,95 @@ function getDocDef(){
             },
             //fluid deficit
             {
-                text: data.value.inputs.weight.value,
+                text: req.weight,
                 fontSize: 18,
                 absolutePosition: {x: 170, y: 280},
             },
             {       
-                text: data.value.calculations.deficit.percentage,
+                text: req.calculations.deficit.percentage,
                 fontSize: 18,
                 absolutePosition: {x: 310, y: 280},
             },
             {
-                text: data.value.calculations.deficit.volume.toFixed(),
+                text: req.calculations.deficit.volume.toFixed(),
                 fontSize: 18,
                 absolutePosition: {x: 430, y: 280},
             },
             {
-                text: data.value.capAlert.deficit.asterisk(),
+                text: capAlert.deficit.asterisk(req),
                 fontSize: 18,
                 absolutePosition: {x: 470, y: 280},
                 color: "red",
             },
             {
-                text: data.value.capAlert.deficit.message(),
+                text: capAlert.deficit.message(req),
                 fontSize: 14,
                 absolutePosition: {x: 200, y: 322},
                 color: "red",
             },
             //fluid deficit (less bolus volume)
             {
-                text: data.value.calculations.deficit.volume.toFixed(),
+                text: req.calculations.deficit.volume.toFixed(),
                 fontSize: 18,
                 absolutePosition: {x: 170, y: 390},
             },
             {
-                text: data.value.calculations.deficit.bolusToSubtract.toFixed(),
+                text: req.calculations.deficit.bolusToSubtract.toFixed(),
                 fontSize: 18,
                 absolutePosition: {x: 300, y: 390},
             },
             {
-                text: data.value.calculations.deficit.volumeLessBolus.toFixed(),
+                text: req.calculations.deficit.volumeLessBolus.toFixed(),
                 fontSize: 18,
                 absolutePosition: {x: 430, y: 390},
             },
             //deficit replacement rate
             {
-                text: data.value.calculations.deficit.volumeLessBolus.toFixed(),
+                text: req.calculations.deficit.volumeLessBolus.toFixed(),
                 fontSize: 18,
                 absolutePosition: {x: 225, y: 470},
             },
             {
-                text: data.value.calculations.deficit.rate.toFixed(1),
+                text: req.calculations.deficit.rate.toFixed(1),
                 fontSize: 18,
                 absolutePosition: {x: 430, y: 470},
             },
             //maintenance rate
             {
-                text: data.value.calculations.maintenance.volume.toFixed(),
+                text: req.calculations.maintenance.volume.toFixed(),
                 fontSize: 18,
                 absolutePosition: {x: 185, y: 565},
             },
             {
-                text: data.value.capAlert.maintenance.asterisk(),
+                text: capAlert.maintenance.asterisk(req),
                 fontSize: 18,
                 absolutePosition: {x: 225, y: 565},
                 color: "red",
             },
             {
-                text: data.value.capAlert.maintenance.message(),
+                text: capAlert.maintenance.message(req),
                 fontSize: 14,
                 absolutePosition: {x: 225, y: 604},
                 color: "red",
             },
             {
-                text: data.value.calculations.maintenance.rate.toFixed(1),
+                text: req.calculations.maintenance.rate.toFixed(1),
                 fontSize: 18,
                 absolutePosition: {x: 395, y: 565},
             },
             //starting fluid rate
             {
-                text: data.value.calculations.maintenance.rate.toFixed(1),
+                text: req.calculations.maintenance.rate.toFixed(1),
                 fontSize: 18,
                 absolutePosition: {x: 205, y: 650},
             },
             {
-                text: data.value.calculations.deficit.rate.toFixed(1),
+                text: req.calculations.deficit.rate.toFixed(1),
                 fontSize: 18,
                 absolutePosition: {x: 330, y: 650},
             },
             {
-                text: data.value.calculations.startingFluidRate.toFixed(1),
+                text: req.calculations.startingFluidRate.toFixed(1),
                 fontSize: 18,
                 absolutePosition: {x: 455, y: 650},
                 pageBreak: 'after'
@@ -507,7 +582,7 @@ function getDocDef(){
                 canvas: [
                     {
                         type: 'rect',
-                        x: data.value.indicatorCoordinates.xAxisDiabetic(),
+                        x: indicatorCoordinates.xAxisDiabetic(req),
                         y: 400,
                         w: 40,
                         h: 40,
@@ -518,28 +593,28 @@ function getDocDef(){
             },
             //insulin hourly rate
             {
-                text: parseFloat(data.value.inputs.insulinRate.val),
+                text: parseFloat(req.insulinRate),
                 fontSize: 18,
                 absolutePosition: {x: 170, y: 205},
             },
             {
-                text: data.value.inputs.weight.val,
+                text: req.weight,
                 fontSize: 18,
                 absolutePosition: {x: 315, y: 205},
             },
             {
-                text: data.value.calculations.insulin.rate.toFixed(2),
+                text: req.calculations.insulin.rate.toFixed(2),
                 fontSize: 18,
                 absolutePosition: {x: 440, y: 205},
             },
             {
-                text: data.value.capAlert.insulin.asterisk(),
+                text: capAlert.insulin.asterisk(req),
                 fontSize: 18,
                 absolutePosition: {x: 475, y: 205},
                 color: "red",
             },
             {
-                text: data.value.capAlert.insulin.message(),
+                text: capAlert.insulin.message(req),
                 fontSize: 14,
                 absolutePosition: {x: 230, y: 235},
                 color: "red",

@@ -7,10 +7,10 @@ function errHandler(e){ //posts a message containing the error object to be hand
   postMessage(e);
 }
 
-onmessage = function(req) { //receives inputs from main thread and triggers PDF blob generation
-  console.log('webWorker: request received...', req);
+onmessage = function(req) { //triggered from main thread and starts PDF blob generation
+  console.log('webWorker: request received...');
   new Promise(function (resolve, reject) {
-    generatePdfBlob(function (result) {
+    generatePdfBlob(req.data, function (result) {
       if (result) { resolve(result); } else { reject(); }
     });
   }).then(function (pdfBlob) {
@@ -18,10 +18,10 @@ onmessage = function(req) { //receives inputs from main thread and triggers PDF 
   });
 };
 
-function generatePdfBlob(callback) { //returns a pdf document blob given inputs
+function generatePdfBlob(req, callback) { //returns a pdf document blob given inputs
   try{
     if (!callback) throw 'generatePdfBlob is an async method and needs a callback';
-    const docDef = getDocDef(); //generates the document definition using inputs and documentVariables
+    const docDef = getDocDef(req); //generates the document definition using inputs and documentVariables
     console.log('webWorker: docDef generated...', docDef)
     pdfMake.vfs = pdfFonts.pdfMake.vfs
     pdfMake.createPdf(docDef).getBlob(callback);
