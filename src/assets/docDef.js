@@ -48,14 +48,14 @@ function getDocDef(){
                         body: [
                             [
                                 {text: ""},
-                                {text: "Name: "+data.value.inputs.name.val, alignment: 'left', style: 'header'},
+                                {text: "Name: "+data.value.inputs.patientName.val, alignment: 'left', style: 'header'},
                                 {text: config.url + "(v" + config.version + ")", alignment: 'center', style: 'header'},
                                 {text: "Protocol Page "+currentPage+" of "+pageCount, alignment: 'right', style: 'header'},
                                 {text: ""}
                             ],
                             [
                                 {text: ""},
-                                {text: "Date of Birth: "+data.value.inputs.dob.val, alignment: 'left', style: 'header'},
+                                {text: "Date of Birth: "+data.value.inputs.patientDOB.val, alignment: 'left', style: 'header'},
                                 {text: ""},
                                 {text: "Audit ID: "+data.value.auditID, alignment: 'right', style: 'header'},
                                 {text: ""}

@@ -15,6 +15,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.3",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.1",
+    "pdfmake": "^0.2.10",
     "sweetalert2": "^11.7.20",
     "vue": "^3.4.15",
     "vue-router": "^4.2.5"
