@@ -18,7 +18,7 @@
     },
     "mild": {
       "pHRange": {
-        "upper": 7.4,
+        "upper": 7.3,
         "lower": 7.2
       },
       "bicarbonateBelow": 15,

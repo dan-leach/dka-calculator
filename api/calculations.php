@@ -24,7 +24,7 @@ if (($data->pH < $settings->severity->severe->pHRange->upper) && ($data->pH >= $
 } else if ((isset($data->bicarbonate)) && ($data->bicarbonate < $settings->severity->mild->bicarbonateBelow)) {
     $calculations->severity = "mild";
 } else {
-    send_error_response('Could not determine DKA severity using pH [' . $data->pH . '] and bicarbonate [' . $data->bicarbonate . ']. ' , 400);
+    send_error_response('pH of ' . $data->pH . ' and bicarbonate of ' . $data->bicarbonate . ' mmol/L does not meet the diagnostic threshold for DKA. ' , 400);
 }
 
 //functions related to calculation of bolus volumes
@@ -157,5 +157,6 @@ $calculations->insulin = new StdClass;
 $calculations->insulin->rate = insulinRate();
 $calculations->insulin->isCapped = insulinIsCapped();
 
+$calculationsJSON = json_encode($calculations);
 
 ?>

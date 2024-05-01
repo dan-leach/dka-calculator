@@ -12,7 +12,7 @@ const generateSteps = ref({
     text: "Transmitting data to DKA Calculator",
     complete: false,
     fail: "",
-    current: true,
+    current: false,
   },
   calculate: {
     text: "Calculating protocol variables",
@@ -41,7 +41,45 @@ const generateSteps = ref({
 });
 
 const generate = {
-  start: function () {
+  start: async function () {
+    for (let step in generateSteps.value) {
+      generateSteps.value[step].fail = "";
+      generateSteps.value[step].complete = false;
+      generateSteps.value[step].current = false;
+    }
+
+    //generate payload to send to server
+    let payload = {};
+    generateSteps.value.transmit.current = true;
+    try {
+      payload = await this.buildPayload();
+      generateSteps.value.transmit.current = false;
+      generateSteps.value.transmit.complete = true;
+    } catch (error) {
+      generateSteps.value.transmit.current = false;
+      generateSteps.value.transmit.fail = error;
+      console.error(error);
+      return;
+    }
+
+    //send the payload to server and receive calculations and auditID
+    generateSteps.value.calculate.current = true;
+    try {
+      const res = await api("fetchCalculations", payload);
+      data.value.auditID = res.auditID;
+      data.value.calculations = res.calculations;
+      generateSteps.value.calculate.current = false;
+      generateSteps.value.calculate.complete = true;
+      generateSteps.value.audit.complete = true;
+    } catch (error) {
+      generateSteps.value.calculate.current = false;
+      generateSteps.value.calculate.fail = error;
+      console.error(error);
+      return;
+    }
+
+    //build and download care pathway
+    generateSteps.value.build.current = true;
     try {
       let myWorker = this.startWebWorker();
       myWorker.onmessage = function (res) {
@@ -51,6 +89,7 @@ const generate = {
           generateSteps.value.build.current = false;
           generateSteps.value.build.fail = res.data;
           console.error(res.data);
+          return;
         } else {
           //otherwise use the returned blob to create the download
           generateSteps.value.build.complete = true;
@@ -62,12 +101,47 @@ const generate = {
             generateSteps.value.download.current = false;
             generateSteps.value.download.fail = res.error;
             console.error(error);
+            return;
           }
         }
       };
     } catch (error) {
+      generateSteps.value.build.current = false;
+      generateSteps.value.build.fail = res.data;
       console.error(error);
+      return;
     }
+  },
+  buildPayload: async function () {
+    let payload = {};
+    for (let input in data.value.inputs)
+      payload[input] = data.value.inputs[input].val;
+    if (data.value.inputs.patientNHS.val && data.value.inputs.patientDOB.val)
+      payload.patientHash = await this.patientHash();
+    delete payload.patientName;
+    delete payload.patientHospNum;
+    delete payload.patientNHS;
+    delete payload.patientDOB;
+
+    payload.patientAge = data.value.inputs.patientDOB.patientAge.val;
+    payload.weightLimitOverride = data.value.inputs.weight.limit.override;
+    payload.appVersion = config.version;
+    payload.clientDatetime = new Date();
+    payload.clientUseragent = navigator.userAgent;
+    return payload;
+  },
+  patientHash: async function () {
+    return Array.from(
+      new Uint8Array(
+        await crypto.subtle.digest(
+          "SHA-256",
+          new TextEncoder().encode(
+            data.value.inputs.patientNHS.val + data.value.inputs.patientDOB.val
+          )
+        )
+      ),
+      (byte) => byte.toString(16).padStart(2, "0")
+    ).join("");
   },
   startWebWorker: function () {
     //launches the web worker that will generate the PDF blob
@@ -103,7 +177,6 @@ const generate = {
     return myWorker;
   },
   handleWorkerResponse: function (res) {
-    //takes the
     console.log("main: response received from webWorker.js...");
     // Automatically start file download
     const anchor = document.createElement("a");
@@ -122,50 +195,13 @@ const generate = {
   },
 };
 
-const fetchCalculations = () => {
-  for (let step in generateSteps.value) {
-    generateSteps.value[step].fail = "";
-    generateSteps.value[step].complete = false;
-  }
-  let payload = {};
-  for (let input in data.value.inputs)
-    payload[input] = data.value.inputs[input].val;
-  delete payload.patientName;
-  delete payload.patientHospNum;
-
-  payload.patientAge = data.value.inputs.patientDOB.patientAge.val;
-  payload.weightLimitOverride = data.value.inputs.weight.limit.override;
-  payload.appVersion = config.version;
-  payload.clientDatetime = new Date();
-  payload.clientUseragent = navigator.userAgent;
-  console.log(payload);
-  api("fetchCalculations", payload).then(
-    function (res) {
-      generateSteps.value.calculate.complete = true;
-      generateSteps.value.audit.complete = true;
-      generateSteps.value.calculate.current = false;
-      generateSteps.value.build.current = true;
-      data.value.auditID = res.auditID;
-      data.value.calculations = res.calculations;
-      generate.start();
-    },
-    function (error) {
-      generateSteps.value.calculate.current = false;
-      generateSteps.value.calculate.fail = error;
-    }
-  );
-  generateSteps.value.transmit.complete = true;
-  generateSteps.value.transmit.current = false;
-  generateSteps.value.calculate.current = true;
-};
-
 onMounted(() => {
   /*if (!data.value.form.isValid(3)) {
     router.push("/form-audit-details");
   } else {
     fetchCalculations();
   }*/
-  fetchCalculations();
+  generate.start();
 });
 </script>
 
@@ -195,7 +231,7 @@ onMounted(() => {
         <!--retry-->
         <button
           type="button"
-          @click="fetchCalculations"
+          @click="generate.start"
           class="btn btn-primary mb-4"
         >
           Retry
@@ -206,7 +242,7 @@ onMounted(() => {
       <!--retry-->
       <button
         type="button"
-        @click="fetchCalculations"
+        @click="generate.start"
         class="btn btn-primary mb-2"
       >
         Regenerate care pathway

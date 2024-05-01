@@ -9,10 +9,6 @@ if ($data->legalAgreement == 1) {
     send_error_response("Agreement to legal disclaimer is required.", 401);
 }
 
-//patientDOB
-if (!isset($data->patientDOB)) send_error_response("Patient date of birth is required.", 400);
-$data->patientDOB = htmlspecialchars($data->patientDOB);
-
 //patientAge 
 if (!isset($data->patientAge)) send_error_response("Patient age is required.", 400);
 $data->patientAge = filter_var($data->patientAge, FILTER_VALIDATE_INT);
@@ -21,8 +17,8 @@ $data->patientAge = filter_var($data->patientAge, FILTER_VALIDATE_INT);
 if (!isset($data->patientSex)) send_error_response("Patient sex is required.", 400);
 $data->patientSex = htmlspecialchars($data->patientSex);
 
-//patientNHS
-if (isset($data->patientNHS)) $data->patientNHS = filter_var($data->patientNHS, FILTER_VALIDATE_INT);
+//patientHash
+if (isset($data->patientHash)) $data->patientHash = htmlspecialchars($data->patientHash);
 
 //patientPostcode
 if (isset($data->patientPostcode)) $data->patientPostcode = htmlspecialchars($data->patientPostcode);
@@ -36,13 +32,13 @@ if (!isset($data->pH)) send_error_response("pH is required.", 400);
 $data->pH = filter_var($data->pH, FILTER_VALIDATE_FLOAT);
 
 //bicarbonate 
-if (!isset($data->bicarbonate)) $data->bicarbonate = filter_var($data->bicarbonate, FILTER_VALIDATE_FLOAT);
+if (isset($data->bicarbonate)) $data->bicarbonate = filter_var($data->bicarbonate, FILTER_VALIDATE_FLOAT);
 
 //glucose
-if (!isset($data->glucose)) $data->glucose = filter_var($data->glucose, FILTER_VALIDATE_FLOAT);
+if (isset($data->glucose)) $data->glucose = filter_var($data->glucose, FILTER_VALIDATE_FLOAT);
 
 //ketones
-if (!isset($data->ketones)) $data->ketones = filter_var($data->ketones, FILTER_VALIDATE_FLOAT);
+if (isset($data->ketones)) $data->ketones = filter_var($data->ketones, FILTER_VALIDATE_FLOAT);
 
 //weight 
 if (!isset($data->weight)) send_error_response("Weight is required.", 400);
@@ -80,6 +76,7 @@ $data->ethnicGroup = htmlspecialchars($data->ethnicGroup);
 if (!isset($data->preventableFactors)) send_error_response("Preventable factors selection is required.", 400);
 if (!sizeof($data->preventableFactors)) send_error_response("Preventable factors selection is required.", 400);
 foreach ($data->preventableFactors as $key => $factor) $preventableFactors[$key] = htmlspecialchars($factor);
+$preventableFactorsJSON = json_encode($data->preventableFactors);
 
 //weightLimitOverride 
 if (!isset($data->weightLimitOverride)) send_error_response("Weight limit override status is required.", 400);

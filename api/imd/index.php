@@ -27,8 +27,8 @@ function output($row)
     return intval($row['imd_decile']);
 }
 
-$imd = null;
+$imdDecile = null;
 
-foreach ($imd_data as $row) $imd = output($row);
+foreach ($imd_data as $row) $imdDecile = output($row);
 
 ?>

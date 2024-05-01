@@ -7,9 +7,7 @@ require 'dataValidation.php';
 
 require 'private/keys.php';
 
-$patientHash = hash('sha256', $data->patientNHS . $data->patientDOB . $salt);
-unset($data->patientNHS);
-unset($data->patientDOB);
+if (isset($data->patientHash)) $patientHash = hash('sha256', $data->patientHash . $salt);
 
 require 'imd/index.php';
 unset($data->patientPostcode);
@@ -23,8 +21,6 @@ $link = mysqli_connect("localhost", $username, $password, "dkacalcu_dka_database
 
 require 'generateAuditID.php';
 
-$calculationsJSON = json_encode($calculations);
-$preventableFactorsJSON = json_encode($data->preventableFactors);
 require 'databaseInsert.php';
 
 $res = new stdClass();
