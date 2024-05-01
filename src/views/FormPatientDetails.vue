@@ -215,8 +215,6 @@ onMounted(() => {
           class="form-check-input"
           type="checkbox"
           v-model="data.inputs.patientNHS.optOut.val"
-          data-bs-toggle="collapse"
-          data-bs-target="#patientHospNumCollapse"
           @change="optOutClick('patientNHS')"
           id="optOutNHS"
         />
@@ -232,45 +230,51 @@ onMounted(() => {
       ></div>
     </div>
     <!--hospital number alternative-->
-    <div class="collapse mb-4" id="patientHospNumCollapse">
-      <div class="input-group">
-        <div class="form-floating">
-          <input
-            type="text"
-            class="form-control"
-            id="patientHospNum"
-            v-model="data.inputs.patientHospNum.val"
-            @change="data.inputs.patientHospNum.isValid()"
-            placeholder="x"
-            :minlength="data.inputs.patientHospNum.minLength"
-            :maxlength="data.inputs.patientHospNum.maxLength"
-            autocomplete="off"
-            required
-          />
-          <label for="patientHospNum">{{
-            data.inputs.patientHospNum.label
-          }}</label>
-        </div>
-        <span
-          class="input-group-text"
-          data-bs-toggle="collapse"
-          data-bs-target="#patientHospNumInfo"
-          ><font-awesome-icon :icon="['fas', 'circle-info']"
-        /></span>
-      </div>
+    <Transition>
       <div
-        v-if="showErrors"
-        class="form-text text-danger mx-1"
-        id="patientHospNum"
+        class="mb-4"
+        id="patientHospNumCollapse"
+        v-if="data.inputs.patientNHS.optOut.val"
       >
-        {{ data.inputs.patientHospNum.errors }}
+        <div class="input-group">
+          <div class="form-floating">
+            <input
+              type="text"
+              class="form-control"
+              id="patientHospNum"
+              v-model="data.inputs.patientHospNum.val"
+              @change="data.inputs.patientHospNum.isValid()"
+              placeholder="x"
+              :minlength="data.inputs.patientHospNum.minLength"
+              :maxlength="data.inputs.patientHospNum.maxLength"
+              autocomplete="off"
+              required
+            />
+            <label for="patientHospNum">{{
+              data.inputs.patientHospNum.label
+            }}</label>
+          </div>
+          <span
+            class="input-group-text"
+            data-bs-toggle="collapse"
+            data-bs-target="#patientHospNumInfo"
+            ><font-awesome-icon :icon="['fas', 'circle-info']"
+          /></span>
+        </div>
+        <div
+          v-if="showErrors"
+          class="form-text text-danger mx-1"
+          id="patientHospNum"
+        >
+          {{ data.inputs.patientHospNum.errors }}
+        </div>
+        <div
+          class="collapse form-text mx-1"
+          id="patientHospNumInfo"
+          v-html="data.inputs.patientHospNum.info"
+        ></div>
       </div>
-      <div
-        class="collapse form-text mx-1"
-        id="patientHospNumInfo"
-        v-html="data.inputs.patientHospNum.info"
-      ></div>
-    </div>
+    </Transition>
     <!--patientPostcode-->
     <div class="mb-4">
       <div class="input-group">
@@ -359,5 +363,11 @@ onMounted(() => {
 }
 .episode-type-btn {
   height: 62px;
+}
+.v-enter-active {
+  transition: all 0.5s ease;
+}
+.v-enter-from {
+  opacity: 0;
 }
 </style>
