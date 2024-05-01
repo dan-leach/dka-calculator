@@ -30,7 +30,7 @@ import { config } from "../assets/config.js";
     </div>
     <button
       type="button"
-      @click="router.push('/form-audit-details')"
+      @click="router.push('/form-patient-details')"
       class="btn btn-secondary"
     >
       Back to form

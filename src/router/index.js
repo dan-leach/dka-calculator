@@ -44,6 +44,11 @@ const router = createRouter({
       name: "privacy-policy",
       component: () => import("../views/PrivacyPolicy.vue"),
     },
+    {
+      path: "/:pathMatch(.*)*",
+      name: "404",
+      component: () => import("../views/404.vue"),
+    },
   ],
 });
 
