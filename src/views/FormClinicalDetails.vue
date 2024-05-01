@@ -26,6 +26,8 @@ onMounted(() => {
   } else if (!data.value.form.isValid(1)) {
     router.push("/form-patient-details");
   } else {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
     data.value.inputs.protocolStartDatetime.todayString.build();
     data.value.inputs.protocolStartDatetime.val =
       data.value.inputs.protocolStartDatetime.todayString.val;

@@ -550,7 +550,7 @@ export const data = ref({
       label: "What starting rate of insulin is required?",
       privacyLabel: "Insulin starting rate",
       form: 2,
-      info: "Insulin starting rate (in mL/kg/hour) is used to calculate a insulin rate in mL/hr. It is stored by the DKA Calculator for audit purposes.",
+      info: "Insulin starting rate (in Units/kg/hour) is used to calculate a insulin rate in Units/hr. It is stored by the DKA Calculator for audit purposes.",
       isValid: function () {
         this.errors = "";
         if (!this.val)

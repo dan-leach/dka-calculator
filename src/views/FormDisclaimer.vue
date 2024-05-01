@@ -1,4 +1,5 @@
 <script setup>
+import { onMounted } from "vue";
 import { data } from "../assets/data.js";
 import router from "../router";
 
@@ -6,6 +7,11 @@ const continueClick = () => {
   data.value.inputs.legalAgreement.val = true;
   router.push("/form-patient-details");
 };
+
+onMounted(() => {
+  document.body.scrollTop = 0; // For Safari
+  document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+});
 </script>
 
 <template>

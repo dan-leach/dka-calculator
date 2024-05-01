@@ -3,3 +3,4 @@ Before launch:
 1. Update config to live URL (remove dev)
 2. Test limits
 3. Legacy
+4. scroll to top on form change
