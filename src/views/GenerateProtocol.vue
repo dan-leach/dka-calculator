@@ -196,12 +196,22 @@ const generate = {
 };
 
 onMounted(() => {
-  /*if (!data.value.form.isValid(3)) {
+  if (!data.value.form.isValid(0)) {
+    router.push("/form-disclaimer");
+  } else if (!data.value.form.isValid(1)) {
+    router.push("/form-patient-details");
+  } else if (!data.value.form.isValid(2)) {
+    router.push("/form-clinical-details");
+  } else if (
+    data.value.inputs.weight.limit.override &&
+    !data.value.inputs.weight.limit.overrideConfirm
+  ) {
+    router.push("/form-override-confirm");
+  } else if (!data.value.form.isValid(3)) {
     router.push("/form-audit-details");
   } else {
-    fetchCalculations();
-  }*/
-  generate.start();
+    generate.start();
+  }
 });
 </script>
 

@@ -14,10 +14,17 @@ const continueClick = () => {
 };
 
 onMounted(() => {
-  if (!data.value.form.isValid(2)) {
+  if (!data.value.form.isValid(0)) {
+    router.push("/form-disclaimer");
+  } else if (!data.value.form.isValid(1)) {
+    router.push("/form-patient-details");
+  } else if (!data.value.form.isValid(2)) {
     router.push("/form-clinical-details");
-  } else if (data.value.inputs.weight.limit.override && !data.value.inputs.weight.limit.overrideConfirm) {
-    router.push("/form-override-confirm")
+  } else if (
+    data.value.inputs.weight.limit.override &&
+    !data.value.inputs.weight.limit.overrideConfirm
+  ) {
+    router.push("/form-override-confirm");
   }
 });
 </script>
@@ -168,12 +175,17 @@ onMounted(() => {
         >
           <option value="" disabled>{{ data.inputs.ethnicGroup.label }}</option>
           <option
-            v-for="ethnicGroup, index in config.client.ethnicGroups.groups"
+            v-for="(ethnicGroup, index) in config.client.ethnicGroups.groups"
             :value="ethnicGroup"
-            :disabled="config.client.ethnicGroups.headingIndexes.includes(index)"
+            :disabled="
+              config.client.ethnicGroups.headingIndexes.includes(index)
+            "
           >
-            <span v-if="config.client.ethnicGroups.headingIndexes.includes(index)">-----{{ethnicGroup}}-----</span>
-            <span v-else>{{ethnicGroup}}</span>
+            <span
+              v-if="config.client.ethnicGroups.headingIndexes.includes(index)"
+              >-----{{ ethnicGroup }}-----</span
+            >
+            <span v-else>{{ ethnicGroup }}</span>
           </option>
         </select>
 
@@ -242,11 +254,12 @@ onMounted(() => {
           @change="data.inputs.preventableFactors.isValid()"
           autocomplete="off"
           required
-          :disabled="data.inputs.preventableFactors.val != '' && data.inputs.preventableFactors.val != 'nil'" 
+          :disabled="
+            data.inputs.preventableFactors.val != '' &&
+            data.inputs.preventableFactors.val != 'nil'
+          "
         />
-        <label
-          class="btn btn-outline-success me-2 "
-          for="nilFactor"
+        <label class="btn btn-outline-success me-2" for="nilFactor"
           >No preventable factors</label
         >
       </div>

@@ -21,15 +21,23 @@ const continueClick = () => {
 };
 
 onMounted(() => {
-  if (!data.value.form.isValid(1)) router.push("/form-patient-details");
-  data.value.inputs.protocolStartDatetime.todayString.build()
-  data.value.inputs.protocolStartDatetime.val = data.value.inputs.protocolStartDatetime.todayString.val
-  data.value.inputs.protocolStartDatetime.minDate.build()
-  data.value.inputs.protocolStartDatetime.minDateString.build()
-  document.getElementById("protocolStartDatetime").min = data.value.inputs.protocolStartDatetime.minDateString.val
-  data.value.inputs.protocolStartDatetime.maxDate.build()
-  data.value.inputs.protocolStartDatetime.maxDateString.build()
-  document.getElementById("protocolStartDatetime").max = data.value.inputs.protocolStartDatetime.maxDateString.val
+  if (!data.value.form.isValid(0)) {
+    router.push("/form-disclaimer");
+  } else if (!data.value.form.isValid(1)) {
+    router.push("/form-patient-details");
+  } else {
+    data.value.inputs.protocolStartDatetime.todayString.build();
+    data.value.inputs.protocolStartDatetime.val =
+      data.value.inputs.protocolStartDatetime.todayString.val;
+    data.value.inputs.protocolStartDatetime.minDate.build();
+    data.value.inputs.protocolStartDatetime.minDateString.build();
+    document.getElementById("protocolStartDatetime").min =
+      data.value.inputs.protocolStartDatetime.minDateString.val;
+    data.value.inputs.protocolStartDatetime.maxDate.build();
+    data.value.inputs.protocolStartDatetime.maxDateString.build();
+    document.getElementById("protocolStartDatetime").max =
+      data.value.inputs.protocolStartDatetime.maxDateString.val;
+  }
 });
 </script>
 
@@ -111,7 +119,12 @@ onMounted(() => {
     </div>
     <div class="card mb-4 bg-transparent">
       <div class="card-header d-flex flex-row flex-wrap">
-        <span class="align-middle">Optional values &nbsp;<font-awesome-icon :icon="['fas', 'circle-info']" data-bs-toggle="collapse" data-bs-target="#bicarbonateInfo"/></span>
+        <span class="align-middle"
+          >Optional values &nbsp;<font-awesome-icon
+            :icon="['fas', 'circle-info']"
+            data-bs-toggle="collapse"
+            data-bs-target="#bicarbonateInfo"
+        /></span>
       </div>
       <div class="card-body">
         <div class="d-flex flex-row flex-wrap">
@@ -131,7 +144,9 @@ onMounted(() => {
                   :step="data.inputs.bicarbonate.step"
                   autocomplete="off"
                 />
-                <label for="bicarbonate">{{ data.inputs.bicarbonate.label }}</label>
+                <label for="bicarbonate">{{
+                  data.inputs.bicarbonate.label
+                }}</label>
               </div>
               <span class="input-group-text">mmol/L</span>
             </div>
@@ -142,7 +157,6 @@ onMounted(() => {
             >
               {{ data.inputs.bicarbonate.errors }}
             </div>
-            
           </div>
           <!--glucose-->
           <div class="mb-1 flex-grow-1">
@@ -164,7 +178,11 @@ onMounted(() => {
               </div>
               <span class="input-group-text">mmol/L</span>
             </div>
-            <div v-if="showErrors" class="form-text text-danger mx-1" id="glucoseErrors">
+            <div
+              v-if="showErrors"
+              class="form-text text-danger mx-1"
+              id="glucoseErrors"
+            >
               {{ data.inputs.glucose.errors }}
             </div>
           </div>
@@ -238,7 +256,10 @@ onMounted(() => {
       >
         {{ data.inputs.weight.errors }}
       </div>
-      <div class="form-check form-switch ms-1 my-1" v-if="data.inputs.weight.limit.exceeded">
+      <div
+        class="form-check form-switch ms-1 my-1"
+        v-if="data.inputs.weight.limit.exceeded"
+      >
         <input
           class="form-check-input"
           type="checkbox"
@@ -272,7 +293,9 @@ onMounted(() => {
             autocomplete="off"
             required
           />
-          <label class="btn btn-outline-secondary me-2" for="shockPresentTrue">Yes</label>
+          <label class="btn btn-outline-secondary me-2" for="shockPresentTrue"
+            >Yes</label
+          >
 
           <input
             type="radio"
@@ -284,7 +307,9 @@ onMounted(() => {
             @change="data.inputs.shockPresent.isValid()"
             autocomplete="off"
           />
-          <label class="btn btn-outline-secondary" for="shockPresentFalse">No</label>
+          <label class="btn btn-outline-secondary" for="shockPresentFalse"
+            >No</label
+          >
           <font-awesome-icon
             :icon="['fas', 'circle-info']"
             data-bs-toggle="collapse"
@@ -375,7 +400,11 @@ onMounted(() => {
             autocomplete="off"
             required
           />
-          <label class="btn btn-outline-secondary me-2" for="preExistingDiabetesTrue">Yes</label>
+          <label
+            class="btn btn-outline-secondary me-2"
+            for="preExistingDiabetesTrue"
+            >Yes</label
+          >
 
           <input
             type="radio"
@@ -387,7 +416,11 @@ onMounted(() => {
             @change="data.inputs.preExistingDiabetes.isValid()"
             autocomplete="off"
           />
-          <label class="btn btn-outline-secondary" for="preExistingDiabetesFalse">No</label>
+          <label
+            class="btn btn-outline-secondary"
+            for="preExistingDiabetesFalse"
+            >No</label
+          >
           <font-awesome-icon
             :icon="['fas', 'circle-info']"
             data-bs-toggle="collapse"

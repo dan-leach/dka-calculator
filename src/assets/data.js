@@ -19,6 +19,8 @@ export const data = ref({
   inputs: {
     legalAgreement: {
       val: false,
+      label: "Agreement to legal disclaimer",
+      info: "Your agreement to the legal disclaimer is recorded.",
       form: 0,
       isValid: function () {
         if (!this.val) return false;
@@ -56,7 +58,7 @@ export const data = ref({
       val: "",
       label: "Date of birth",
       form: 1,
-      info: "Patient date of birth is printed onto the generated care pathway document in the patient demographics area. It is not stored directly by the DKA Calculator, but is used to calculate a patient age (in years) which is stored for audit purposes.",
+      info: "Patient date of birth is printed onto the generated care pathway document in the patient demographics area. It is not stored directly by the DKA Calculator, but is used to calculate a patient age (in years) which is stored for audit purposes. To allow linkage of audit data between episodes the patient date of birth is used to generate a unique patient ID which is stored. The patient date of birth cannot be found from the calculated unique patient ID (<a href='https://www.codecademy.com/resources/blog/what-is-hashing/' target='_blank'>read more about secure cryptographic hashing</a>).",
       withinYears: 19, //date of birth must be between today and 19 years ago - allowance for adult patients not yet transitioned to adult services
       patientAge: {
         build: function () {
@@ -64,14 +66,14 @@ export const data = ref({
           const birthDate = new Date(data.value.inputs.patientDOB.val);
           let age = today.getFullYear() - birthDate.getFullYear();
           const m = today.getMonth() - birthDate.getMonth();
-        
-          if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
-        
+
+          if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate()))
+            age--;
+
           this.val = age;
-        }
-        
         },
-        val: null,
+      },
+      val: null,
       minDate: function () {
         const today = new Date();
         const minDate = new Date(
@@ -81,10 +83,10 @@ export const data = ref({
         );
         return minDate;
       },
-      ageMonths: function() {
+      ageMonths: function () {
         let months;
-        let today = new Date()
-        let dob = new Date(data.value.inputs.patientDOB.val)
+        let today = new Date();
+        let dob = new Date(data.value.inputs.patientDOB.val);
         months = (today.getFullYear() - dob.getFullYear()) * 12;
         months -= dob.getMonth();
         months += today.getMonth();
@@ -109,10 +111,13 @@ export const data = ref({
 
         if (this.errors) return false;
 
-        this.patientAge.build()
+        this.patientAge.build();
         if (this.patientAge.val > config.client.ageLimit) {
-          this.errors += "Patient age cannot be greater than " + config.client.ageLimit + " years. ";
-          return false
+          this.errors +=
+            "Patient age cannot be greater than " +
+            config.client.ageLimit +
+            " years. ";
+          return false;
         }
 
         return true;
@@ -121,8 +126,9 @@ export const data = ref({
     },
     patientSex: {
       val: "",
+      label: "Patient sex",
       form: 1,
-      info: "Patient sex is stored by the DKA Calculator for audit purposes.",
+      info: "Patient sex is printed onto the generated care pathway. It is stored by the DKA Calculator for audit purposes.",
       isValid: function () {
         this.errors = "";
         if (!this.val) this.errors += "Patient sex must be selected. ";
@@ -135,7 +141,7 @@ export const data = ref({
       val: "",
       label: "NHS number",
       form: 1,
-      info: "Patient NHS number is printed onto the generated care pathway document in the patient demographics area. It is not stored directly by the DKA Calculator. To allow linkage of audit data between episodes the NHS number is used to generate a unique patient ID which is stored. The patient's NHS number cannot be found from the calculated unique patient ID (<a href='https://www.codecademy.com/resources/blog/what-is-hashing/' target='_blank'>read more about secure hashing</a>).",
+      info: "If provided, patient NHS number is printed onto the generated care pathway document in the patient demographics area. It is not stored directly by the DKA Calculator. To allow linkage of audit data between episodes the NHS number is used to generate a unique patient ID which is stored. The patient NHS number cannot be found from the calculated unique patient ID (<a href='https://www.codecademy.com/resources/blog/what-is-hashing/' target='_blank'>read more about secure cryptographic hashing</a>).",
       min: 1000000000,
       max: 9999999999,
       isValid: function () {
@@ -171,7 +177,7 @@ export const data = ref({
       val: "",
       label: "Hospital number",
       form: 1,
-      info: "Patient hospital number is printed onto the generated care pathway document in the patient demographics area. It is not stored by the DKA Calculator.",
+      info: "If used instead of the patient NHS number, patient hospital number is printed onto the generated care pathway document in the patient demographics area. It is not stored by the DKA Calculator.",
       minLength: 4,
       maxLength: 20,
       isValid: function () {
@@ -200,7 +206,7 @@ export const data = ref({
       val: "",
       label: "Postcode",
       form: 1,
-      info: "The patient postcode is not stored by the DKA Calculator. It is used to find an Index of Multiple Deprivation (IMD) decile which is stored for audit purposes.",
+      info: "The patient postcode is not stored by the DKA Calculator. If provided, it is used to find an Index of Multiple Deprivation (IMD) decile which is stored for audit purposes.",
       minLength: 5,
       maxLength: 8,
       pattern:
@@ -254,14 +260,18 @@ export const data = ref({
       todayString: {
         build: function () {
           const today = new Date();
-          let todayString = today.getFullYear()
-          todayString += '-' + ((today.getMonth()<9) ? '0' : '') + (today.getMonth()+1)
-          todayString += '-' + ((today.getDate()<10) ? '0' : '') + today.getDate()
-          todayString += 'T' + ((today.getHours()<10) ? '0' : '') + today.getHours()
-          todayString += ':' + ((today.getMinutes()<10) ? '0' : '') + today.getMinutes()
-          this.val = todayString
+          let todayString = today.getFullYear();
+          todayString +=
+            "-" + (today.getMonth() < 9 ? "0" : "") + (today.getMonth() + 1);
+          todayString +=
+            "-" + (today.getDate() < 10 ? "0" : "") + today.getDate();
+          todayString +=
+            "T" + (today.getHours() < 10 ? "0" : "") + today.getHours();
+          todayString +=
+            ":" + (today.getMinutes() < 10 ? "0" : "") + today.getMinutes();
+          this.val = todayString;
         },
-        val: ''
+        val: "",
       },
       minDate: {
         build: function () {
@@ -270,24 +280,31 @@ export const data = ref({
             today.getFullYear(),
             today.getMonth(),
             today.getDate(),
-            today.getHours() - data.value.inputs.protocolStartDatetime.withinHours,
+            today.getHours() -
+              data.value.inputs.protocolStartDatetime.withinHours,
             today.getMinutes()
           );
           this.val = minDate;
         },
-        val: null
+        val: null,
       },
       minDateString: {
         build: function () {
-          let minDate = data.value.inputs.protocolStartDatetime.minDate.val
-          let minDateString = minDate.getFullYear()
-          minDateString += '-' + ((minDate.getMonth()<9) ? '0' : '') + (minDate.getMonth()+1)
-          minDateString += '-' + ((minDate.getDate()<10) ? '0' : '') + minDate.getDate()
-          minDateString += 'T' + ((minDate.getHours()<10) ? '0' : '') + minDate.getHours()
-          minDateString += ':' + ((minDate.getMinutes()<10) ? '0' : '') + minDate.getMinutes()
-          this.val = minDateString
+          let minDate = data.value.inputs.protocolStartDatetime.minDate.val;
+          let minDateString = minDate.getFullYear();
+          minDateString +=
+            "-" +
+            (minDate.getMonth() < 9 ? "0" : "") +
+            (minDate.getMonth() + 1);
+          minDateString +=
+            "-" + (minDate.getDate() < 10 ? "0" : "") + minDate.getDate();
+          minDateString +=
+            "T" + (minDate.getHours() < 10 ? "0" : "") + minDate.getHours();
+          minDateString +=
+            ":" + (minDate.getMinutes() < 10 ? "0" : "") + minDate.getMinutes();
+          this.val = minDateString;
         },
-        val: ''
+        val: "",
       },
       maxDate: {
         build: function () {
@@ -296,24 +313,31 @@ export const data = ref({
             today.getFullYear(),
             today.getMonth(),
             today.getDate(),
-            today.getHours() + data.value.inputs.protocolStartDatetime.withinHours,
+            today.getHours() +
+              data.value.inputs.protocolStartDatetime.withinHours,
             today.getMinutes()
           );
           this.val = maxDate;
         },
-        val: null
+        val: null,
       },
       maxDateString: {
         build: function () {
-          let maxDate = data.value.inputs.protocolStartDatetime.maxDate.val
-          let maxDateString = maxDate.getFullYear()
-          maxDateString += '-' + ((maxDate.getMonth()<9) ? '0' : '') + (maxDate.getMonth()+1)
-          maxDateString += '-' + ((maxDate.getDate()<10) ? '0' : '') + maxDate.getDate()
-          maxDateString += 'T' + ((maxDate.getHours()<10) ? '0' : '') + maxDate.getHours()
-          maxDateString += ':' + ((maxDate.getMinutes()<10) ? '0' : '') + maxDate.getMinutes()
-          this.val = maxDateString
+          let maxDate = data.value.inputs.protocolStartDatetime.maxDate.val;
+          let maxDateString = maxDate.getFullYear();
+          maxDateString +=
+            "-" +
+            (maxDate.getMonth() < 9 ? "0" : "") +
+            (maxDate.getMonth() + 1);
+          maxDateString +=
+            "-" + (maxDate.getDate() < 10 ? "0" : "") + maxDate.getDate();
+          maxDateString +=
+            "T" + (maxDate.getHours() < 10 ? "0" : "") + maxDate.getHours();
+          maxDateString +=
+            ":" + (maxDate.getMinutes() < 10 ? "0" : "") + maxDate.getMinutes();
+          this.val = maxDateString;
         },
-        val: ''
+        val: "",
       },
       isValid: function () {
         this.errors = "";
@@ -338,7 +362,7 @@ export const data = ref({
       val: null,
       label: "pH",
       form: 2,
-      info: "pH is used to determine DKA severity which is used in fluid deficit calculations. It is stored by the DKA Calculator for audit purposes.",
+      info: "pH is added to the relevant field in the care pathway. pH is used to determine DKA severity which is used in fluid deficit calculations. It is stored by the DKA Calculator for audit purposes.",
       min: 6.2,
       max: 7.5,
       step: 0.01,
@@ -365,6 +389,8 @@ export const data = ref({
       label: "Bicarbonate",
       form: 2,
       info: "If provided, these values will be added to the relevant fields in the care pathway. Bicarbonate is used to determine DKA severity which is used in fluid deficit calculations. Bicarbonate, glucose and ketones are stored by the DKA Calculator for audit purposes.",
+      privacyInfo:
+        "If provided, bicarbonate will be added to the relevant field in the care pathway. Bicarbonate is used to determine DKA severity which is used in fluid deficit calculations. It is stored by the DKA Calculator for audit purposes.",
       min: 0,
       max: 35,
       step: 0.1,
@@ -390,6 +416,8 @@ export const data = ref({
     glucose: {
       val: null,
       label: "Glucose",
+      privacyInfo:
+        "If provided, glucose will be added to the relevant field in the care pathway. It is stored by the DKA Calculator for audit purposes.",
       form: 2,
       min: 3,
       max: 50,
@@ -400,8 +428,7 @@ export const data = ref({
           this.val = Number.parseFloat(this.val).toFixed(1);
 
           if (this.val < this.min)
-            this.errors +=
-              "Glucose must be at least " + this.min + " mmol/L. ";
+            this.errors += "Glucose must be at least " + this.min + " mmol/L. ";
 
           if (this.val > this.max)
             this.errors +=
@@ -416,6 +443,8 @@ export const data = ref({
     ketones: {
       val: null,
       label: "Ketones",
+      privacyInfo:
+        "If provided, ketone level will be added to the relevant field in the care pathway. Ketone level is used to check the diagnostic threshold for DKA is reached. It is stored by the DKA Calculator for audit purposes.",
       form: 2,
       min: 0,
       max: 15,
@@ -443,43 +472,58 @@ export const data = ref({
       val: null,
       label: "Weight",
       form: 2,
-      info: "Weight is used to calculate fluid volumes for boluses, deficit replacement and maintenance. It is stored by the DKA Calculator for audit purposes.",
+      info: "Weight is used to calculate fluid volumes for boluses, deficit replacement and maintenance. It is stored by the DKA Calculator for audit purposes. If the weight provided falls outside 2 standard deviations of the mean for age, whether or not you override this limit is also recorded.",
       min: 2,
       max: 150,
       step: 0.1,
       limit: {
         lower: function () {
-          return config.client.weightLimits[data.value.inputs.patientSex.val].lower[data.value.inputs.patientDOB.ageMonths()]
+          return config.client.weightLimits[data.value.inputs.patientSex.val]
+            .lower[data.value.inputs.patientDOB.ageMonths()];
         },
         upper: function () {
-          let upper = config.client.weightLimits[data.value.inputs.patientSex.val].upper[data.value.inputs.patientDOB.ageMonths()]
-          if (upper>config.client.weightLimits.max) upper = config.client.weightLimits.max;
-          return upper
+          let upper =
+            config.client.weightLimits[data.value.inputs.patientSex.val].upper[
+              data.value.inputs.patientDOB.ageMonths()
+            ];
+          if (upper > config.client.weightLimits.max)
+            upper = config.client.weightLimits.max;
+          return upper;
         },
         exceeded: false,
         override: false,
         overrideConfirm: false,
-        overrideLabel: "Override weight limit"
+        overrideLabel: "Override weight limit",
       },
       isValid: function () {
         this.errors = "";
         if (!this.val) {
           this.errors += "Weight must be provided. ";
-          return false
+          return false;
         }
 
         this.val = Number.parseFloat(this.val).toFixed(1);
 
-        if (this.val < this.min) this.errors += "Weight must be at least " + this.min + " kg. ";
-        if (this.val > this.max) this.errors += "Weight must be no more than " + this.max + " kg. ";
+        if (this.val < this.min)
+          this.errors += "Weight must be at least " + this.min + " kg. ";
+        if (this.val > this.max)
+          this.errors += "Weight must be no more than " + this.max + " kg. ";
         if (this.errors) return false;
 
-        if ((this.val < this.limit.lower() || this.val > this.limit.upper())) {
-          if (!this.limit.override) this.errors += "Weight must be within 2 standard deviations of the mean for age (upper limit " + config.client.weightLimits.max + "kg) (range " + this.limit.lower() + "kg to " + this.limit.upper() + "kg)."
-          this.limit.exceeded = true
+        if (this.val < this.limit.lower() || this.val > this.limit.upper()) {
+          if (!this.limit.override)
+            this.errors +=
+              "Weight must be within 2 standard deviations of the mean for age (upper limit " +
+              config.client.weightLimits.max +
+              "kg) (range " +
+              this.limit.lower() +
+              "kg to " +
+              this.limit.upper() +
+              "kg).";
+          this.limit.exceeded = true;
         } else {
-          this.limit.exceeded = false
-          this.limit.override = false
+          this.limit.exceeded = false;
+          this.limit.override = false;
         }
         if (this.errors) return false;
         return true;
@@ -489,8 +533,9 @@ export const data = ref({
     shockPresent: {
       val: "",
       label: "Is the patient clinically shocked?",
+      privacyLabel: "Clinical shock status",
       form: 2,
-      info: "Clinical shock status is stored by the DKA Calculator for audit purposes.",
+      info: "Clinical shock status is used to indicate initial resuscitation strategy on the care pathway and to determine if the initial bolus is subtracted from the fluid deficit as part of the fluid calculations. It is stored by the DKA Calculator for audit purposes.",
       isValid: function () {
         this.errors = "";
         if (!this.val)
@@ -503,8 +548,9 @@ export const data = ref({
     insulinRate: {
       val: "",
       label: "What starting rate of insulin is required?",
+      privacyLabel: "Insulin starting rate",
       form: 2,
-      info: "Insulin starting rate is stored by the DKA Calculator for audit purposes.",
+      info: "Insulin starting rate (in mL/kg/hour) is used to calculate a insulin rate in mL/hr. It is stored by the DKA Calculator for audit purposes.",
       isValid: function () {
         this.errors = "";
         if (!this.val)
@@ -518,8 +564,9 @@ export const data = ref({
       val: "",
       label:
         "Was the patient known to have diabetes prior to the current episode of DKA?",
+      privacyLabel: "Pre-existing diabetes status",
       form: 2,
-      info: "If the patient has pre-existing diabetes is stored by the DKA Calculator for audit purposes.",
+      info: "If the patient has pre-existing diabetes used to indicate the approach to managing existing insulin therapy on the care pathway. It is stored by the DKA Calculator for audit purposes.",
       isValid: function () {
         this.errors = "";
         if (!this.val)
@@ -532,6 +579,7 @@ export const data = ref({
     episodeType: {
       val: "",
       label: "What is this protocol being used for?",
+      privacyLabel: "Episode type",
       form: 3,
       info: "Episode type is stored by the DKA Calculator for audit purposes.",
       isValid: function () {
@@ -545,6 +593,7 @@ export const data = ref({
     region: {
       val: "",
       label: "Please select your region",
+      privacyLabel: "Region",
       form: 3,
       info: "Region is stored by the DKA Calculator for audit purposes.",
       isValid: function () {
@@ -565,6 +614,7 @@ export const data = ref({
     centre: {
       val: "",
       label: "Please select the treating centre",
+      privacyLabel: "Treating centre",
       options: [],
       form: 3,
       info: "Treating centre is stored by the DKA Calculator for audit purposes.",
@@ -579,6 +629,7 @@ export const data = ref({
     ethnicGroup: {
       val: "",
       label: "Please select patient ethnic group",
+      privacyLabel: "Patient ethnic group",
       form: 3,
       info: "Patient ethnic group is stored by the DKA Calculator for audit purposes.",
       isValid: function () {
@@ -593,6 +644,7 @@ export const data = ref({
       val: [],
       label:
         "Were there any preventable factors which may have contributed to this episode of DKA?",
+      privacyLabel: "Preventable factors",
       options: [
         "Missed diagnosis in primary care",
         "Missed diagnosis in hospital",
@@ -615,7 +667,12 @@ export const data = ref({
       },
       errors: "",
     },
+    other: {
+      privacyLabel: "Other data recorded",
+      privacyInfo:
+        "In addition to the input fields above, the following data are recorded to enable, audit, security and performance monitoring: <ul><li>The audit ID (unique to for each care pathway generated) which is also printed on the generated PDF document and can be used for audit data linkage</li><li>Software version of the DKA Calculator used for the episode</li><li>The results of the calculations performed by the DKA Calculator including DKA severity, fluid and insulin calculations</li><li>The date/time when the protocol was generated</li><li>The browser type (useragent) used to access the DKA Calculator</li><li>The IP address of the device used to access the DKA Calculator</li></ul>",
+    },
   },
   calculations: {},
-  auditID: '',
+  auditID: "",
 });
