@@ -15,12 +15,19 @@ const generate = {
         let myWorker = this.startWebWorker();
         myWorker.onmessage = function(res) { //once response received from webWorker triggers download of pdf
             if(res.data.stack){ //if res.data.stack is defined then it's an error being returned by web worker so pass res.data to errHandler
+                generateSteps.value.build.current = false
+                generateSteps.value.build.fail = res.data
                 console.error(res.data);
             } else { //otherwise use the returned blob to create the download
+                generateSteps.value.build.complete = true
+                generateSteps.value.build.current = false
+                generateSteps.value.download.current = true
                 try{
                     generate.handleWorkerResponse(res);
                 } catch (error) {
-                    console.error(error);
+                  generateSteps.value.download.current = false
+                  generateSteps.value.download.fail = res.error
+                  console.error(error);
                 }
             }
         };
@@ -41,6 +48,8 @@ const generate = {
         override: data.value.inputs.weight.limit.override,
         pH: data.value.inputs.pH.val,
         bicarbonate: data.value.inputs.bicarbonate.val,
+        glucose: data.value.inputs.glucose.val,
+        ketones: data.value.inputs.ketones.val,
         shockPresent: data.value.inputs.shockPresent.val,
         preExistingDiabetes: data.value.inputs.preExistingDiabetes.val,
         patientSex: data.value.inputs.patientSex.val,
@@ -65,7 +74,8 @@ const generate = {
 		this.success();
 	},
 	success: function(){ //show the success modal
-		console.log('success to do')
+    generateSteps.value.download.complete = true
+    generateSteps.value.download.current = false
 	},
 }
 
@@ -83,17 +93,59 @@ const fetchCalculations = () => {
   api('fetchCalculations', payload)
     .then(
       function (res) {
+        generateSteps.value.calculate.complete = true
+        generateSteps.value.audit.complete = true
+        generateSteps.value.calculate.current = false
+        generateSteps.value.build.current = true
         data.value.auditID = res.auditID
         data.value.calculations = res.calculations
         generate.start()
       },
       function (error) {
+        generateSteps.value.calculate.current = false
+        generateSteps.value.calculate.fail = error
         Swal.fire({
           html: error
         })
       }
     )
+  generateSteps.value.transmit.complete = true
+  generateSteps.value.transmit.current = false
+  generateSteps.value.calculate.current = true
 }
+
+const generateSteps = ref({
+  transmit: {
+    text: 'Transmitting data to DKA Calculator',
+    complete: false,
+    fail: '',
+    current: true
+  },
+  calculate: {
+    text: 'Calculating protocol variables',
+    complete: false,
+    fail: '',
+    current: false
+  },
+  audit: {
+    text: 'Logging audit data',
+    complete: false,
+    fail: '',
+    current: false
+  },
+  build: {
+    text: 'Generating individualised care pathway',
+    complete: false,
+    fail: '',
+    current: false
+  },
+  download: {
+    text: 'Starting PDF download',
+    complete: false,
+    fail: '',
+    current: false
+  }
+})
 
 onMounted(() => {
   /*if (!data.value.form.isValid(3)) {
@@ -107,8 +159,14 @@ onMounted(() => {
 
 <template>
   <div class="container my-4 needs-validation">
-    <h2 class="display-3">Generate protocol</h2>
-    <p><span class="spinner-border" role="status"></span>Please wait whilst the care pathway for {{data.inputs.patientName.val}} is generated...</p>
+    <h2 class="display-3">Generating care pathway</h2>
+    <div v-for="step in generateSteps" class="mb-2">
+      <span class="step-text" :class="(step.complete || step.fail || step.current) ? '' : 'text-black-50'">{{step.text}}&nbsp;&nbsp;</span>
+      <span class="spinner-border spinner-border-sm align-middle" v-if="step.current"></span>
+      <span v-if="step.complete"><font-awesome-icon :icon="['fas', 'check']" style="color: green;"/></span>
+      <span v-if="step.fail"><font-awesome-icon :icon="['fas', 'xmark']" style="color: red;"/></span>
+      <p v-if="step.fail" class="text-danger ms-2">{{step.fail}}</p>
+    </div>
   </div>
 </template>
 
@@ -118,5 +176,8 @@ onMounted(() => {
 }
 .btn-outline-secondary {
   width: 150px;
+}
+.step-text {
+  font-size: larger;
 }
 </style>

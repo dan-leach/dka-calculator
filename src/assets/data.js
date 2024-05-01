@@ -364,15 +364,13 @@ export const data = ref({
       val: null,
       label: "Bicarbonate",
       form: 2,
-      info: "Bicarbonate is used to determine DKA severity which is used in fluid deficit calculations. It is stored by the DKA Calculator for audit purposes.",
+      info: "If provided, bicarbonate is used to determine DKA severity which is used in fluid deficit calculations. If provided, bicarbonate, glucose and ketones are stored by the DKA Calculator for audit purposes.",
       min: 0,
       max: 35,
       step: 0.1,
       isValid: function () {
         this.errors = "";
-        if (!this.val) {
-          this.errors += "Bicarbonate must be provided. ";
-        } else {
+        if (this.val) {
           this.val = Number.parseFloat(this.val).toFixed(1);
 
           if (this.val < this.min)
@@ -382,6 +380,58 @@ export const data = ref({
           if (this.val > this.max)
             this.errors +=
               "Bicarbonate must be no more than " + this.max + " mmol/L. ";
+        }
+
+        if (this.errors) return false;
+        return true;
+      },
+      errors: "",
+    },
+    glucose: {
+      val: null,
+      label: "Glucose",
+      form: 2,
+      min: 3,
+      max: 50,
+      step: 0.1,
+      isValid: function () {
+        this.errors = "";
+        if (this.val) {
+          this.val = Number.parseFloat(this.val).toFixed(1);
+
+          if (this.val < this.min)
+            this.errors +=
+              "Glucose must be at least " + this.min + " mmol/L. ";
+
+          if (this.val > this.max)
+            this.errors +=
+              "Glucose must be no more than " + this.max + " mmol/L. ";
+        }
+
+        if (this.errors) return false;
+        return true;
+      },
+      errors: "",
+    },
+    ketones: {
+      val: null,
+      label: "Ketones",
+      form: 2,
+      min: 0,
+      max: 15,
+      step: 0.1,
+      isValid: function () {
+        this.errors = "";
+        if (this.val) {
+          this.val = Number.parseFloat(this.val).toFixed(1);
+
+          if (this.val < this.min)
+            this.errors +=
+              "Ketone level must be at least " + this.min + " mmol/L. ";
+
+          if (this.val > this.max)
+            this.errors +=
+              "Ketone level must be no more than " + this.max + " mmol/L. ";
         }
 
         if (this.errors) return false;

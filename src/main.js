@@ -14,9 +14,11 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import {
   faQuestionCircle,
   faInfoCircle,
+  faCheck,
+  faXmark
 } from "@fortawesome/free-solid-svg-icons";
 /* add icons to the library */
-library.add(faQuestionCircle, faInfoCircle);
+library.add(faQuestionCircle, faInfoCircle, faCheck, faXmark);
 
 const app = createApp(App);
 

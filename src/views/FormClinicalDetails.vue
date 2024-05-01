@@ -21,7 +21,7 @@ const continueClick = () => {
 };
 
 onMounted(() => {
-  if (!data.value.form.isValid(1)) router.push("/form-patient-details");
+  //if (!data.value.form.isValid(1)) router.push("/form-patient-details");
   data.value.inputs.protocolStartDatetime.todayString.build()
   data.value.inputs.protocolStartDatetime.val = data.value.inputs.protocolStartDatetime.todayString.val
   data.value.inputs.protocolStartDatetime.minDate.build()
@@ -109,120 +109,98 @@ onMounted(() => {
         v-html="data.inputs.pH.info"
       ></div>
     </div>
-    <div class="d-flex flex-row flex-wrap">
-      <!--bicarbonate-->
-      <div class="mb-4 flex-grow-1">
-        <div class="input-group">
-          <div class="form-floating">
-            <input
-              type="number"
-              class="form-control"
-              id="bicarbonate"
-              v-model="data.inputs.bicarbonate.val"
-              @change="data.inputs.bicarbonate.isValid()"
-              placeholder="x"
-              :min="data.inputs.bicarbonate.min"
-              :max="data.inputs.bicarbonate.max"
-              :step="data.inputs.bicarbonate.step"
-              autocomplete="off"
-              required
-            />
-            <label for="bicarbonate">{{ data.inputs.bicarbonate.label }}</label>
+    <div class="card mb-4 bg-transparent">
+      <div class="card-header d-flex flex-row flex-wrap">
+        Optional  <font-awesome-icon :icon="['fas', 'circle-info']" data-bs-toggle="collapse" data-bs-target="#bicarbonateInfo"/>
+      </div>
+      <div class="card-body">
+        <div class="d-flex flex-row flex-wrap">
+          <!--bicarbonate-->
+          <div class="mb-1 flex-grow-1">
+            <div class="input-group">
+              <div class="form-floating">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="bicarbonate"
+                  v-model="data.inputs.bicarbonate.val"
+                  @change="data.inputs.bicarbonate.isValid()"
+                  placeholder="x"
+                  :min="data.inputs.bicarbonate.min"
+                  :max="data.inputs.bicarbonate.max"
+                  :step="data.inputs.bicarbonate.step"
+                  autocomplete="off"
+                />
+                <label for="bicarbonate">{{ data.inputs.bicarbonate.label }}</label>
+              </div>
+              <span class="input-group-text">mmol/L</span>
+            </div>
+            <div
+              v-if="showErrors"
+              class="form-text text-danger mx-1"
+              id="bicarbonateErrors"
+            >
+              {{ data.inputs.bicarbonate.errors }}
+            </div>
+            
           </div>
-          <span class="input-group-text">mmol/L</span>
-          <span
-            class="input-group-text"
-            data-bs-toggle="collapse"
-            data-bs-target="#bicarbonateInfo"
-            ><font-awesome-icon :icon="['fas', 'circle-info']"
-          /></span>
-        </div>
-        <div
-          v-if="showErrors"
-          class="form-text text-danger mx-1"
-          id="bicarbonateErrors"
-        >
-          {{ data.inputs.bicarbonate.errors }}
+          <!--glucose-->
+          <div class="mb-1 flex-grow-1">
+            <div class="input-group">
+              <div class="form-floating">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="glucose"
+                  v-model="data.inputs.glucose.val"
+                  @change="data.inputs.glucose.isValid()"
+                  placeholder="x"
+                  :min="data.inputs.glucose.min"
+                  :max="data.inputs.glucose.max"
+                  :step="data.inputs.glucose.step"
+                  autocomplete="off"
+                />
+                <label for="glucose">{{ data.inputs.glucose.label }}</label>
+              </div>
+              <span class="input-group-text">mmol/L</span>
+            </div>
+            <div v-if="showErrors" class="form-text text-danger mx-1" id="glucoseErrors">
+              {{ data.inputs.glucose.errors }}
+            </div>
+          </div>
+          <!--ketones-->
+          <div class="mb-1 flex-grow-1">
+            <div class="input-group">
+              <div class="form-floating">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="ketones"
+                  v-model="data.inputs.ketones.val"
+                  @change="data.inputs.ketones.isValid()"
+                  placeholder="x"
+                  :min="data.inputs.ketones.min"
+                  :max="data.inputs.ketones.max"
+                  :step="data.inputs.ketones.step"
+                  autocomplete="off"
+                />
+                <label for="ketones">{{ data.inputs.ketones.label }}</label>
+              </div>
+              <span class="input-group-text">mmol/L</span>
+            </div>
+            <div
+              v-if="showErrors"
+              class="form-text text-danger mx-1"
+              id="ketonesErrors"
+            >
+              {{ data.inputs.ketones.errors }}
+            </div>
+          </div>
         </div>
         <div
           class="collapse form-text mx-1"
           id="bicarbonateInfo"
           v-html="data.inputs.bicarbonate.info"
-        ></div>
-      </div>
-      <!--glucose-->
-      <div class="mb-4 flex-grow-1">
-        <div class="input-group">
-          <div class="form-floating">
-            <input
-              type="number"
-              class="form-control"
-              id="glucose"
-              v-model="data.inputs.glucose.val"
-              @change="data.inputs.glucose.isValid()"
-              placeholder="x"
-              :min="data.inputs.glucose.min"
-              :max="data.inputs.glucose.max"
-              :step="data.inputs.glucose.step"
-              autocomplete="off"
-              required
-            />
-            <label for="glucose">{{ data.inputs.glucose.label }}</label>
-          </div>
-          <span
-            class="input-group-text"
-            data-bs-toggle="collapse"
-            data-bs-target="#glucoseInfo"
-            ><font-awesome-icon :icon="['fas', 'circle-info']"
-          /></span>
-        </div>
-        <div v-if="showErrors" class="form-text text-danger mx-1" id="glucoseErrors">
-          {{ data.inputs.glucose.errors }}
-        </div>
-        <div
-          class="collapse form-text mx-1"
-          id="glucoseInfo"
-          v-html="data.inputs.glucose.info"
-        ></div>
-      </div>
-      <!--ketones-->
-      <div class="mb-4 flex-grow-1">
-        <div class="input-group">
-          <div class="form-floating">
-            <input
-              type="number"
-              class="form-control"
-              id="ketones"
-              v-model="data.inputs.ketones.val"
-              @change="data.inputs.ketones.isValid()"
-              placeholder="x"
-              :min="data.inputs.ketones.min"
-              :max="data.inputs.ketones.max"
-              :step="data.inputs.ketones.step"
-              autocomplete="off"
-              required
-            />
-            <label for="ketones">{{ data.inputs.ketones.label }}</label>
-          </div>
-          <span class="input-group-text">mmol/L</span>
-          <span
-            class="input-group-text"
-            data-bs-toggle="collapse"
-            data-bs-target="#ketonesInfo"
-            ><font-awesome-icon :icon="['fas', 'circle-info']"
-          /></span>
-        </div>
-        <div
-          v-if="showErrors"
-          class="form-text text-danger mx-1"
-          id="ketonesErrors"
-        >
-          {{ data.inputs.ketones.errors }}
-        </div>
-        <div
-          class="collapse form-text mx-1"
-          id="ketonesInfo"
-          v-html="data.inputs.ketones.info"
         ></div>
       </div>
     </div>

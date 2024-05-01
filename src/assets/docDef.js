@@ -404,14 +404,24 @@ function getDocDef(req){
             //page 3
             //record initial values box
             {
+                text: req.glucose,
+                fontSize: 12,
+                absolutePosition: {x: 222, y: 219},
+            },
+            {
                 text: req.pH,
                 fontSize: 12,
                 absolutePosition: {x: 222, y: 247},
             },
             {
-                text: req.bicarbonate,
+                text: req.ketones,
                 fontSize: 12,
                 absolutePosition: {x: 222, y: 275},
+            },
+            {
+                text: req.bicarbonate,
+                fontSize: 12,
+                absolutePosition: {x: 222, y: 302},
                 pageBreak: 'after'
             },
             //page 4
