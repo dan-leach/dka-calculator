@@ -8,10 +8,25 @@ function volumeToRate($volume, $unitTime){ //takes a volume and divides by numbe
 };
 
 //severity
-if (($data->pH < $settings->severity->severe->range->upper) && ($data->pH >= $settings->severity->severe->range->lower)) $calculations->severity = "severe";
-if (($data->pH < $settings->severity->moderate->range->upper) && ($data->pH >= $settings->severity->moderate->range->lower)) $calculations->severity = "moderate";
-if (($data->pH <= $settings->severity->mild->range->upper) && ($data->pH >= $settings->severity->mild->range->lower)) $calculations->severity = "mild";
-if (!$calculations->severity) send_error_response('Could not determine DKA severity using pH [' . $data->pH . '] and bicarbonate [' . $data->bicarbonate . ']. ' , 400);
+if (isset($data->ketones)) {
+    if ($data->ketones < $settings->minimumKetones) send_error_response('Ketones of ' . $data->ketones . ' mmol/L are below the diagnostic threshold for DKA of ' . $settings->minimumKetones . ' mmol/L.' , 400);
+}
+if (($data->pH < $settings->severity->severe->pHRange->upper) && ($data->pH >= $settings->severity->severe->pHRange->lower)) {
+    $calculations->severity = "severe";
+} else if ((isset($data->bicarbonate)) && ($data->bicarbonate < $settings->severity->severe->bicarbonateBelow)) {
+    $calculations->severity = "severe";
+} else if (($data->pH < $settings->severity->moderate->pHRange->upper) && ($data->pH >= $settings->severity->moderate->pHRange->lower)) {
+    $calculations->severity = "moderate";
+} else if ((isset($data->bicarbonate)) && ($data->bicarbonate < $settings->severity->moderate->bicarbonateBelow)) {
+    $calculations->severity = "moderate";
+} else if (($data->pH <= $settings->severity->mild->pHRange->upper) && ($data->pH >= $settings->severity->mild->pHRange->lower)) {
+    $calculations->severity = "mild";
+} else if ((isset($data->bicarbonate)) && ($data->bicarbonate < $settings->severity->mild->bicarbonateBelow)) {
+    $calculations->severity = "mild";
+} else {
+    send_error_response('Could not determine DKA severity using pH [' . $data->pH . '] and bicarbonate [' . $data->bicarbonate . ']. ' , 400);
+}
+
 //functions related to calculation of bolus volumes
 function bolusVolumeUncapped($mlsPerKg){ //returns literal bolus volume based on given mL/kg for given patient weight
     global $data;
@@ -32,6 +47,7 @@ function bolusVolume($mlsPerKg){ //returns the bolus volume to be used, selectin
         return bolusVolumeUncapped($mlsPerKg);
     }
 }
+$calculations->bolus = new StdClass;
 $calculations->bolus->volume = bolusVolume($settings->bolusMlsPerKg);
 $calculations->bolus->isCapped = bolusIsCapped($settings->bolusMlsPerKg);
 
@@ -75,6 +91,7 @@ function deficitRate(){ //returns rate of deficit volume replacement to run over
     global $settings;
     return volumeToRate(deficitVolumeLessBolus(), $settings->deficitReplacementDuration);
 }
+$calculations->deficit = new StdClass;
 $calculations->deficit->percentage = deficitPercentage();
 $calculations->deficit->volume = deficitVolume();
 $calculations->deficit->isCapped = deficitIsCapped();
@@ -104,6 +121,7 @@ function maintenanceVolume(){ //returns the maintenance volume to be used, selec
 function maintenanceRate(){ //returns the maintenance fluid rate to run over 24 hours (mL/hour)
     return volumeToRate(maintenanceVolume(), 24);
 }
+$calculations->maintenance = new StdClass;
 $calculations->maintenance->volume = maintenanceVolume();
 $calculations->maintenance->isCapped = maintenanceIsCapped();
 $calculations->maintenance->rate = maintenanceRate();
@@ -135,6 +153,7 @@ function insulinRate(){ // returns the starting insulin rate (Units/hour), selec
     if (insulinIsCapped()) return insulinRateCapped();
     return insulinRateUncapped();
 }
+$calculations->insulin = new StdClass;
 $calculations->insulin->rate = insulinRate();
 $calculations->insulin->isCapped = insulinIsCapped();
 

@@ -36,8 +36,13 @@ if (!isset($data->pH)) send_error_response("pH is required.", 400);
 $data->pH = filter_var($data->pH, FILTER_VALIDATE_FLOAT);
 
 //bicarbonate 
-if (!isset($data->bicarbonate)) send_error_response("Bicarbonate is required.", 400);
-$data->bicarbonate = filter_var($data->bicarbonate, FILTER_VALIDATE_FLOAT);
+if (!isset($data->bicarbonate)) $data->bicarbonate = filter_var($data->bicarbonate, FILTER_VALIDATE_FLOAT);
+
+//glucose
+if (!isset($data->glucose)) $data->glucose = filter_var($data->glucose, FILTER_VALIDATE_FLOAT);
+
+//ketones
+if (!isset($data->ketones)) $data->ketones = filter_var($data->ketones, FILTER_VALIDATE_FLOAT);
 
 //weight 
 if (!isset($data->weight)) send_error_response("Weight is required.", 400);

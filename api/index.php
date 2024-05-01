@@ -23,6 +23,8 @@ $link = mysqli_connect("localhost", $username, $password, "dkacalcu_dka_database
 
 require 'generateAuditID.php';
 
+$calculationsJSON = json_encode($calculations);
+$preventableFactorsJSON = json_encode($data->preventableFactors);
 require 'databaseInsert.php';
 
 $res = new stdClass();

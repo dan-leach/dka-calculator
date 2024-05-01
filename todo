@@ -5,11 +5,6 @@ Add UI progress updates to view
 
 1. Hash NHS number+DOB before transmission
 2. transitions between form steps
-3. Handle glucose and ketones adding to DB on backend
-4. Add bicarbonate logic to severity selection
-5. Make bicarbonate optional on backend
-6. Fix positioning of info icon on optional card form-clinical-details
-7. Add error handling for webworker, including updating UI with error message and setting fail flag
-9. Set no autofill on form
-10. Privacy policy
-
+3. Add error handling for webworker, including updating UI with error message and setting fail flag
+4. Set no autofill on form
+5. Privacy policy
