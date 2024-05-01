@@ -2,6 +2,7 @@
 
 require 'handleError.php';
 
+if (!isset($_POST['data'])) send_error_response('No data received. ' , 400);
 $data = json_decode($_POST['data']);
 require 'dataValidation.php';
 
