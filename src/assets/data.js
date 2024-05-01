@@ -364,7 +364,7 @@ export const data = ref({
       val: null,
       label: "Bicarbonate",
       form: 2,
-      info: "If provided, bicarbonate is used to determine DKA severity which is used in fluid deficit calculations. If provided, bicarbonate, glucose and ketones are stored by the DKA Calculator for audit purposes.",
+      info: "If provided, these values will be added to the relevant fields in the care pathway. Bicarbonate is used to determine DKA severity which is used in fluid deficit calculations. Bicarbonate, glucose and ketones are stored by the DKA Calculator for audit purposes.",
       min: 0,
       max: 35,
       step: 0.1,

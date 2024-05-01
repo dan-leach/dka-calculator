@@ -148,12 +148,11 @@ const generateSteps = ref({
 })
 
 onMounted(() => {
-  /*if (!data.value.form.isValid(3)) {
+  if (!data.value.form.isValid(3)) {
     router.push("/form-audit-details");
   } else {
     fetchCalculations()
-  }*/
-  fetchCalculations()
+  }
 });
 </script>
 
@@ -165,8 +164,36 @@ onMounted(() => {
       <span class="spinner-border spinner-border-sm align-middle" v-if="step.current"></span>
       <span v-if="step.complete"><font-awesome-icon :icon="['fas', 'check']" style="color: green;"/></span>
       <span v-if="step.fail"><font-awesome-icon :icon="['fas', 'xmark']" style="color: red;"/></span>
-      <p v-if="step.fail" class="text-danger ms-2">{{step.fail}}</p>
+      <div v-if="step.fail">
+        <p class="text-danger ms-2">{{step.fail}}</p>
+        <!--retry-->
+        <button
+          type="button"
+          @click="fetchCalculations"
+          class="btn btn-primary mb-4"
+        >
+          Retry
+        </button>
+      </div>
     </div>
+    <div v-if="generateSteps.download.complete">
+      <!--retry-->
+      <button
+        type="button"
+        @click="fetchCalculations"
+        class="btn btn-primary mb-2"
+      >
+        Regenerate care pathway
+      </button>
+    </div>
+    <!--back-->
+    <button
+      type="button"
+      @click="router.push('/form-audit-details')"
+      class="btn btn-secondary"
+    >
+      Back to form
+    </button>
   </div>
 </template>
 

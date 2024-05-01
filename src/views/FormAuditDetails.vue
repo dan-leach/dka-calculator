@@ -282,7 +282,7 @@ onMounted(() => {
           @click="continueClick"
           class="btn btn-lg btn-primary"
         >
-          Continue
+          Generate protocol
         </button>
       </div>
     </div>

@@ -10,6 +10,6 @@ Add UI progress updates to view
 5. Make bicarbonate optional on backend
 6. Fix positioning of info icon on optional card form-clinical-details
 7. Add error handling for webworker, including updating UI with error message and setting fail flag
-8. Add retry flag for failed generate step
 9. Set no autofill on form
+10. Privacy policy
 

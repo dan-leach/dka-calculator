@@ -21,7 +21,7 @@ const continueClick = () => {
 };
 
 onMounted(() => {
-  //if (!data.value.form.isValid(1)) router.push("/form-patient-details");
+  if (!data.value.form.isValid(1)) router.push("/form-patient-details");
   data.value.inputs.protocolStartDatetime.todayString.build()
   data.value.inputs.protocolStartDatetime.val = data.value.inputs.protocolStartDatetime.todayString.val
   data.value.inputs.protocolStartDatetime.minDate.build()
@@ -111,7 +111,7 @@ onMounted(() => {
     </div>
     <div class="card mb-4 bg-transparent">
       <div class="card-header d-flex flex-row flex-wrap">
-        Optional  <font-awesome-icon :icon="['fas', 'circle-info']" data-bs-toggle="collapse" data-bs-target="#bicarbonateInfo"/>
+        <span class="align-middle">Optional values &nbsp;<font-awesome-icon :icon="['fas', 'circle-info']" data-bs-toggle="collapse" data-bs-target="#bicarbonateInfo"/></span>
       </div>
       <div class="card-body">
         <div class="d-flex flex-row flex-wrap">
