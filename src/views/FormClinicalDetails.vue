@@ -74,42 +74,42 @@ onMounted(() => {
         {{ data.inputs.protocolStartDatetime.info }}
       </div>
     </div>
-    <div class="d-flex flex-row flex-wrap">
-      <!--pH-->
-      <div class="mb-4 flex-grow-1">
-        <div class="input-group">
-          <div class="form-floating">
-            <input
-              type="number"
-              class="form-control"
-              id="pH"
-              v-model="data.inputs.pH.val"
-              @change="data.inputs.pH.isValid()"
-              placeholder="x"
-              :min="data.inputs.pH.min"
-              :max="data.inputs.pH.max"
-              :step="data.inputs.pH.step"
-              autocomplete="off"
-              required
-            />
-            <label for="pH">{{ data.inputs.pH.label }}</label>
-          </div>
-          <span
-            class="input-group-text"
-            data-bs-toggle="collapse"
-            data-bs-target="#pHInfo"
-            ><font-awesome-icon :icon="['fas', 'circle-info']"
-          /></span>
+    <!--pH-->
+    <div class="mb-4">
+      <div class="input-group">
+        <div class="form-floating">
+          <input
+            type="number"
+            class="form-control"
+            id="pH"
+            v-model="data.inputs.pH.val"
+            @change="data.inputs.pH.isValid()"
+            placeholder="x"
+            :min="data.inputs.pH.min"
+            :max="data.inputs.pH.max"
+            :step="data.inputs.pH.step"
+            autocomplete="off"
+            required
+          />
+          <label for="pH">{{ data.inputs.pH.label }}</label>
         </div>
-        <div v-if="showErrors" class="form-text text-danger mx-1" id="pHErrors">
-          {{ data.inputs.pH.errors }}
-        </div>
-        <div
-          class="collapse form-text mx-1"
-          id="pHInfo"
-          v-html="data.inputs.pH.info"
-        ></div>
+        <span
+          class="input-group-text"
+          data-bs-toggle="collapse"
+          data-bs-target="#pHInfo"
+          ><font-awesome-icon :icon="['fas', 'circle-info']"
+        /></span>
       </div>
+      <div v-if="showErrors" class="form-text text-danger mx-1" id="pHErrors">
+        {{ data.inputs.pH.errors }}
+      </div>
+      <div
+        class="collapse form-text mx-1"
+        id="pHInfo"
+        v-html="data.inputs.pH.info"
+      ></div>
+    </div>
+    <div class="d-flex flex-row flex-wrap">
       <!--bicarbonate-->
       <div class="mb-4 flex-grow-1">
         <div class="input-group">
@@ -148,6 +148,81 @@ onMounted(() => {
           class="collapse form-text mx-1"
           id="bicarbonateInfo"
           v-html="data.inputs.bicarbonate.info"
+        ></div>
+      </div>
+      <!--glucose-->
+      <div class="mb-4 flex-grow-1">
+        <div class="input-group">
+          <div class="form-floating">
+            <input
+              type="number"
+              class="form-control"
+              id="glucose"
+              v-model="data.inputs.glucose.val"
+              @change="data.inputs.glucose.isValid()"
+              placeholder="x"
+              :min="data.inputs.glucose.min"
+              :max="data.inputs.glucose.max"
+              :step="data.inputs.glucose.step"
+              autocomplete="off"
+              required
+            />
+            <label for="glucose">{{ data.inputs.glucose.label }}</label>
+          </div>
+          <span
+            class="input-group-text"
+            data-bs-toggle="collapse"
+            data-bs-target="#glucoseInfo"
+            ><font-awesome-icon :icon="['fas', 'circle-info']"
+          /></span>
+        </div>
+        <div v-if="showErrors" class="form-text text-danger mx-1" id="glucoseErrors">
+          {{ data.inputs.glucose.errors }}
+        </div>
+        <div
+          class="collapse form-text mx-1"
+          id="glucoseInfo"
+          v-html="data.inputs.glucose.info"
+        ></div>
+      </div>
+      <!--ketones-->
+      <div class="mb-4 flex-grow-1">
+        <div class="input-group">
+          <div class="form-floating">
+            <input
+              type="number"
+              class="form-control"
+              id="ketones"
+              v-model="data.inputs.ketones.val"
+              @change="data.inputs.ketones.isValid()"
+              placeholder="x"
+              :min="data.inputs.ketones.min"
+              :max="data.inputs.ketones.max"
+              :step="data.inputs.ketones.step"
+              autocomplete="off"
+              required
+            />
+            <label for="ketones">{{ data.inputs.ketones.label }}</label>
+          </div>
+          <span class="input-group-text">mmol/L</span>
+          <span
+            class="input-group-text"
+            data-bs-toggle="collapse"
+            data-bs-target="#ketonesInfo"
+            ><font-awesome-icon :icon="['fas', 'circle-info']"
+          /></span>
+        </div>
+        <div
+          v-if="showErrors"
+          class="form-text text-danger mx-1"
+          id="ketonesErrors"
+        >
+          {{ data.inputs.ketones.errors }}
+        </div>
+        <div
+          class="collapse form-text mx-1"
+          id="ketonesInfo"
+          v-html="data.inputs.ketones.info"
         ></div>
       </div>
     </div>

@@ -73,6 +73,39 @@ const datetimes = {
             output += '/' + protocolStartDatetime.getFullYear()
             return output
         }
+    },
+    serialReview: {
+        time: function(req, h) {
+            let dt = new Date(req.protocolStartDatetime)
+            dt.setTime(dt.getTime() + (h*60*60*1000))
+            let output = ((dt.getHours()<10) ? '0' : '') + dt.getHours()
+            output += ':' + ((dt.getMinutes()<10) ? '0' : '') + (dt.getMinutes())
+            return output
+        },
+        date: function(req, h) {
+            let dt = new Date(req.protocolStartDatetime)
+            dt.setTime(dt.getTime() + (h*60*60*1000))
+            let output = ((dt.getDate()<10) ? '0' : '') + dt.getDate()
+            output += '/' + ((dt.getMonth()<9) ? '0' : '') + (dt.getMonth()+1)
+            output += '/' + dt.getFullYear()
+            return output
+        }
+    },
+    generated: function() {
+        let now = new Date()
+        let output = ((now.getHours()<10) ? '0' : '') + now.getHours()
+        output += ':' + ((now.getMinutes()<10) ? '0' : '') + (now.getMinutes())
+        output += ' ' + ((now.getDate()<10) ? '0' : '') + now.getDate()
+        output += '/' + ((now.getMonth()<9) ? '0' : '') + (now.getMonth()+1)
+        output += '/' + now.getFullYear()
+        return output
+    },
+    dob: function(str) {
+        let dob = new Date(str)
+        let output = ((dob.getDate()<10) ? '0' : '') + dob.getDate()
+        output += '/' + ((dob.getMonth()<9) ? '0' : '') + (dob.getMonth()+1)
+        output += '/' + dob.getFullYear()
+        return output
     }
 }
 
@@ -130,7 +163,7 @@ function getDocDef(req){
                             ],
                             [
                                 {text: ""},
-                                {text: "Date of Birth: "+req.patientDOB, alignment: 'left', style: 'header'},
+                                {text: "Date of Birth: "+datetimes.dob(req.patientDOB), alignment: 'left', style: 'header'},
                                 {text: ""},
                                 {text: "Audit ID: "+req.auditID, alignment: 'right', style: 'header'},
                                 {text: ""}
@@ -278,7 +311,7 @@ function getDocDef(req){
                 absolutePosition: {x: 60, y: 306},
             },
             {
-                text: "Date of Birth: "+req.patientDOB,
+                text: "Date of Birth: "+datetimes.dob(req.patientDOB),
                 fontSize: 12,
                 absolutePosition: {x: 60, y: 324},
             },
@@ -293,7 +326,7 @@ function getDocDef(req){
                 absolutePosition: {x: 60, y: 360},
             },
             {
-                text: "Generated: "+"TODO",
+                text: "Generated: "+datetimes.generated(),
                 fontSize: 12,
                 absolutePosition: {x: 60, y: 378},
             },
@@ -310,7 +343,7 @@ function getDocDef(req){
             },
             //calculator input check box
             {
-                text: "This protocol was generated at " + config.url + " and certain elements of the document, such as fluid",
+                text: "This protocol was generated at " + config.url.replace('https://', '') + " and certain elements of the document, such as fluid",
                 link: config.url,
                 fontSize: 10,
                 absolutePosition: {x: 65, y: 645},
@@ -332,7 +365,7 @@ function getDocDef(req){
                 absolutePosition: {x: 65, y: 709},
             },
             {
-                text: "pH: "+req.pH,
+                text: "pH: "+req.pH+((req.bicarbonate)?"     Bicarbonate: "+req.bicarbonate+"mmol/L":""),
                 fontSize: 10,
                 absolutePosition: {x: 325, y: 709},
             },
@@ -369,10 +402,16 @@ function getDocDef(req){
                 pageBreak: 'after'
             },
             //page 3
-            { //record initial values box
+            //record initial values box
+            {
                 text: req.pH,
                 fontSize: 12,
                 absolutePosition: {x: 222, y: 247},
+            },
+            {
+                text: req.bicarbonate,
+                fontSize: 12,
+                absolutePosition: {x: 222, y: 275},
                 pageBreak: 'after'
             },
             //page 4
@@ -397,7 +436,7 @@ function getDocDef(req){
             // bolus volumes
             //1st 10ml/kg resus bolus
             {
-                text: req.calculations.bolus.volume.toFixed,
+                text: req.calculations.bolus.volume.toFixed(),
                 fontSize: 18,
                 absolutePosition: {x: 95, y: 453},
             },
@@ -633,122 +672,122 @@ function getDocDef(req){
             },
             //page 10 - adds time and date for each box on serial data sheet
             {
-                text: 'calcVars.utilities.timing.time(0)',
+                text: datetimes.serialReview.time(req, 0),
                 style: 'timing',
                 absolutePosition: {x: 107, y: 86},
             },
             {
-                text: 'calcVars.utilities.timing.date(0)',
+                text: datetimes.serialReview.date(req, 0),
                 style: 'timing',
                 absolutePosition: {x: 97, y: 93},
             },
             {
-                text: 'calcVars.utilities.timing.time(2)',
+                text: datetimes.serialReview.time(req, 2),
                 style: 'timing',
                 absolutePosition: {x: 107, y: 105},
             },
             {
-                text: 'calcVars.utilities.timing.date(2)',
+                text: datetimes.serialReview.date(req, 2),
                 style: 'timing',
                 absolutePosition: {x: 97, y: 112},
             },
             {
-                text: 'calcVars.utilities.timing.time(6)',
+                text: datetimes.serialReview.time(req, 6),
                 style: 'timing',
                 absolutePosition: {x: 107, y: 143},
             },
             {
-                text: 'calcVars.utilities.timing.date(6)',
+                text: datetimes.serialReview.date(req, 6),
                 style: 'timing',
                 absolutePosition: {x: 97, y: 150},
             },
             {
-                text: 'calcVars.utilities.timing.time(10)',
+                text: datetimes.serialReview.time(req, 10),
                 style: 'timing',
                 absolutePosition: {x: 107, y: 181},
             },
             {
-                text: 'calcVars.utilities.timing.date(10)',
+                text: datetimes.serialReview.date(req, 10),
                 style: 'timing',
                 absolutePosition: {x: 97, y: 188},
             },
             {
-                text: 'calcVars.utilities.timing.time(14)',
+                text: datetimes.serialReview.time(req, 14),
                 style: 'timing',
                 absolutePosition: {x: 107, y: 219},
             },
             {
-                text: 'calcVars.utilities.timing.date(14)',
+                text: datetimes.serialReview.date(req, 14),
                 style: 'timing',
                 absolutePosition: {x: 97, y: 226},
             },
             {
-                text: 'calcVars.utilities.timing.time(18)',
+                text: datetimes.serialReview.time(req, 18),
                 style: 'timing',
                 absolutePosition: {x: 107, y: 256},
             },
             {
-                text: 'calcVars.utilities.timing.date(18)',
+                text: datetimes.serialReview.date(req, 18),
                 style: 'timing',
                 absolutePosition: {x: 97, y: 263},
             },
             {
-                text: 'calcVars.utilities.timing.time(22)',
+                text: datetimes.serialReview.time(req, 22),
                 style: 'timing',
                 absolutePosition: {x: 107, y: 294},
             },
             {
-                text: 'calcVars.utilities.timing.date(22)',
+                text: datetimes.serialReview.date(req, 22),
                 style: 'timing',
                 absolutePosition: {x: 97, y: 301},
             },
             {
-                text: 'calcVars.utilities.timing.time(26)',
+                text: datetimes.serialReview.time(req, 26),
                 style: 'timing',
                 absolutePosition: {x: 107, y: 332},
             },
             {
-                text: 'calcVars.utilities.timing.date(26)',
+                text: datetimes.serialReview.date(req, 26),
                 style: 'timing',
                 absolutePosition: {x: 97, y: 339},
             },
             {
-                text: 'calcVars.utilities.timing.time(30)',
+                text: datetimes.serialReview.time(req, 30),
                 style: 'timing',
                 absolutePosition: {x: 107, y: 370},
             },
             {
-                text: 'calcVars.utilities.timing.date(30)',
+                text: datetimes.serialReview.date(req, 30),
                 style: 'timing',
                 absolutePosition: {x: 97, y: 377},
             },
             {
-                text: 'calcVars.utilities.timing.time(34)',
+                text: datetimes.serialReview.time(req, 34),
                 style: 'timing',
                 absolutePosition: {x: 107, y: 407},
             },
             {
-                text: 'calcVars.utilities.timing.date(34)',
+                text: datetimes.serialReview.date(req, 34),
                 style: 'timing',
                 absolutePosition: {x: 97, y: 414},
             },
             {
-                text: 'calcVars.utilities.timing.time(38)',
+                text: datetimes.serialReview.time(req, 38),
                 style: 'timing',
                 absolutePosition: {x: 107, y: 445},
             },
             {
-                text: 'calcVars.utilities.timing.date(38)',
+                text: datetimes.serialReview.date(req, 38),
                 style: 'timing',
                 absolutePosition: {x: 97, y: 452},
             },
             {
-                text: 'calcVars.utilities.timing.time(42)',
+                text: datetimes.serialReview.time(req, 42),
                 style: 'timing',
                 absolutePosition: {x: 107, y: 482},
             },
             {
-                text: 'calcVars.utilities.timing.date(42)',
+                text: datetimes.serialReview.date(req, 42),
                 style: 'timing',
                 absolutePosition: {x: 97, y: 489},
             },
@@ -769,9 +808,9 @@ function getDocDef(req){
             },
             //page 13
             {
-                text: "https://www.ispad.org/resource/resmgr/consensus_guidelines_2018_/11.diabetic_ketoacidosis_and.pdf",
-                link: "https://www.ispad.org/resource/resmgr/consensus_guidelines_2018_/11.diabetic_ketoacidosis_and.pdf",
-                fontSize: 7,
+                text: config.ispad,
+                link: config.ispad,
+                fontSize: 8,
                 absolutePosition: {x: 220, y: 675},
                 pageBreak: 'after'
             },
@@ -995,7 +1034,7 @@ function getDocDef(req){
                         width: 250,
                         alignment: 'center'
                     }, ''],
-                    [ '', { text: 'For worked examples, refer to the full guideline (https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/).', link: 'https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/' }, ''],
+                    [ '', { text: 'For worked examples, refer to the full guideline ('+config.bsped.dkaGuidelines.replace('https://','')+').', link: config.bsped.dkaGuidelines }, ''],
                     [ '', ' ', ''],
                     [ '', {
                         text: 'Hyperchloraemic metabolic acidosis',
@@ -1024,7 +1063,7 @@ function getDocDef(req){
                         width: 250,
                         alignment: 'center'
                     }, ''],
-                    [ '', { text: 'For worked examples, refer to the full guideline (https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/).', link: 'https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/' }, ''],
+                    [ '', { text: 'For worked examples, refer to the full guideline ('+config.bsped.dkaGuidelines.replace('https://','')+').', link: config.bsped.dkaGuidelines }, ''],
                     [ '', ' ', ''],
                     [ '', {
                         text: 'Albumin',
@@ -1078,7 +1117,7 @@ function getDocDef(req){
                         text: 'Disclaimer',
                         bold: true
                     }, ''],
-                    [ '', "Important: Decisions about patient care remains the treating clinician's responsibility. By using this care pathway you confirm that you accept in full the terms of the disclaimer found at www.dka-calculator.co.uk. If you do not agree to the terms, you must not use this care pathway.", ''],
+                    [ '', "Important: Decisions about patient care remains the treating clinician's responsibility. By using this care pathway you confirm that you accept in full the terms of the disclaimer found at "+config.url.replace('https://', '')+". If you do not agree to the terms, you must not use this care pathway.", ''],
                     [ '', ' ', ''],
                     [ '', ' ', ''],
                     [ '', {

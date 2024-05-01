@@ -20,6 +20,7 @@ export const config = reactive({
     dkaGuidelines:
       "https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/",
   },
+  ispad: "https://www.ispad.org",
   disclaimer:
     "Decisions about patient care remain the treating clinician's responsibility.",
   client: {

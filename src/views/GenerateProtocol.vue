@@ -40,6 +40,7 @@ const generate = {
         weight: data.value.inputs.weight.val,
         override: data.value.inputs.weight.limit.override,
         pH: data.value.inputs.pH.val,
+        bicarbonate: data.value.inputs.bicarbonate.val,
         shockPresent: data.value.inputs.shockPresent.val,
         preExistingDiabetes: data.value.inputs.preExistingDiabetes.val,
         patientSex: data.value.inputs.patientSex.val,
