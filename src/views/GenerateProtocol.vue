@@ -78,6 +78,11 @@ const generate = {
       return;
     }
 
+    ////
+    generateSteps.value.download.complete = true;
+    return;
+    ////
+
     //build and download care pathway
     generateSteps.value.build.current = true;
     try {
@@ -249,6 +254,82 @@ onMounted(() => {
       </div>
     </div>
     <div v-if="generateSteps.download.complete">
+      <div>
+        <!--show working-->
+        <button
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#showWorking"
+          class="btn btn-primary mb-2"
+        >
+          Show working
+        </button>
+
+        <div class="collapse mb-2" id="showWorking">
+          <!--deficit percentage-->
+          <div class="card">
+            <div class="card-header">Deficit percentage</div>
+            <div class="card-body">
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Formula</span>
+                  <span
+                    v-html="data.calculations.deficit.percentage.formula"
+                  ></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Working</span>
+                  <span
+                    v-html="data.calculations.deficit.percentage.working"
+                  ></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Output</span>
+                  {{ data.calculations.deficit.percentage.val }}%
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--deficit volume-->
+          <div class="card">
+            <div class="card-header">Deficit volume</div>
+            <div class="card-body">
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Formula</span>
+                  <span
+                    v-html="data.calculations.deficit.volume.formula"
+                  ></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Limit*</span>
+                  <span v-html="data.calculations.deficit.volume.limit"></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Working</span>
+                  <span
+                    v-html="data.calculations.deficit.volume.working"
+                  ></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Output</span>
+                  {{ data.calculations.deficit.volume.val }}mL
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <!--retry-->
       <button
         type="button"

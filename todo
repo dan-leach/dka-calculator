@@ -1,6 +1,7 @@
+Currently building show working api and frontend
+Will then need to update docDef as req structure has changed (e.g. req.calculations.bolus.volume --> req.calculations.bolus.volume.val)
+
 Before launch:
 
-1. Update config to live URL (remove dev)
-2. Test limits
-3. Legacy
-4. scroll to top on form change
+1. Test limits
+2. Legacy
