@@ -631,10 +631,33 @@ export const data = ref({
       label: "Please select patient ethnic group",
       privacyLabel: "Patient ethnic group",
       form: 3,
-      info: "Patient ethnic group is stored by the DKA Calculator for audit purposes.",
+      info: "Patient ethnic group is stored by the DKA Calculator for audit purposes. The list of ethnic groups is taken from the Office for National Statistics.",
       isValid: function () {
         this.errors = "";
-        if (!this.val) this.errors += "Patient ethnic group must be selected. ";
+        if (!this.val) {
+          this.errors += "Patient ethnic group must be selected. ";
+        } else {
+          for (let ethnicGroup of config.client.ethnicGroups) {
+            if (ethnicGroup.name == this.val)
+              data.value.inputs.ethnicSubgroup.options = ethnicGroup.subgroups;
+          }
+        }
+        if (this.errors) return false;
+        return true;
+      },
+      errors: "",
+    },
+    ethnicSubgroup: {
+      val: "",
+      label: "Please select patient ethnic subgroup",
+      privacyLabel: "Patient ethnic subgroup",
+      options: [],
+      form: 3,
+      info: "Patient ethnic subgroup is stored by the DKA Calculator for audit purposes. The list of ethnic groups is taken from the Office for National Statistics.",
+      isValid: function () {
+        this.errors = "";
+        if (!this.val)
+          this.errors += "Patient ethnic subgroup must be selected. ";
         if (this.errors) return false;
         return true;
       },
@@ -649,6 +672,15 @@ export const data = ref({
         val: [],
         list: ["Yes", "No", "Not yet known"],
         change: function (selected) {
+          console.log(data.value.inputs.preExistingDiabetes.val);
+          for (let category of data.value.inputs.preventableFactors.categories
+            .list) {
+            console.log(
+              category.preExistingDiabetes.includes(
+                data.value.inputs.preExistingDiabetes.val
+              )
+            );
+          }
           this.val = [];
           this.val.push(selected);
           if (selected == "Yes") {
@@ -664,10 +696,22 @@ export const data = ref({
       categories: {
         val: [],
         list: [
-          "Missed/delayed diagnosis",
-          "Diabetes technology issue",
-          "Lack of adherence",
-          "Social factors",
+          {
+            name: "Missed/delayed diagnosis",
+            preExistingDiabetes: ["false"],
+          },
+          {
+            name: "Diabetes technology issue",
+            preExistingDiabetes: ["true"],
+          },
+          {
+            name: "Lack of adherence",
+            preExistingDiabetes: ["true"],
+          },
+          {
+            name: "Social factors",
+            preExistingDiabetes: ["true", "false"],
+          },
         ],
       },
       factors: [

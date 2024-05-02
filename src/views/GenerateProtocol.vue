@@ -267,7 +267,7 @@ onMounted(() => {
 
         <div class="collapse mb-2" id="showWorking">
           <!--deficit percentage-->
-          <div class="card">
+          <div class="card mb-4">
             <div class="card-header">Deficit percentage</div>
             <div class="card-body">
               <div class="mb-2">
@@ -295,7 +295,7 @@ onMounted(() => {
             </div>
           </div>
           <!--deficit volume-->
-          <div class="card">
+          <div class="card mb-4">
             <div class="card-header">Deficit volume</div>
             <div class="card-body">
               <div class="mb-2">

@@ -119,6 +119,7 @@ onMounted(() => {
         v-html="data.inputs.pH.info"
       ></div>
     </div>
+    <!--optional values-->
     <div class="card mb-4 bg-transparent">
       <div class="card-header d-flex flex-row flex-wrap">
         <span class="align-middle"
@@ -281,7 +282,15 @@ onMounted(() => {
     </div>
     <!--shockPresent-->
     <div class="mb-4">
-      <p class="text-center m-2">{{ data.inputs.shockPresent.label }}</p>
+      <p class="text-center m-2">
+        {{ data.inputs.shockPresent.label }}
+        <font-awesome-icon
+          :icon="['fas', 'circle-info']"
+          data-bs-toggle="collapse"
+          data-bs-target="#shockPresentInfo"
+          class="ms-2"
+        />
+      </p>
       <div class="d-flex justify-content-center">
         <div>
           <input
@@ -312,12 +321,6 @@ onMounted(() => {
           <label class="btn btn-outline-secondary" for="shockPresentFalse"
             >No</label
           >
-          <font-awesome-icon
-            :icon="['fas', 'circle-info']"
-            data-bs-toggle="collapse"
-            data-bs-target="#shockPresentInfo"
-            class="ms-2"
-          />
         </div>
       </div>
       <div
@@ -333,7 +336,15 @@ onMounted(() => {
     </div>
     <!--insulinRate-->
     <div class="mb-4">
-      <p class="text-center m-2">{{ data.inputs.insulinRate.label }}</p>
+      <p class="text-center m-2">
+        {{ data.inputs.insulinRate.label }}
+        <font-awesome-icon
+          :icon="['fas', 'circle-info']"
+          data-bs-toggle="collapse"
+          data-bs-target="#insulinRateInfo"
+          class="ms-2"
+        />
+      </p>
       <div class="d-flex justify-content-center">
         <div>
           <input
@@ -367,12 +378,6 @@ onMounted(() => {
             for="0.1"
             >0.1 units/kg/hour</label
           >
-          <font-awesome-icon
-            :icon="['fas', 'circle-info']"
-            data-bs-toggle="collapse"
-            data-bs-target="#insulinRateInfo"
-            class="ms-2"
-          />
         </div>
       </div>
       <div
@@ -388,7 +393,15 @@ onMounted(() => {
     </div>
     <!--preExistingDiabetes-->
     <div class="mb-4">
-      <p class="text-center m-2">{{ data.inputs.preExistingDiabetes.label }}</p>
+      <p class="text-center m-2">
+        {{ data.inputs.preExistingDiabetes.label }}
+        <font-awesome-icon
+          :icon="['fas', 'circle-info']"
+          data-bs-toggle="collapse"
+          data-bs-target="#preExistingDiabetesInfo"
+          class="ms-2"
+        />
+      </p>
       <div class="d-flex justify-content-center">
         <div>
           <input
@@ -423,12 +436,6 @@ onMounted(() => {
             for="preExistingDiabetesFalse"
             >No</label
           >
-          <font-awesome-icon
-            :icon="['fas', 'circle-info']"
-            data-bs-toggle="collapse"
-            data-bs-target="#preExistingDiabetesInfo"
-            class="ms-2"
-          />
         </div>
       </div>
       <div

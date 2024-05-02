@@ -14,7 +14,7 @@ const continueClick = () => {
 };
 
 onMounted(() => {
-  /*if (!data.value.form.isValid(0)) {
+  if (!data.value.form.isValid(0)) {
     router.push("/form-disclaimer");
   } else if (!data.value.form.isValid(1)) {
     router.push("/form-patient-details");
@@ -28,7 +28,7 @@ onMounted(() => {
   } else {
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-  }*/
+  }
 });
 </script>
 
@@ -38,8 +38,8 @@ onMounted(() => {
     <!--episodeType-->
     <div class="mb-4">
       <p class="text-center m-2">
-        {{ data.inputs.episodeType.label
-        }}<font-awesome-icon
+        {{ data.inputs.episodeType.label }}
+        <font-awesome-icon
           :icon="['fas', 'circle-info']"
           data-bs-toggle="collapse"
           data-bs-target="#episodeTypeInfo"
@@ -128,45 +128,47 @@ onMounted(() => {
       </div>
     </div>
     <!--centre-->
-    <div class="mb-4">
-      <div class="input-group">
-        <select
-          name="centre"
-          class="form-select"
-          v-model="data.inputs.centre.val"
-          @change="data.inputs.centre.isValid()"
-          autocomplete="off"
-          required
-          :disabled="!data.inputs.region.val"
-        >
-          <option value="" disabled>{{ data.inputs.centre.label }}</option>
-          <option
-            v-for="centreOption in data.inputs.centre.options"
-            :value="centreOption"
+    <transition>
+      <div class="mb-4" v-if="data.inputs.region.val">
+        <div class="input-group">
+          <select
+            name="centre"
+            class="form-select"
+            v-model="data.inputs.centre.val"
+            @change="data.inputs.centre.isValid()"
+            autocomplete="off"
+            required
+            :disabled="!data.inputs.region.val"
           >
-            {{ centreOption }}
-          </option>
-          <option value="Other">Other</option>
-        </select>
+            <option value="" disabled>{{ data.inputs.centre.label }}</option>
+            <option
+              v-for="centreOption in data.inputs.centre.options"
+              :value="centreOption"
+            >
+              {{ centreOption }}
+            </option>
+            <option value="Other">Other</option>
+          </select>
 
-        <span
-          class="input-group-text"
-          data-bs-toggle="collapse"
-          data-bs-target="#centreInfo"
-          ><font-awesome-icon :icon="['fas', 'circle-info']"
-        /></span>
+          <span
+            class="input-group-text"
+            data-bs-toggle="collapse"
+            data-bs-target="#centreInfo"
+            ><font-awesome-icon :icon="['fas', 'circle-info']"
+          /></span>
+        </div>
+        <div
+          v-if="showErrors"
+          class="form-text text-danger mx-1"
+          id="centreErrors"
+        >
+          {{ data.inputs.centre.errors }}
+        </div>
+        <div class="collapse form-text mx-1" id="centreInfo">
+          {{ data.inputs.centre.info }}
+        </div>
       </div>
-      <div
-        v-if="showErrors"
-        class="form-text text-danger mx-1"
-        id="centreErrors"
-      >
-        {{ data.inputs.centre.errors }}
-      </div>
-      <div class="collapse form-text mx-1" id="centreInfo">
-        {{ data.inputs.centre.info }}
-      </div>
-    </div>
+    </transition>
     <!--ethnicGroup-->
     <div class="mb-4">
       <div class="input-group">
@@ -180,17 +182,10 @@ onMounted(() => {
         >
           <option value="" disabled>{{ data.inputs.ethnicGroup.label }}</option>
           <option
-            v-for="(ethnicGroup, index) in config.client.ethnicGroups.groups"
-            :value="ethnicGroup"
-            :disabled="
-              config.client.ethnicGroups.headingIndexes.includes(index)
-            "
+            v-for="ethnicGroup in config.client.ethnicGroups"
+            :value="ethnicGroup.name"
           >
-            <span
-              v-if="config.client.ethnicGroups.headingIndexes.includes(index)"
-              >-----{{ ethnicGroup }}-----</span
-            >
-            <span v-else>{{ ethnicGroup }}</span>
+            {{ ethnicGroup.name }}
           </option>
         </select>
 
@@ -212,6 +207,50 @@ onMounted(() => {
         {{ data.inputs.ethnicGroup.info }}
       </div>
     </div>
+    <!--ethnicSubgroup-->
+    <transition>
+      <div class="mb-4" v-if="data.inputs.ethnicGroup.val">
+        <div class="input-group">
+          <select
+            name="ethnicSubgroup"
+            class="form-select"
+            v-model="data.inputs.ethnicSubgroup.val"
+            @change="data.inputs.ethnicSubgroup.isValid()"
+            autocomplete="off"
+            required
+            :disabled="!data.inputs.ethnicGroup.val"
+          >
+            <option value="" disabled>
+              {{ data.inputs.ethnicSubgroup.label }}
+            </option>
+            <option
+              v-for="ethnicSubgroupOption in data.inputs.ethnicSubgroup.options"
+              :value="ethnicSubgroupOption"
+            >
+              {{ ethnicSubgroupOption }}
+            </option>
+            <option value="Unknown">Unknown</option>
+          </select>
+
+          <span
+            class="input-group-text"
+            data-bs-toggle="collapse"
+            data-bs-target="#ethnicSubgroupInfo"
+            ><font-awesome-icon :icon="['fas', 'circle-info']"
+          /></span>
+        </div>
+        <div
+          v-if="showErrors"
+          class="form-text text-danger mx-1"
+          id="ethnicSubgroupErrors"
+        >
+          {{ data.inputs.ethnicSubgroup.errors }}
+        </div>
+        <div class="collapse form-text mx-1" id="ethnicSubgroupInfo">
+          {{ data.inputs.ethnicSubgroup.info }}
+        </div>
+      </div>
+    </transition>
     <!--preventableFactors-->
     <div class="mb-4">
       <p class="text-center m-2">
@@ -240,79 +279,102 @@ onMounted(() => {
             option
           }}</label>
         </div>
-      </div>
-      <div
-        v-if="
-          data.inputs.preventableFactors.options.val.includes('Not yet known')
-        "
-        class="form-text text-center"
-      >
-        A feature to allow you to submit preventable factors data at a later
-        point is under development.
-      </div>
-      <div
-        v-if="showErrors"
-        class="form-text text-danger text-center mx-1"
-        id="preventableFactorsErrors"
-      >
-        {{ data.inputs.preventableFactors.errors }}
-      </div>
-      <div
-        class="collapse form-text text-center mx-1"
-        id="preventableFactorsInfo"
-      >
-        {{ data.inputs.preventableFactors.info }}
+        <div
+          v-if="data.inputs.preventableFactors.options.val.includes('Yes')"
+          class="form-text text-center"
+        >
+          Please select all preventable factors which apply, using the
+          categories below.
+        </div>
+        <div
+          v-else-if="
+            data.inputs.preventableFactors.options.val.includes('Not yet known')
+          "
+          class="form-text text-center"
+        >
+          A feature to allow you to submit preventable factors data at a later
+          point is under development.
+        </div>
+        <div
+          v-if="showErrors"
+          class="form-text text-danger text-center mx-1"
+          id="preventableFactorsErrors"
+        >
+          {{ data.inputs.preventableFactors.errors }}
+        </div>
+        <div
+          class="collapse form-text text-center mx-1"
+          id="preventableFactorsInfo"
+        >
+          {{ data.inputs.preventableFactors.info }}
+        </div>
       </div>
       <!--categories-->
-      <div
-        v-if="data.inputs.preventableFactors.options.val.includes('Yes')"
-        class="d-flex flex-row flex-wrap justify-content-center mt-4"
-      >
-        <div v-for="category in data.inputs.preventableFactors.categories.list">
-          <input
-            type="checkbox"
-            class="btn-check"
-            :id="category"
-            :value="category"
-            v-model="data.inputs.preventableFactors.categories.val"
-            autocomplete="off"
-          />
-          <label
-            class="btn btn-outline-secondary me-2 preventable-factors-category-btn mb-2"
-            :for="category"
-            >{{ category }}</label
+      <transition>
+        <div
+          v-if="data.inputs.preventableFactors.options.val.includes('Yes')"
+          class="d-flex flex-row flex-wrap justify-content-center mt-4"
+        >
+          <div
+            v-for="category in data.inputs.preventableFactors.categories.list"
           >
-          <!--factors-->
-          <div class="d-flex flex-column justify-content-center">
-            <div v-for="factor in data.inputs.preventableFactors.factors">
-              <div
-                v-if="
-                  factor.categories.includes(category) &&
-                  (data.inputs.preventableFactors.categories.val.includes(
-                    category
-                  ) ||
-                    data.inputs.preventableFactors.val.includes(factor.val))
-                "
+            <div
+              v-if="
+                category.preExistingDiabetes.includes(
+                  data.inputs.preExistingDiabetes.val
+                )
+              "
+            >
+              <input
+                type="checkbox"
+                class="btn-check"
+                :id="category.name"
+                :value="category.name"
+                v-model="data.inputs.preventableFactors.categories.val"
+                autocomplete="off"
+              />
+              <label
+                class="btn btn-outline-secondary me-2 preventable-factors-category-btn mb-2"
+                :for="category.name"
+                >{{ category.name }}</label
               >
-                <input
-                  type="checkbox"
-                  class="btn-check"
-                  :id="factor.val"
-                  :value="factor.val"
-                  v-model="data.inputs.preventableFactors.val"
-                  @change="data.inputs.preventableFactors.isValid()"
-                  autocomplete="off"
-                />
-                <label
-                  class="btn btn-outline-dark me-2 preventable-factors-factor-btn mb-1"
-                  :for="factor.val"
-                  >{{ factor.val }}</label
-                >
+              <!--factors-->
+              <div class="d-flex flex-column justify-content-center">
+                <div v-for="factor in data.inputs.preventableFactors.factors">
+                  <transition>
+                    <div
+                      v-if="
+                        factor.categories.includes(category.name) &&
+                        (data.inputs.preventableFactors.categories.val.includes(
+                          category.name
+                        ) ||
+                          data.inputs.preventableFactors.val.includes(
+                            factor.val
+                          ))
+                      "
+                    >
+                      <input
+                        type="checkbox"
+                        class="btn-check"
+                        :id="factor.val"
+                        :value="factor.val"
+                        v-model="data.inputs.preventableFactors.val"
+                        @change="data.inputs.preventableFactors.isValid()"
+                        autocomplete="off"
+                      />
+                      <label
+                        class="btn btn-outline-dark me-2 preventable-factors-factor-btn mb-1"
+                        :for="factor.val"
+                        >{{ factor.val }}</label
+                      >
+                    </div>
+                  </transition>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </transition>
     </div>
     <div class="d-flex flex-row justify-content-evenly">
       <!--back-->
@@ -357,5 +419,11 @@ onMounted(() => {
 .preventable-factors-factor-btn {
   font-size: smaller;
   width: 170px;
+}
+.v-enter-active {
+  transition: all 0.5s ease;
+}
+.v-enter-from {
+  opacity: 0;
 }
 </style>

@@ -128,12 +128,23 @@ onMounted(() => {
       >
         {{ data.inputs.patientDOB.errors }}
       </div>
-      <div class="collapse form-text mx-1" id="patientDOBInfo">
-        {{ data.inputs.patientDOB.info }}
-      </div>
+      <div
+        class="collapse form-text mx-1"
+        id="patientDOBInfo"
+        v-html="data.inputs.patientDOB.info"
+      ></div>
     </div>
     <!--patientSex-->
     <div class="mb-4">
+      <p class="text-center m-2">
+        {{ data.inputs.patientSex.label }}
+        <font-awesome-icon
+          :icon="['fas', 'circle-info']"
+          data-bs-toggle="collapse"
+          data-bs-target="#patientSexInfo"
+          class="ms-2"
+        />
+      </p>
       <div class="d-flex justify-content-center">
         <div>
           <input
@@ -160,12 +171,6 @@ onMounted(() => {
             autocomplete="off"
           />
           <label class="btn btn-outline-secondary" for="female">Female</label>
-          <font-awesome-icon
-            :icon="['fas', 'circle-info']"
-            data-bs-toggle="collapse"
-            data-bs-target="#patientSexInfo"
-            class="ms-2"
-          />
         </div>
       </div>
       <div

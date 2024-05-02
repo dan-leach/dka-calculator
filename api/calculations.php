@@ -51,7 +51,7 @@ $calculations->bolus = new StdClass;
 $calculations->bolus->volume = bolusVolume($settings->bolusMlsPerKg);
 $calculations->bolus->isCapped = bolusIsCapped($settings->bolusMlsPerKg);
 
-//functions related to calculation of deficit
+//functions related to calculation of deficit percentage
 function deficitPercentage(){ //returns the percentage dehydration based on pH
     global $calculations;
     global $settings;
@@ -62,18 +62,23 @@ function deficitPercentage(){ //returns the percentage dehydration based on pH
 }
 function deficitPercentageFormula(){
     global $settings;
-    return "pH range [".$settings->severity->mild->pHRange->lower." to ".$settings->severity->mild->pHRange->upper." = ".$settings->severity->mild->deficitPercentage."%] or [".$settings->severity->moderate->pHRange->lower." to ".$settings->severity->moderate->pHRange->upper." = ".$settings->severity->moderate->deficitPercentage."%] or [".$settings->severity->severe->pHRange->lower." to ".$settings->severity->severe->pHRange->upper." = ".$settings->severity->severe->deficitPercentage."%]<br>OR (if more severe)<br> bicarbonate [<".$settings->severity->mild->bicarbonateBelow."mmol/L = ".$settings->severity->mild->deficitPercentage."%] or [<".$settings->severity->moderate->bicarbonateBelow."mmol/L = ".$settings->severity->moderate->deficitPercentage."%] or [<".$settings->severity->severe->bicarbonateBelow."mmol/L = ".$settings->severity->severe->deficitPercentage."%]";
+    return "[pH] in range ".$settings->severity->mild->pHRange->lower." to ".$settings->severity->mild->pHRange->upper." or [bicarbonate] <".$settings->severity->mild->bicarbonateBelow."mmol/L ==> ".$settings->severity->mild->deficitPercentage."%<br>[pH] in range ".$settings->severity->moderate->pHRange->lower." to ".$settings->severity->moderate->pHRange->upper." or [bicarbonate] <".$settings->severity->moderate->bicarbonateBelow."mmol/L ==> ".$settings->severity->moderate->deficitPercentage."%<br>[pH] in range ".$settings->severity->severe->pHRange->lower." to ".$settings->severity->severe->pHRange->upper." or [bicarbonate] <".$settings->severity->severe->bicarbonateBelow."mmol/L ==> ".$settings->severity->severe->deficitPercentage."%";
 }
 function deficitPercentageWorking(){
     global $calculations;
     global $settings;
     global $data;
-    if($calculations->severity == "severe") return "pH [$data->pH] is in range [".$settings->severity->severe->pHRange->lower." to ".$settings->severity->severe->pHRange->upper."] or bicarbonate [".(($data->bicarbonate) ? $data->bicarbonate : 'not provided')."] is [<".$settings->severity->severe->bicarbonateBelow."mmol/L] ==> ".$settings->severity->severe->deficitPercentage."%";
-    if($calculations->severity == "moderate") return "pH is in range [".$settings->severity->moderate->pHRange->lower." to ".$settings->severity->moderate->pHRange->upper."] or bicarbonate is [<".$settings->severity->moderate->bicarbonateBelow."mmol/L] ==> ".$settings->severity->moderate->deficitPercentage."%";
-    if($calculations->severity == "mild") return "pH is in range [".$settings->severity->mild->pHRange->lower." to ".$settings->severity->mild->pHRange->upper."] or bicarbonate is [<".$settings->severity->severe->bicarbonateBelow."mmol/L] ==> ".$settings->severity->mild->deficitPercentage."%";
+    if($calculations->severity == "severe") return "[pH $data->pH] is in range ".$settings->severity->severe->pHRange->lower." to ".$settings->severity->severe->pHRange->upper." or [bicarbonate ".(($data->bicarbonate) ? $data->bicarbonate . 'mmol/L' : 'not provided')."] is <".$settings->severity->severe->bicarbonateBelow."mmol/L ==> ".$settings->severity->severe->deficitPercentage."%";
+    if($calculations->severity == "moderate") return "[pH $data->pH] is in range ".$settings->severity->moderate->pHRange->lower." to ".$settings->severity->moderate->pHRange->upper." or [bicarbonate ".(($data->bicarbonate) ? $data->bicarbonate . 'mmol/L' : 'not provided')."] is <".$settings->severity->moderate->bicarbonateBelow."mmol/L ==> ".$settings->severity->moderate->deficitPercentage."%";
+    if($calculations->severity == "mild") return "[pH $data->pH] is in range ".$settings->severity->mild->pHRange->lower." to ".$settings->severity->mild->pHRange->upper." or [bicarbonate ".(($data->bicarbonate) ? $data->bicarbonate . 'mmol/L' : 'not provided')."] is <".$settings->severity->severe->bicarbonateBelow."mmol/L ==> ".$settings->severity->mild->deficitPercentage."%";
 }
+$calculations->deficit = new StdClass;
+$calculations->deficit->percentage = new StdClass;
+$calculations->deficit->percentage->val = deficitPercentage();
+$calculations->deficit->percentage->formula = deficitPercentageFormula();
+$calculations->deficit->percentage->working = deficitPercentageWorking();
 
-
+//functions related to calculation of deficit volume
 function deficitVolumeUncapped(){ //returns literal deficit volume based on percentage dehydration and patient weight
     global $data;
     return deficitPercentage()*$data->weight*10;
@@ -84,12 +89,12 @@ function deficitVolumeCapped(){ //returns the set limit of the bolus volume depe
     if (deficitPercentage() == 10) return $settings->caps->deficit10;
     send_error_response('Unable to select deficit.volumeCapped. ' , 400);
 }
-function deficitIsCapped(){ //returns true if the uncapped deficit volume exceeds the cap
+function deficitVolumeIsCapped(){ //returns true if the uncapped deficit volume exceeds the cap
     if (deficitVolumeUncapped() > deficitVolumeCapped()) return true;
     return false;
 }
 function deficitVolume(){ //returns the deficit volume to be used, selecting between capped or uncapped volume
-    if (deficitIsCapped()) return deficitVolumeCapped();
+    if (deficitVolumeIsCapped()) return deficitVolumeCapped();
     return deficitVolumeUncapped();
 }
 function deficitVolumeFormula(){
@@ -102,10 +107,16 @@ function deficitVolumeLimit(){
 }
 function deficitVolumeWorking(){
     global $data;
-    return "[".deficitPercentage()."%] x [".$data->weight."kg] x 10 = ".deficitVolumeUncapped()."mL ".(deficitIsCapped() ? '(exceeds limit)' : '');
+    return "[".deficitPercentage()."%] x [".$data->weight."kg] x 10 = ".deficitVolumeUncapped()."mL ".(deficitVolumeIsCapped() ? '(exceeds limit)' : '');
 }
+$calculations->deficit->volume = new StdClass;
+$calculations->deficit->volume->val = deficitVolume();
+$calculations->deficit->volume->formula = deficitVolumeFormula();
+$calculations->deficit->volume->limit = deficitVolumeLimit();
+$calculations->deficit->volume->working = deficitVolumeWorking();
+$calculations->deficit->volume->isCapped = deficitVolumeIsCapped();
 
-
+//functions related to calculation of deficit volume less bolus
 function deficitBolusToSubtract(){ //returns a bolus volume to subtract, unless patient is shocked in which case boluses are not subtracted
     global $data;
     global $settings;
@@ -115,26 +126,17 @@ function deficitBolusToSubtract(){ //returns a bolus volume to subtract, unless 
 function deficitVolumeLessBolus(){ //returns the deficit volume with bolus subtracted (if applicable)
     return deficitVolume() - deficitBolusToSubtract();
 }
+$calculations->deficit->bolusToSubtract = deficitBolusToSubtract();
+$calculations->deficit->volumeLessBolus = deficitVolumeLessBolus();
+
+//functions related to calculation of deficit rate
 function deficitRate(){ //returns rate of deficit volume replacement to run over 48 hours (mL/hour)
     global $settings;
     return volumeToRate(deficitVolumeLessBolus(), $settings->deficitReplacementDuration);
 }
-$calculations->deficit = new StdClass;
-$calculations->deficit->percentage = new StdClass;
-$calculations->deficit->percentage->val = deficitPercentage();
-$calculations->deficit->percentage->formula = deficitPercentageFormula();
-$calculations->deficit->percentage->working = deficitPercentageWorking();
-$calculations->deficit->volume = new StdClass;
-$calculations->deficit->volume->val = deficitVolume();
-$calculations->deficit->volume->formula = deficitVolumeFormula();
-$calculations->deficit->volume->limit = deficitVolumeLimit();
-$calculations->deficit->volume->working = deficitVolumeWorking();
-$calculations->deficit->isCapped = deficitIsCapped();
-$calculations->deficit->bolusToSubtract = deficitBolusToSubtract();
-$calculations->deficit->volumeLessBolus = deficitVolumeLessBolus();
 $calculations->deficit->rate = deficitRate();
 
-//functions related to calculation of maintenance
+//functions related to calculation of maintenance volume
 function maintenanceVolumeUncapped(){ //returns the daily fluid requirement using holliday-segar formula(mL)
     global $data;
     if($data->weight<10) return (($data->weight)*100);
@@ -153,12 +155,14 @@ function maintenanceVolume(){ //returns the maintenance volume to be used, selec
     if(maintenanceIsCapped()) return maintenanceVolumeCapped();
     return maintenanceVolumeUncapped();
 }
-function maintenanceRate(){ //returns the maintenance fluid rate to run over 24 hours (mL/hour)
-    return volumeToRate(maintenanceVolume(), 24);
-}
 $calculations->maintenance = new StdClass;
 $calculations->maintenance->volume = maintenanceVolume();
 $calculations->maintenance->isCapped = maintenanceIsCapped();
+
+//functions related to calculation of maintenance rate
+function maintenanceRate(){ //returns the maintenance fluid rate to run over 24 hours (mL/hour)
+    return volumeToRate(maintenanceVolume(), 24);
+}
 $calculations->maintenance->rate = maintenanceRate();
 
 //returns the starting fluid rate

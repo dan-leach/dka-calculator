@@ -72,6 +72,10 @@ $data->centre = htmlspecialchars($data->centre);
 if (!isset($data->ethnicGroup)) send_error_response("Ethnic group is required.", 400);
 $data->ethnicGroup = htmlspecialchars($data->ethnicGroup);
 
+//ethnicSubgroup 
+if (!isset($data->ethnicSubgroup)) send_error_response("Ethnic subgroup is required.", 400);
+$data->ethnicSubgroup = htmlspecialchars($data->ethnicSubgroup);
+
 //preventableFactors
 if (!isset($data->preventableFactors)) send_error_response("Preventable factors selection is required.", 400);
 if (!sizeof($data->preventableFactors)) send_error_response("Preventable factors selection is required.", 400);

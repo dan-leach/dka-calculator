@@ -301,6 +301,49 @@ export const config = reactive({
         ],
       },
     ],
+    ethnicGroups: [
+      {
+        name: "Asian or Asian British",
+        subgroups: [
+          "Indian",
+          "Pakistani",
+          "Bangladeshi",
+          "Chinese",
+          "Any other Asian background",
+        ],
+      },
+      {
+        name: "Black, Black British, Caribbean or African",
+        subgroups: [
+          "Caribbean",
+          "African",
+          "Any other Black, Black British, or Caribbean background",
+        ],
+      },
+      {
+        name: "Mixed or multiple ethnic groups",
+        subgroups: [
+          "White and Black Caribbean",
+          "White and Black African",
+          "White and Asian",
+          "Any other Mixed or multiple ethnic background",
+        ],
+      },
+      {
+        name: "White",
+        subgroups: [
+          "English, Welsh, Scottish, Northern Irish or British",
+          "Irish",
+          "Gypsy or Irish Traveller",
+          "Roma",
+          "Any other White background",
+        ],
+      },
+      {
+        name: "Other ethnic group",
+        subgroups: ["Arab", "Any other ethnic group"],
+      },
+    ],
     weightLimits: {
       //each object contains an array of the lower and upper limit for the safe weight range (+/- 2SD)
       male: {
@@ -1232,35 +1275,6 @@ export const config = reactive({
         ],
       },
       max: 75,
-    },
-    ethnicGroups: {
-      groups: [
-        "Asian or Asian British",
-        "Indian",
-        "Pakistani",
-        "Bangladeshi",
-        "Chinese",
-        "Any other Asian background",
-        "Black, Black British, Caribbean or African",
-        "Caribbean",
-        "African",
-        "Any other Black, Black British, or Caribbean background",
-        "Mixed or multiple ethnic groups",
-        "White and Black Caribbean",
-        "White and Black African",
-        "White and Asian",
-        "Any other Mixed or multiple ethnic background",
-        "White",
-        "English, Welsh, Scottish, Northern Irish or British",
-        "Irish",
-        "Gypsy or Irish Traveller",
-        "Roma",
-        "Any other White background",
-        "Other ethnic group",
-        "Arab",
-        "Any other ethnic group",
-      ],
-      headingIndexes: [0, 6, 10, 15, 21],
     },
     ageLimit: 18,
     indicatorCoordinates: {
