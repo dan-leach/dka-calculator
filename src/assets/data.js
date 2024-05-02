@@ -645,23 +645,111 @@ export const data = ref({
       label:
         "Were there any preventable factors which may have contributed to this episode of DKA?",
       privacyLabel: "Preventable factors",
-      options: [
-        "Missed diagnosis in primary care",
-        "Missed diagnosis in hospital",
-        "Failure to refer for same day treatment",
-        "Delay in seeking treatment by patient/family",
-        "Pump failure",
-        "Sensor/CGMS failure",
-        "Failure of patient/family to administer insulin",
-        "Failure of patient/family to check blood ketones",
+      options: {
+        val: [],
+        list: ["Yes", "No", "Not yet known"],
+        change: function (selected) {
+          this.val = [];
+          this.val.push(selected);
+          if (selected == "Yes") {
+            data.value.inputs.preventableFactors.categories.val = [];
+            data.value.inputs.preventableFactors.val = [];
+          } else {
+            data.value.inputs.preventableFactors.categories.val = [selected];
+            data.value.inputs.preventableFactors.val = [selected];
+          }
+          data.value.inputs.preventableFactors.isValid();
+        },
+      },
+      categories: {
+        val: [],
+        list: [
+          "Missed/delayed diagnosis",
+          "Diabetes technology issue",
+          "Lack of adherence",
+          "Social factors",
+        ],
+      },
+      factors: [
+        {
+          val: "Lack of family awareness of diabetes symptoms",
+          categories: ["Missed/delayed diagnosis"],
+        },
+        {
+          val: "Lack of or delayed access to primary care appointment",
+          categories: ["Missed/delayed diagnosis"],
+        },
+        {
+          val: "Missed or delayed diagnosis in primary care",
+          categories: ["Missed/delayed diagnosis"],
+        },
+        {
+          val: "Incorrect investigation/referral by primary care",
+          categories: ["Missed/delayed diagnosis"],
+        },
+        {
+          val: "Missed or delayed diagnosis in secondary/tertiary care",
+          categories: ["Missed/delayed diagnosis"],
+        },
+        {
+          val: "Incorrect management by secondary/tertiary care",
+          categories: ["Missed/delayed diagnosis"],
+        },
+        {
+          val: "Other diagnosis issue",
+          categories: ["Missed/delayed diagnosis"],
+        },
+        {
+          val: "Malfunction of insulin pump",
+          categories: ["Diabetes technology issue"],
+        },
+        {
+          val: "Insulin pump used incorrectly",
+          categories: ["Diabetes technology issue", "Lack of adherence"],
+        },
+        {
+          val: "Malfunction of glucose sensor",
+          categories: ["Diabetes technology issue"],
+        },
+        {
+          val: "Other technology issue",
+          categories: ["Diabetes technology issue"],
+        },
+        {
+          val: "Inadequate supervision by parent/carer",
+          categories: ["Lack of adherence", "Social factors"],
+        },
+        {
+          val: "Lack of adherence to usual insulin therapy by child/young person",
+          categories: ["Lack of adherence"],
+        },
+        {
+          val: "Inadequate monitoring of glucose of ketones",
+          categories: ["Lack of adherence"],
+        },
+        {
+          val: "Failure to follow sick day rules",
+          categories: ["Lack of adherence"],
+        },
+        {
+          val: "Other adherance issue",
+          categories: ["Lack of adherence"],
+        },
+        {
+          val: "Language barrier",
+          categories: ["Social factors"],
+        },
+        {
+          val: "Other social factor",
+          categories: ["Social factors"],
+        },
       ],
       form: 3,
       info: "Preventable factors are stored by the DKA Calculator for audit purposes.",
       isValid: function () {
         this.errors = "";
         if (!this.val.length)
-          this.errors +=
-            "Preventable factors must be selected, or choose 'No preventable factors'. ";
+          this.errors += "An option for preventable factors must be selected. ";
         if (this.errors) return false;
         return true;
       },

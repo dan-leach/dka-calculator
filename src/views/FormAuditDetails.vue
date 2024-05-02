@@ -14,7 +14,7 @@ const continueClick = () => {
 };
 
 onMounted(() => {
-  if (!data.value.form.isValid(0)) {
+  /*if (!data.value.form.isValid(0)) {
     router.push("/form-disclaimer");
   } else if (!data.value.form.isValid(1)) {
     router.push("/form-patient-details");
@@ -28,7 +28,7 @@ onMounted(() => {
   } else {
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-  }
+  }*/
 });
 </script>
 
@@ -37,7 +37,15 @@ onMounted(() => {
     <h2 class="display-3">Audit details</h2>
     <!--episodeType-->
     <div class="mb-4">
-      <p class="text-center m-2">{{ data.inputs.episodeType.label }}</p>
+      <p class="text-center m-2">
+        {{ data.inputs.episodeType.label
+        }}<font-awesome-icon
+          :icon="['fas', 'circle-info']"
+          data-bs-toggle="collapse"
+          data-bs-target="#episodeTypeInfo"
+          class="ms-2"
+        />
+      </p>
       <div class="d-flex justify-content-center">
         <div>
           <input
@@ -70,12 +78,6 @@ onMounted(() => {
           <label class="btn btn-outline-secondary" for="episodeTypeTest"
             >For testing or training purposes</label
           >
-          <font-awesome-icon
-            :icon="['fas', 'circle-info']"
-            data-bs-toggle="collapse"
-            data-bs-target="#episodeTypeInfo"
-            class="ms-2"
-          />
         </div>
       </div>
       <div
@@ -213,58 +215,40 @@ onMounted(() => {
     <!--preventableFactors-->
     <div class="mb-4">
       <p class="text-center m-2">
-        {{ data.inputs.preventableFactors.label
-        }}<font-awesome-icon
+        {{ data.inputs.preventableFactors.label }}
+        <font-awesome-icon
           :icon="['fas', 'circle-info']"
           data-bs-toggle="collapse"
           data-bs-target="#preventableFactorsInfo"
           class="ms-2"
         />
       </p>
-      <div v-if="data.inputs.preventableFactors.val != 'nil'">
-        <div class="d-flex flex-wrap justify-content-center">
-          <div
-            v-for="factor in data.inputs.preventableFactors.options"
-            class="my-1"
-          >
-            <input
-              type="checkbox"
-              class="btn-check flex-fill"
-              :id="factor"
-              :value="factor"
-              v-model="data.inputs.preventableFactors.val"
-              @change="data.inputs.preventableFactors.isValid()"
-              autocomplete="off"
-              required
-              :disabled="data.inputs.preventableFactors.val == 'nil'"
-            />
-            <label
-              class="btn btn-outline-secondary me-2 preventable-factors-btn"
-              :for="factor"
-              >{{ factor }}</label
-            >
-          </div>
+      <!--options-->
+      <div class="d-flex flex-row flex-wrap justify-content-center mb-4">
+        <div v-for="option in data.inputs.preventableFactors.options.list">
+          <input
+            type="checkbox"
+            class="btn-check"
+            :id="option"
+            :value="option"
+            v-model="data.inputs.preventableFactors.options.val"
+            @change="data.inputs.preventableFactors.options.change(option)"
+            autocomplete="off"
+            required
+          />
+          <label class="btn btn-outline-secondary me-2" :for="option">{{
+            option
+          }}</label>
         </div>
-        <p class="text-center m-2">or</p>
       </div>
-      <div class="d-flex justify-content-center">
-        <input
-          type="checkbox"
-          class="btn-check"
-          id="nilFactor"
-          value="nil"
-          v-model="data.inputs.preventableFactors.val"
-          @change="data.inputs.preventableFactors.isValid()"
-          autocomplete="off"
-          required
-          :disabled="
-            data.inputs.preventableFactors.val != '' &&
-            data.inputs.preventableFactors.val != 'nil'
-          "
-        />
-        <label class="btn btn-outline-success me-2" for="nilFactor"
-          >No preventable factors</label
-        >
+      <div
+        v-if="
+          data.inputs.preventableFactors.options.val.includes('Not yet known')
+        "
+        class="form-text text-center"
+      >
+        A feature to allow you to submit preventable factors data at a later
+        point is under development.
       </div>
       <div
         v-if="showErrors"
@@ -278,6 +262,56 @@ onMounted(() => {
         id="preventableFactorsInfo"
       >
         {{ data.inputs.preventableFactors.info }}
+      </div>
+      <!--categories-->
+      <div
+        v-if="data.inputs.preventableFactors.options.val.includes('Yes')"
+        class="d-flex flex-row flex-wrap justify-content-center mt-4"
+      >
+        <div v-for="category in data.inputs.preventableFactors.categories.list">
+          <input
+            type="checkbox"
+            class="btn-check"
+            :id="category"
+            :value="category"
+            v-model="data.inputs.preventableFactors.categories.val"
+            autocomplete="off"
+          />
+          <label
+            class="btn btn-outline-secondary me-2 preventable-factors-category-btn mb-2"
+            :for="category"
+            >{{ category }}</label
+          >
+          <!--factors-->
+          <div class="d-flex flex-column justify-content-center">
+            <div v-for="factor in data.inputs.preventableFactors.factors">
+              <div
+                v-if="
+                  factor.categories.includes(category) &&
+                  (data.inputs.preventableFactors.categories.val.includes(
+                    category
+                  ) ||
+                    data.inputs.preventableFactors.val.includes(factor.val))
+                "
+              >
+                <input
+                  type="checkbox"
+                  class="btn-check"
+                  :id="factor.val"
+                  :value="factor.val"
+                  v-model="data.inputs.preventableFactors.val"
+                  @change="data.inputs.preventableFactors.isValid()"
+                  autocomplete="off"
+                />
+                <label
+                  class="btn btn-outline-dark me-2 preventable-factors-factor-btn mb-1"
+                  :for="factor.val"
+                  >{{ factor.val }}</label
+                >
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="d-flex flex-row justify-content-evenly">
@@ -316,8 +350,12 @@ onMounted(() => {
 .episode-type-btn {
   height: 62px;
 }
-.preventable-factors-btn {
-  height: 75px;
-  width: 230px;
+.preventable-factors-category-btn {
+  height: 65px;
+  width: 170px;
+}
+.preventable-factors-factor-btn {
+  font-size: smaller;
+  width: 170px;
 }
 </style>
