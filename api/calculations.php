@@ -36,20 +36,33 @@ function bolusVolumeCapped(){ //returns the set limit of the bolus volume
     global $settings;
     return $settings->caps->bolus;
 }
-function bolusIsCapped($mlsPerKg){ //returns true if the uncapped bolus volume exceeds the cap
+function bolusVolumeIsCapped($mlsPerKg){ //returns true if the uncapped bolus volume exceeds the cap
     if (bolusVolumeUncapped($mlsPerKg) > bolusVolumeCapped()) return true;
     return false;
 }
 function bolusVolume($mlsPerKg){ //returns the bolus volume to be used, selecting between capped or uncapped volume
-    if (bolusIsCapped($mlsPerKg)){
+    if (bolusVolumeIsCapped($mlsPerKg)){
         return bolusVolumeCapped();
     } else {
         return bolusVolumeUncapped($mlsPerKg);
     }
 }
-$calculations->bolus = new StdClass;
-$calculations->bolus->volume = bolusVolume($settings->bolusMlsPerKg);
-$calculations->bolus->isCapped = bolusIsCapped($settings->bolusMlsPerKg);
+function bolusVolumeFormula($mlsPerKg) {
+    return "[".$mlsPerKg."mL/kg] x [Patient weight (kg)]";
+}
+function bolusVolumeLimit($mlsPerKg) {
+    global $settings;
+    return $settings->caps->bolus . "mL";
+}
+function bolusVolumeWorking($mlsPerKg) {
+    return "[".$mlsPerKg."mL/kg] x [".$data->weight."kg] = ".bolusVolume($mlsPerKg)."mL";
+}
+$calculations->bolusVolume = new StdClass;
+$calculations->bolusVolume->val = bolusVolume($settings->bolusMlsPerKg);
+$calculations->bolusVolume->isCapped = bolusVolumeIsCapped($settings->bolusMlsPerKg);
+$calculations->bolusVolume->formula = bolusVolumeFormula($settings->bolusMlsPerKg);
+$calculations->bolusVolume->limit = bolusVolumeLimit($settings->bolusMlsPerKg);
+$calculations->bolusVolume->working = bolusVolumeWorking($settings->bolusMlsPerKg);
 
 //functions related to calculation of deficit percentage
 function deficitPercentage(){ //returns the percentage dehydration based on pH
@@ -120,21 +133,41 @@ $calculations->deficit->volume->isCapped = deficitVolumeIsCapped();
 function deficitBolusToSubtract(){ //returns a bolus volume to subtract, unless patient is shocked in which case boluses are not subtracted
     global $data;
     global $settings;
-    if($data->shockPresent) return 0;
+    if($data->shockPresent == "true") return 0;
     return bolusVolume($settings->bolusMlsPerKg);
 }
 function deficitVolumeLessBolus(){ //returns the deficit volume with bolus subtracted (if applicable)
     return deficitVolume() - deficitBolusToSubtract();
 }
-$calculations->deficit->bolusToSubtract = deficitBolusToSubtract();
-$calculations->deficit->volumeLessBolus = deficitVolumeLessBolus();
+function deficitVolumeLessBolusFormula() {
+    return "[Deficit volume] - [10mL/kg bolus (only for non-shocked patients)]";
+}
+function deficitVolumeLessBolusWorking(){
+    return "[".deficitVolume()."mL] - [".deficitBolusToSubtract()."ml] = ".deficitVolumeLessBolus()."mL";
+}
+$calculations->deficit->volumeLessBolus = new StdClass;
+$calculations->deficit->volumeLessBolus->bolusToSubtract = deficitBolusToSubtract();
+$calculations->deficit->volumeLessBolus->val = deficitVolumeLessBolus();
+$calculations->deficit->volumeLessBolus->formula = deficitVolumeLessBolusFormula();
+$calculations->deficit->volumeLessBolus->working = deficitVolumeLessBolusWorking();
 
 //functions related to calculation of deficit rate
 function deficitRate(){ //returns rate of deficit volume replacement to run over 48 hours (mL/hour)
     global $settings;
     return volumeToRate(deficitVolumeLessBolus(), $settings->deficitReplacementDuration);
 }
-$calculations->deficit->rate = deficitRate();
+function deficitRateFormula(){
+    global $settings;
+    return "[Deficit volume less bolus] ÷ [".$settings->deficitReplacementDuration." hours]";
+}
+function deficitRateWorking(){
+    global $settings;
+    return "[".deficitVolumeLessBolus()."mL] ÷ [".$settings->deficitReplacementDuration." hours] = ".deficitRate()."mL/hour";
+}
+$calculations->deficit->rate = new StdClass;
+$calculations->deficit->rate->val = deficitRate();
+$calculations->deficit->rate->formula = deficitRateFormula();
+$calculations->deficit->rate->working = deficitRateWorking();
 
 //functions related to calculation of maintenance volume
 function maintenanceVolumeUncapped(){ //returns the daily fluid requirement using holliday-segar formula(mL)

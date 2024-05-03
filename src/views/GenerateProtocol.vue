@@ -328,6 +328,88 @@ onMounted(() => {
               </div>
             </div>
           </div>
+          <!--bolus volume-->
+          <div class="card mb-4">
+            <div class="card-header">Bolus volumes</div>
+            <div class="card-body">
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Formula</span>
+                  <span v-html="data.calculations.bolusVolume.formula"></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Limit*</span>
+                  <span v-html="data.calculations.bolusVolume.limit"></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Working</span>
+                  <span v-html="data.calculations.bolusVolume.working"></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Output</span>
+                  {{ data.calculations.bolusVolume.val }}mL
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--deficit volume less bolus-->
+          <div class="card mb-4">
+            <div class="card-header">Deficit volume less bolus</div>
+            <div class="card-body">
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Formula</span>
+                  <span
+                    v-html="data.calculations.deficit.volumeLessBolus.formula"
+                  ></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Working</span>
+                  <span
+                    v-html="data.calculations.deficit.volumeLessBolus.working"
+                  ></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Output</span>
+                  {{ data.calculations.deficit.volumeLessBolus.val }}mL
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--deficit rate-->
+          <div class="card mb-4">
+            <div class="card-header">Deficit replacement rate</div>
+            <div class="card-body">
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Formula</span>
+                  <span v-html="data.calculations.deficit.rate.formula"></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Working</span>
+                  <span v-html="data.calculations.deficit.rate.working"></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Output</span>
+                  {{ data.calculations.deficit.rate.val }}mL
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <!--retry-->

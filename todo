@@ -1,4 +1,11 @@
 Currently building show working api and frontend
+to do:
+
+1. Daily maintenance volume
+2. Maintenance rate
+3. Starting fluid rate
+4. Insulin infusion rate
+
 Will then need to update docDef as req structure has changed (e.g. req.calculations.bolus.volume --> req.calculations.bolus.volume.val)
 
 Before launch:

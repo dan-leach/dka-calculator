@@ -672,15 +672,6 @@ export const data = ref({
         val: [],
         list: ["Yes", "No", "Not yet known"],
         change: function (selected) {
-          console.log(data.value.inputs.preExistingDiabetes.val);
-          for (let category of data.value.inputs.preventableFactors.categories
-            .list) {
-            console.log(
-              category.preExistingDiabetes.includes(
-                data.value.inputs.preExistingDiabetes.val
-              )
-            );
-          }
           this.val = [];
           this.val.push(selected);
           if (selected == "Yes") {
