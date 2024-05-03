@@ -410,6 +410,122 @@ onMounted(() => {
               </div>
             </div>
           </div>
+          <!--maintenance volume-->
+          <div class="card mb-4">
+            <div class="card-header">Daily maintenance volume</div>
+            <div class="card-body">
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Formula</span>
+                  <span
+                    v-html="data.calculations.maintenance.volume.formula"
+                  ></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Limit*</span>
+                  <span v-html="data.calculations.maintenance.volume.limit"></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Working</span>
+                  <span
+                    v-html="data.calculations.maintenance.volume.working"
+                  ></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Output</span>
+                  {{ data.calculations.maintenance.volume.val }}mL
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--maintenance rate-->
+          <div class="card mb-4">
+            <div class="card-header">Daily maintenance rate</div>
+            <div class="card-body">
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Formula</span>
+                  <span v-html="data.calculations.maintenance.rate.formula"></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Working</span>
+                  <span v-html="data.calculations.maintenance.rate.working"></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Output</span>
+                  {{ data.calculations.maintenance.rate.val }}mL
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--starting fluid rate-->
+          <div class="card mb-4">
+            <div class="card-header">Starting fluid rate</div>
+            <div class="card-body">
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Formula</span>
+                  <span v-html="data.calculations.startingFluidRate.formula"></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Working</span>
+                  <span v-html="data.calculations.startingFluidRate.working"></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Output</span>
+                  {{ data.calculations.startingFluidRate.val }}mL
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--insulin rate-->
+          <div class="card mb-4">
+            <div class="card-header">Insulin rate</div>
+            <div class="card-body">
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Formula</span>
+                  <span
+                    v-html="data.calculations.insulinRate.formula"
+                  ></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Limit*</span>
+                  <span v-html="data.calculations.insulinRate.limit"></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Working</span>
+                  <span
+                    v-html="data.calculations.insulinRate.working"
+                  ></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Output</span>
+                  {{ data.calculations.insulinRate.val }}mL
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <!--retry-->
