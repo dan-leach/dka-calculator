@@ -9,7 +9,7 @@ function volumeToRate($volume, $unitTime){ //takes a volume and divides by numbe
 
 //severity
 if (isset($data->ketones)) {
-    if ($data->ketones < $settings->minimumKetones) send_error_response('Ketones of ' . $data->ketones . ' mmol/L are below the diagnostic threshold for DKA of ' . $settings->minimumKetones . ' mmol/L.' , 400);
+    if ($data->ketones < $settings->minimumKetones) send_error_response('Ketones of ' . number_format($data->ketones,1) . ' mmol/L are below the diagnostic threshold for DKA of ' . $settings->minimumKetones . ' mmol/L.' , 400);
 }
 if (($data->pH < $settings->severity->severe->pHRange->upper) && ($data->pH >= $settings->severity->severe->pHRange->lower)) {
     $calculations->severity = "severe";
@@ -24,7 +24,7 @@ if (($data->pH < $settings->severity->severe->pHRange->upper) && ($data->pH >= $
 } else if ((isset($data->bicarbonate)) && ($data->bicarbonate < $settings->severity->mild->bicarbonateBelow)) {
     $calculations->severity = "mild";
 } else {
-    send_error_response('pH of ' . $data->pH . ' and bicarbonate of ' . $data->bicarbonate . ' mmol/L does not meet the diagnostic threshold for DKA. ' , 400);
+    send_error_response('pH of ' . number_format($data->pH,2) . ' and bicarbonate of ' . number_format($data->bicarbonate,1) . ' mmol/L does not meet the diagnostic threshold for DKA. ' , 400);
 }
 
 //functions related to calculation of bolus volumes
@@ -55,7 +55,8 @@ function bolusVolumeLimit($mlsPerKg) {
     return $settings->caps->bolus . "mL";
 }
 function bolusVolumeWorking($mlsPerKg) {
-    return "[".$mlsPerKg."mL/kg] x [".$data->weight."kg] = ".bolusVolume($mlsPerKg)."mL";
+    global $data;
+    return "[".$mlsPerKg."mL/kg] x [".number_format($data->weight,1)."kg] = ".number_format(bolusVolume($mlsPerKg),0)."mL";
 }
 $calculations->bolusVolume = new StdClass;
 $calculations->bolusVolume->val = bolusVolume($settings->bolusMlsPerKg);
@@ -81,9 +82,9 @@ function deficitPercentageWorking(){
     global $calculations;
     global $settings;
     global $data;
-    if($calculations->severity == "severe") return "[pH $data->pH] is in range ".$settings->severity->severe->pHRange->lower." to ".$settings->severity->severe->pHRange->upper." or [bicarbonate ".(($data->bicarbonate) ? $data->bicarbonate . 'mmol/L' : 'not provided')."] is <".$settings->severity->severe->bicarbonateBelow."mmol/L ==> ".$settings->severity->severe->deficitPercentage."%";
-    if($calculations->severity == "moderate") return "[pH $data->pH] is in range ".$settings->severity->moderate->pHRange->lower." to ".$settings->severity->moderate->pHRange->upper." or [bicarbonate ".(($data->bicarbonate) ? $data->bicarbonate . 'mmol/L' : 'not provided')."] is <".$settings->severity->moderate->bicarbonateBelow."mmol/L ==> ".$settings->severity->moderate->deficitPercentage."%";
-    if($calculations->severity == "mild") return "[pH $data->pH] is in range ".$settings->severity->mild->pHRange->lower." to ".$settings->severity->mild->pHRange->upper." or [bicarbonate ".(($data->bicarbonate) ? $data->bicarbonate . 'mmol/L' : 'not provided')."] is <".$settings->severity->severe->bicarbonateBelow."mmol/L ==> ".$settings->severity->mild->deficitPercentage."%";
+    if($calculations->severity == "severe") return "[pH ".number_format($data->pH,2)."] is in range ".$settings->severity->severe->pHRange->lower." to ".$settings->severity->severe->pHRange->upper." or [bicarbonate ".(($data->bicarbonate) ? number_format($data->bicarbonate,1) . 'mmol/L' : 'not provided')."] is <".$settings->severity->severe->bicarbonateBelow."mmol/L ==> ".$settings->severity->severe->deficitPercentage."%";
+    if($calculations->severity == "moderate") return "[pH ".number_format($data->pH,2)."] is in range ".$settings->severity->moderate->pHRange->lower." to ".$settings->severity->moderate->pHRange->upper." or [bicarbonate ".(($data->bicarbonate) ? number_format($data->bicarbonate,1) . 'mmol/L' : 'not provided')."] is <".$settings->severity->moderate->bicarbonateBelow."mmol/L ==> ".$settings->severity->moderate->deficitPercentage."%";
+    if($calculations->severity == "mild") return "[pH ".number_format($data->pH,2)."] is in range ".$settings->severity->mild->pHRange->lower." to ".$settings->severity->mild->pHRange->upper." or [bicarbonate ".(($data->bicarbonate) ? number_format($data->bicarbonate,1) . 'mmol/L' : 'not provided')."] is <".$settings->severity->severe->bicarbonateBelow."mmol/L ==> ".$settings->severity->mild->deficitPercentage."%";
 }
 $calculations->deficit = new StdClass;
 $calculations->deficit->percentage = new StdClass;
@@ -120,7 +121,7 @@ function deficitVolumeLimit(){
 }
 function deficitVolumeWorking(){
     global $data;
-    return "[".deficitPercentage()."%] x [".$data->weight."kg] x 10 = ".deficitVolumeUncapped()."mL ".(deficitVolumeIsCapped() ? '(exceeds limit)' : '');
+    return "[".deficitPercentage()."%] x [".number_format($data->weight,1)."kg] x 10 = ".number_format(deficitVolumeUncapped(),0)."mL ".(deficitVolumeIsCapped() ? '(exceeds limit)' : '');
 }
 $calculations->deficit->volume = new StdClass;
 $calculations->deficit->volume->val = deficitVolume();
@@ -143,7 +144,7 @@ function deficitVolumeLessBolusFormula() {
     return "[Deficit volume] - [10mL/kg bolus (only for non-shocked patients)]";
 }
 function deficitVolumeLessBolusWorking(){
-    return "[".deficitVolume()."mL] - [".deficitBolusToSubtract()."ml] = ".deficitVolumeLessBolus()."mL";
+    return "[".number_format(deficitVolume(),0)."mL] - [".number_format(deficitBolusToSubtract(),0)."ml] = ".number_format(deficitVolumeLessBolus(),0)."mL";
 }
 $calculations->deficit->volumeLessBolus = new StdClass;
 $calculations->deficit->volumeLessBolus->bolusToSubtract = deficitBolusToSubtract();
@@ -162,7 +163,7 @@ function deficitRateFormula(){
 }
 function deficitRateWorking(){
     global $settings;
-    return "[".deficitVolumeLessBolus()."mL] ÷ [".$settings->deficitReplacementDuration." hours] = ".deficitRate()."mL/hour";
+    return "[".number_format(deficitVolumeLessBolus(),0)."mL] ÷ [".$settings->deficitReplacementDuration." hours] = ".number_format(deficitRate(),1)."mL/hour";
 }
 $calculations->deficit->rate = new StdClass;
 $calculations->deficit->rate->val = deficitRate();
@@ -180,30 +181,68 @@ function maintenanceVolumeCapped(){ //returns the maintenance cap
     global $settings;
     return $settings->caps->maintenance;
 }
-function maintenanceIsCapped(){ //returns true if the uncapped volume exceeds the cap
+function maintenanceVolumeIsCapped(){ //returns true if the uncapped volume exceeds the cap
     if(maintenanceVolumeUncapped() > maintenanceVolumeCapped()) return true;
     return false;
 }
 function maintenanceVolume(){ //returns the maintenance volume to be used, selecting between capped or uncapped volume
-    if(maintenanceIsCapped()) return maintenanceVolumeCapped();
+    if(maintenanceVolumeIsCapped()) return maintenanceVolumeCapped();
     return maintenanceVolumeUncapped();
 }
+function maintenanceVolumeLimit(){
+    global $settings;
+    return $settings->caps->maintenance . "mL";
+}
+function maintenanceVolumeFormula(){
+    return "For [patient weight] ==> (100mL/kg for 0-10kg) + (50mL/kg for 10-20kg) + (20mL/kg for >20kg)";
+}
+function maintenanceVolumeWorking(){
+    global $data;
+    if ($data->weight <= 10) {
+        return "[".number_format($data->weight,1)."kg] x 100mL = ".number_format(maintenanceVolume(),0) . "mL";
+    } else if ($data->weight <= 20) {
+        return "([10kg] x 100mL) + ([".number_format(($data->weight - 10),1)."kg] x 50mL) = ".number_format(maintenanceVolume(),0)."mL";
+    } else {
+        return "([10kg] x 100mL) + ([10kg] x 50mL) + ([".number_format(($data->weight - 20),1)."kg] x 20mL) = ".number_format(maintenanceVolume(),0)."mL";
+    }
+}
 $calculations->maintenance = new StdClass;
-$calculations->maintenance->volume = maintenanceVolume();
-$calculations->maintenance->isCapped = maintenanceIsCapped();
+$calculations->maintenance->volume = new StdClass;
+$calculations->maintenance->volume->val = maintenanceVolume();
+$calculations->maintenance->volume->isCapped = maintenanceVolumeIsCapped();
+$calculations->maintenance->volume->limit = maintenanceVolumeLimit();
+$calculations->maintenance->volume->formula = maintenanceVolumeFormula();
+$calculations->maintenance->volume->working = maintenanceVolumeWorking();
 
 //functions related to calculation of maintenance rate
 function maintenanceRate(){ //returns the maintenance fluid rate to run over 24 hours (mL/hour)
     return volumeToRate(maintenanceVolume(), 24);
 }
-$calculations->maintenance->rate = maintenanceRate();
+function maintenanceRateFormula(){
+    return "[Daily maintenance volume] ÷ 24 hours";
+}
+function maintenanceRateWorking(){
+    return "[".number_format(maintenanceVolume(),0)."mL] ÷ 24 hours = ".number_format(maintenanceRate(),1)."mL/hour";
+}
+$calculations->maintenance->rate = new StdClass;
+$calculations->maintenance->rate->val = maintenanceRate();
+$calculations->maintenance->rate->formula = maintenanceRateFormula();
+$calculations->maintenance->rate->working = maintenanceRateWorking();
 
 //returns the starting fluid rate
 function startingFluidRate(){ 
-    global $calculations;
-    return $calculations->deficit->rate + $calculations->maintenance->rate;
+    return deficitRate() + maintenanceRate();
 }
-$calculations->startingFluidRate = startingFluidRate();
+function startingFluidRateFormula() {
+    return "[Deficit replacement rate] + [Maintenance rate]";
+}
+function startingFluidRateWorking(){
+    return "[".number_format(deficitRate(),1)."mL/hour] + [".number_format(maintenanceRate(),1)."mL/hour] = ".number_format(startingFluidRate(),1)."mL/hour";
+}
+$calculations->startingFluidRate = new StdClass;
+$calculations->startingFluidRate->val = startingFluidRate();
+$calculations->startingFluidRate->formula = startingFluidRateFormula();
+$calculations->startingFluidRate->working = startingFluidRateWorking();
 
 //functions related to calculation of insulin rates
 function insulinRateUncapped(){ //returns the rate literal based on patient weight and selected insulin rate
@@ -225,9 +264,26 @@ function insulinRate(){ // returns the starting insulin rate (Units/hour), selec
     if (insulinIsCapped()) return insulinRateCapped();
     return insulinRateUncapped();
 }
-$calculations->insulin = new StdClass;
-$calculations->insulin->rate = insulinRate();
-$calculations->insulin->isCapped = insulinIsCapped();
+function insulinRateFormula(){
+    return "[Insulin rate (Units/kg/hour)] x [Patient weight]";
+}
+function insulinRateLimit(){
+    global $data;
+    global $settings;
+    if ($data->insulinRate == 0.05) return $settings->caps->insulin005 . " Units/hr";
+    if ($data->insulinRate == 0.1) return $settings->caps->insulin01 . " Units/hr";
+    send_error_response("Unable to select insulin rate limit", 400);
+}
+function insulinRateWorking(){
+    global $data;
+    return "[".$data->insulinRate." Units/kg/hour] x [".number_format($data->weight,1)."kg] = ".number_format(insulinRate(),2)." Units/hour";
+}
+$calculations->insulinRate = new StdClass;
+$calculations->insulinRate->val = insulinRate();
+$calculations->insulinRate->isCapped = insulinIsCapped();
+$calculations->insulinRate->formula = insulinRateFormula();
+$calculations->insulinRate->limit = insulinRateLimit();
+$calculations->insulinRate->working = insulinRateWorking();
 
 $calculationsJSON = json_encode($calculations);
 

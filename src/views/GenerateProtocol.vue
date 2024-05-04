@@ -266,6 +266,36 @@ onMounted(() => {
         </button>
 
         <div class="collapse mb-2" id="showWorking">
+          <!--bolus volume-->
+          <div class="card mb-4">
+            <div class="card-header">Bolus volumes</div>
+            <div class="card-body">
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Formula</span>
+                  <span v-html="data.calculations.bolusVolume.formula"></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Limit*</span>
+                  <span v-html="data.calculations.bolusVolume.limit"></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Working</span>
+                  <span v-html="data.calculations.bolusVolume.working"></span>
+                </div>
+              </div>
+              <div class="mb-2">
+                <div class="card p-2">
+                  <span class="text-muted m-0">Output</span>
+                  {{ data.calculations.bolusVolume.val.toFixed(0) }}mL
+                </div>
+              </div>
+            </div>
+          </div>
           <!--deficit percentage-->
           <div class="card mb-4">
             <div class="card-header">Deficit percentage</div>
@@ -323,37 +353,7 @@ onMounted(() => {
               <div class="mb-2">
                 <div class="card p-2">
                   <span class="text-muted m-0">Output</span>
-                  {{ data.calculations.deficit.volume.val }}mL
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--bolus volume-->
-          <div class="card mb-4">
-            <div class="card-header">Bolus volumes</div>
-            <div class="card-body">
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Formula</span>
-                  <span v-html="data.calculations.bolusVolume.formula"></span>
-                </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Limit*</span>
-                  <span v-html="data.calculations.bolusVolume.limit"></span>
-                </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Working</span>
-                  <span v-html="data.calculations.bolusVolume.working"></span>
-                </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Output</span>
-                  {{ data.calculations.bolusVolume.val }}mL
+                  {{ data.calculations.deficit.volume.val.toFixed(0) }}mL
                 </div>
               </div>
             </div>
@@ -381,7 +381,9 @@ onMounted(() => {
               <div class="mb-2">
                 <div class="card p-2">
                   <span class="text-muted m-0">Output</span>
-                  {{ data.calculations.deficit.volumeLessBolus.val }}mL
+                  {{
+                    data.calculations.deficit.volumeLessBolus.val.toFixed(0)
+                  }}mL
                 </div>
               </div>
             </div>
@@ -405,7 +407,7 @@ onMounted(() => {
               <div class="mb-2">
                 <div class="card p-2">
                   <span class="text-muted m-0">Output</span>
-                  {{ data.calculations.deficit.rate.val }}mL
+                  {{ data.calculations.deficit.rate.val.toFixed(1) }}mL
                 </div>
               </div>
             </div>
@@ -425,7 +427,9 @@ onMounted(() => {
               <div class="mb-2">
                 <div class="card p-2">
                   <span class="text-muted m-0">Limit*</span>
-                  <span v-html="data.calculations.maintenance.volume.limit"></span>
+                  <span
+                    v-html="data.calculations.maintenance.volume.limit"
+                  ></span>
                 </div>
               </div>
               <div class="mb-2">
@@ -439,7 +443,7 @@ onMounted(() => {
               <div class="mb-2">
                 <div class="card p-2">
                   <span class="text-muted m-0">Output</span>
-                  {{ data.calculations.maintenance.volume.val }}mL
+                  {{ data.calculations.maintenance.volume.val.toFixed(0) }}mL
                 </div>
               </div>
             </div>
@@ -451,19 +455,23 @@ onMounted(() => {
               <div class="mb-2">
                 <div class="card p-2">
                   <span class="text-muted m-0">Formula</span>
-                  <span v-html="data.calculations.maintenance.rate.formula"></span>
+                  <span
+                    v-html="data.calculations.maintenance.rate.formula"
+                  ></span>
                 </div>
               </div>
               <div class="mb-2">
                 <div class="card p-2">
                   <span class="text-muted m-0">Working</span>
-                  <span v-html="data.calculations.maintenance.rate.working"></span>
+                  <span
+                    v-html="data.calculations.maintenance.rate.working"
+                  ></span>
                 </div>
               </div>
               <div class="mb-2">
                 <div class="card p-2">
                   <span class="text-muted m-0">Output</span>
-                  {{ data.calculations.maintenance.rate.val }}mL
+                  {{ data.calculations.maintenance.rate.val.toFixed(1) }}mL
                 </div>
               </div>
             </div>
@@ -475,19 +483,23 @@ onMounted(() => {
               <div class="mb-2">
                 <div class="card p-2">
                   <span class="text-muted m-0">Formula</span>
-                  <span v-html="data.calculations.startingFluidRate.formula"></span>
+                  <span
+                    v-html="data.calculations.startingFluidRate.formula"
+                  ></span>
                 </div>
               </div>
               <div class="mb-2">
                 <div class="card p-2">
                   <span class="text-muted m-0">Working</span>
-                  <span v-html="data.calculations.startingFluidRate.working"></span>
+                  <span
+                    v-html="data.calculations.startingFluidRate.working"
+                  ></span>
                 </div>
               </div>
               <div class="mb-2">
                 <div class="card p-2">
                   <span class="text-muted m-0">Output</span>
-                  {{ data.calculations.startingFluidRate.val }}mL
+                  {{ data.calculations.startingFluidRate.val.toFixed(1) }}mL
                 </div>
               </div>
             </div>
@@ -499,9 +511,7 @@ onMounted(() => {
               <div class="mb-2">
                 <div class="card p-2">
                   <span class="text-muted m-0">Formula</span>
-                  <span
-                    v-html="data.calculations.insulinRate.formula"
-                  ></span>
+                  <span v-html="data.calculations.insulinRate.formula"></span>
                 </div>
               </div>
               <div class="mb-2">
@@ -513,19 +523,20 @@ onMounted(() => {
               <div class="mb-2">
                 <div class="card p-2">
                   <span class="text-muted m-0">Working</span>
-                  <span
-                    v-html="data.calculations.insulinRate.working"
-                  ></span>
+                  <span v-html="data.calculations.insulinRate.working"></span>
                 </div>
               </div>
               <div class="mb-2">
                 <div class="card p-2">
                   <span class="text-muted m-0">Output</span>
-                  {{ data.calculations.insulinRate.val }}mL
+                  {{ data.calculations.insulinRate.val.toFixed(2) }} Units/hour
                 </div>
               </div>
             </div>
           </div>
+          *limits set based on weight of 75kg<br />
+          Note: Insulin should NOT be started immediately. Refer to the BSPED
+          Paediatric DKA care pathway for how to use these calculated values.
         </div>
       </div>
       <!--retry-->
