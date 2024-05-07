@@ -78,11 +78,6 @@ const generate = {
       return;
     }
 
-    ////
-    generateSteps.value.download.complete = true;
-    return;
-    ////
-
     //build and download care pathway
     generateSteps.value.build.current = true;
     try {
@@ -223,7 +218,7 @@ onMounted(() => {
 <template>
   <div class="container my-4 needs-validation">
     <h2 class="display-3">Generating care pathway</h2>
-    <div v-for="step in generateSteps" class="mb-2">
+    <div v-for="(step, index) in generateSteps" class="mb-3">
       <span
         class="step-text"
         :class="
@@ -241,31 +236,18 @@ onMounted(() => {
       <span v-if="step.fail"
         ><font-awesome-icon :icon="['fas', 'xmark']" style="color: red"
       /></span>
-      <div v-if="step.fail">
-        <p class="text-danger ms-2">{{ step.fail }}</p>
-        <!--retry-->
-        <button
-          type="button"
-          @click="generate.start"
-          class="btn btn-primary mb-4"
-        >
-          Retry
-        </button>
-      </div>
-    </div>
-    <div v-if="generateSteps.download.complete">
-      <div>
+      <span v-if="index == 'calculate'">
         <!--show working-->
         <button
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#showWorking"
-          class="btn btn-primary mb-2"
+          class="btn btn-sm btn-primary mx-2"
         >
           Show working
         </button>
 
-        <div class="collapse mb-2" id="showWorking">
+        <div class="collapse my-2" id="showWorking">
           <!--bolus volume-->
           <div class="card mb-4">
             <div class="card-header">Bolus volumes</div>
@@ -529,7 +511,8 @@ onMounted(() => {
               <div class="mb-2">
                 <div class="card p-2">
                   <span class="text-muted m-0">Output</span>
-                  {{ data.calculations.insulinRate.val.toFixed(2) }} Units/hour
+                  {{ data.calculations.insulinRate.val.toFixed(2) }}
+                  Units/hour
                 </div>
               </div>
             </div>
@@ -538,7 +521,20 @@ onMounted(() => {
           Note: Insulin should NOT be started immediately. Refer to the BSPED
           Paediatric DKA care pathway for how to use these calculated values.
         </div>
+      </span>
+      <div v-if="step.fail">
+        <p class="text-danger ms-2">{{ step.fail }}</p>
+        <!--retry-->
+        <button
+          type="button"
+          @click="generate.start"
+          class="btn btn-primary mb-4"
+        >
+          Retry
+        </button>
       </div>
+    </div>
+    <div v-if="generateSteps.download.complete">
       <!--retry-->
       <button
         type="button"

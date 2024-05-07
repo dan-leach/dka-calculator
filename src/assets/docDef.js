@@ -32,12 +32,12 @@ const capAlert = {
   bolus: {
     asterisk: function (req) {
       //asterisk for capped bolus
-      if (req.calculations.bolus.isCapped) return "*";
+      if (req.calculations.bolusVolume.isCapped) return "*";
       return "";
     },
     message: function (req) {
       //message for capped bolus
-      if (req.calculations.bolus.isCapped)
+      if (req.calculations.bolusVolume.isCapped)
         return (
           "*Bolus capped to 10mL/kg for " +
           config.value.client.weightLimits.max +
@@ -49,16 +49,16 @@ const capAlert = {
   deficit: {
     asterisk: function (req) {
       //asterisk for capped deficit
-      if (req.calculations.deficit.isCapped) return "*";
+      if (req.calculations.deficit.volume.isCapped) return "*";
     },
     message: function (req) {
       //message for capped deficit
-      if (req.calculations.deficit.isCapped)
+      if (req.calculations.deficit.volume.isCapped)
         return (
           "*Deficit capped to volume for " +
           config.value.weightLimits.max +
           "kg with " +
-          req.calculations.deficit.percentage +
+          req.calculations.deficit.volume.percentage +
           "% dehydration."
         );
       return "";
@@ -67,11 +67,11 @@ const capAlert = {
   maintenance: {
     asterisk: function (req) {
       //asterisk for capped maintenance
-      if (req.calculations.maintenance.isCapped) return "*";
+      if (req.calculations.maintenance.volume.isCapped) return "*";
     },
     message: function (req) {
       //message for capped maintenance
-      if (req.calculations.maintenance.isCapped)
+      if (req.calculations.maintenance.volume.isCapped)
         return (
           "*Maintenance capped to volume for " +
           config.value.client.weightLimits.max +
@@ -83,11 +83,11 @@ const capAlert = {
   insulin: {
     asterisk: function (req) {
       //asterisk for capped insulin
-      if (req.calculations.insulin.isCapped) return "*";
+      if (req.calculations.insulinRate.isCapped) return "*";
     },
     message: function (req) {
       //message for capped insulin
-      if (req.calculations.insulin.isCapped)
+      if (req.calculations.insulinRate.isCapped)
         return (
           "*Insulin rate capped to " +
           req.inputs.insulinRate +
@@ -517,7 +517,7 @@ function getDocDef(req) {
       // bolus volumes
       //1st 10ml/kg resus bolus
       {
-        text: req.calculations.bolus.volume.toFixed(),
+        text: req.calculations.bolusVolume.val.toFixed(),
         fontSize: 18,
         absolutePosition: { x: 95, y: 453 },
       },
@@ -530,7 +530,7 @@ function getDocDef(req) {
       },
       //2nd 10ml/kg resus bolus
       {
-        text: req.calculations.bolus.volume.toFixed(),
+        text: req.calculations.bolusVolume.val.toFixed(),
         fontSize: 18,
         absolutePosition: { x: 95, y: 538 },
       },
@@ -542,7 +542,7 @@ function getDocDef(req) {
       },
       //3rd 10ml/kg resus bolus
       {
-        text: req.calculations.bolus.volume.toFixed(),
+        text: req.calculations.bolusVolume.val.toFixed(),
         fontSize: 18,
         absolutePosition: { x: 95, y: 568 },
       },
@@ -554,7 +554,7 @@ function getDocDef(req) {
       },
       //4th 10ml/kg resus bolus
       {
-        text: req.calculations.bolus.volume.toFixed(),
+        text: req.calculations.bolusVolume.val.toFixed(),
         fontSize: 18,
         absolutePosition: { x: 95, y: 598 },
       },
@@ -566,7 +566,7 @@ function getDocDef(req) {
       },
       //10ml/kg slow bolus - non-shocked arm
       {
-        text: req.calculations.bolus.volume.toFixed(),
+        text: req.calculations.bolusVolume.val.toFixed(),
         fontSize: 18,
         absolutePosition: { x: 375, y: 462 },
       },
@@ -610,12 +610,12 @@ function getDocDef(req) {
         absolutePosition: { x: 170, y: 280 },
       },
       {
-        text: req.calculations.deficit.percentage,
+        text: req.calculations.deficit.percentage.val,
         fontSize: 18,
         absolutePosition: { x: 310, y: 280 },
       },
       {
-        text: req.calculations.deficit.volume.toFixed(),
+        text: req.calculations.deficit.volume.val.toFixed(),
         fontSize: 18,
         absolutePosition: { x: 430, y: 280 },
       },
@@ -633,34 +633,34 @@ function getDocDef(req) {
       },
       //fluid deficit (less bolus volume)
       {
-        text: req.calculations.deficit.volume.toFixed(),
+        text: req.calculations.deficit.volume.val.toFixed(),
         fontSize: 18,
         absolutePosition: { x: 170, y: 390 },
       },
       {
-        text: req.calculations.deficit.bolusToSubtract.toFixed(),
+        text: req.calculations.deficit.volumeLessBolus.bolusToSubtract.toFixed(),
         fontSize: 18,
         absolutePosition: { x: 300, y: 390 },
       },
       {
-        text: req.calculations.deficit.volumeLessBolus.toFixed(),
+        text: req.calculations.deficit.volumeLessBolus.val.toFixed(),
         fontSize: 18,
         absolutePosition: { x: 430, y: 390 },
       },
       //deficit replacement rate
       {
-        text: req.calculations.deficit.volumeLessBolus.toFixed(),
+        text: req.calculations.deficit.volumeLessBolus.val.toFixed(),
         fontSize: 18,
         absolutePosition: { x: 225, y: 470 },
       },
       {
-        text: req.calculations.deficit.rate.toFixed(1),
+        text: req.calculations.deficit.rate.val.toFixed(1),
         fontSize: 18,
         absolutePosition: { x: 430, y: 470 },
       },
       //maintenance rate
       {
-        text: req.calculations.maintenance.volume.toFixed(),
+        text: req.calculations.maintenance.volume.val.toFixed(),
         fontSize: 18,
         absolutePosition: { x: 185, y: 565 },
       },
@@ -677,23 +677,23 @@ function getDocDef(req) {
         color: "red",
       },
       {
-        text: req.calculations.maintenance.rate.toFixed(1),
+        text: req.calculations.maintenance.rate.val.toFixed(1),
         fontSize: 18,
         absolutePosition: { x: 395, y: 565 },
       },
       //starting fluid rate
       {
-        text: req.calculations.maintenance.rate.toFixed(1),
+        text: req.calculations.maintenance.rate.val.toFixed(1),
         fontSize: 18,
         absolutePosition: { x: 205, y: 650 },
       },
       {
-        text: req.calculations.deficit.rate.toFixed(1),
+        text: req.calculations.deficit.rate.val.toFixed(1),
         fontSize: 18,
         absolutePosition: { x: 330, y: 650 },
       },
       {
-        text: req.calculations.startingFluidRate.toFixed(1),
+        text: req.calculations.startingFluidRate.val.toFixed(1),
         fontSize: 18,
         absolutePosition: { x: 455, y: 650 },
         pageBreak: "after",
@@ -725,7 +725,7 @@ function getDocDef(req) {
         absolutePosition: { x: 315, y: 205 },
       },
       {
-        text: req.calculations.insulin.rate.toFixed(2),
+        text: req.calculations.insulinRate.val.toFixed(2),
         fontSize: 18,
         absolutePosition: { x: 440, y: 205 },
       },

@@ -2,13 +2,14 @@ import { reactive } from "vue";
 
 export const config = reactive({
   appName: "Paediatric DKA Calculator",
-  version: "2.0",
+  version: "2.0 (Under development)",
+  underDevelopment: true,
   url: "https://dka-calculator.co.uk",
   author: {
     name: "Dan Leach",
     url: "https://danleach.uk",
     email: "admin@dka-calculator.co.uk",
-    acknowledgement: "With thanks to X for peer-review of the current version.",
+    acknowledgement: "With thanks to ? for peer-review of the current version.",
   },
   repo: {
     main: "https://github.com/dan-leach/dka-calculator",

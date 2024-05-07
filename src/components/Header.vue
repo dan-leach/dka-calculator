@@ -1,5 +1,6 @@
 <script setup>
 import { RouterLink } from "vue-router";
+import { config } from "../assets/config.js";
 </script>
 
 <template>
@@ -9,8 +10,13 @@ import { RouterLink } from "vue-router";
         to="/"
         class="navbar-brand d-flex flex-row flex-wrap align-items-center justify-content-center"
         ><img alt="BSPED logo" class="logo" src="@/assets/bsped.png" />
-        <h1 class="display-5 mx-4 my-0">Paediatric DKA Calculator</h1></RouterLink
-      >
+        <h1 class="display-5 mx-4 my-0">
+          {{ config.appName }}
+        </h1>
+        <h2 class="text-danger">
+          {{ config.underDevelopment ? "Development version" : "" }}
+        </h2>
+      </RouterLink>
     </div>
   </nav>
 </template>
@@ -27,7 +33,9 @@ import { RouterLink } from "vue-router";
 .navbar {
   padding: 0;
 }
-@media only screen and (max-width: 600px) {.logo {
-  width: 40vw;
-}}
+@media only screen and (max-width: 600px) {
+  .logo {
+    width: 40vw;
+  }
+}
 </style>
