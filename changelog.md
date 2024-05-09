@@ -1,23 +1,18 @@
 # Changelog
+All notable changes to the BSPED Paediatric DKA Calculator codebase will be documented in this file.
 
-All notable changes to this project will be documented in this file.
-
-## [App v2.0 / ICP v1.3] - tbc
-
+## [v2.0] - TBC 2024
 ### Changed
-
-- Application rebuild using Vue 3 + vite. No longer supports Internet Explorer.
-- Calculations now performed on the server rather than client device.
-
+- Total client-side codebase rebuild moving from Vue 2 to Vue 3 Composition with build step. No longer supporting internet explorer. The new build is a single page application with various user interface improvements.
+- Calculations of variables for care pathway have now moved to a server-side API call in place of the client-side script. Generation of the care pathway document is still done client-side.
+- DKA severity grade selection has changed to include consideration of bicarbonate level. If provided, a severity level will be selected based on both pH and bicarbonate with the more severe option used if these differ.
 ### Added
-
-- Bicarbonate now used as part of severity grading. If provided, bicarbonate will be used to select the DKA severity. The highest severity will be used if bicarbonate and pH show different severity scores.
-- Bicarbonate, glucose and ketones may now optionally be entered.
-- pH or bicarbonate, and ketones if provided, must be within the diagnostic thresholds for DKA for a care pathway to be generated.
-- Patient NHS number and date of birth are used to generate a unique hash to allow linkage of same patient episodes.
-- Patient postcode is used to generate index of multiple deprivation decile.
-- Patient ethnic group is collected.
-- Preventable factors are being collected.
+- A unique patient hash is generated and stored using SHA-256 (x1 client-side, x1 server-side with salt) using patient NHS number and date of birth as input string. This allows episodes relating to the same patient to be linked for audit purposes.
+- The patient postcode is collected and sent with other data to the API where an index of multiple deprivation (IMD) decile is derived and stored. The postcode is not stored.
+- Bicarbonate, glucose and ketones may now optionally be entered and will be printed on the care pathway if provided. Bicarbonate is used for severity scoring as above.
+- Previously a care pathway could be generated even if the diagnostic thresholds for DKA were not met. A check to prevent this has been added. Ketones, if provided, must be above 3 mmol/L. pH must be <= 7.3 or bicarbonate must be < 15 mmol/L. If these thresholds are not met the API will return an error which must be corrected before a care pathway can be generated.
+- The patient ethnic group is now collected for audit purposes.
+- Factors that may have contributed to the episode of DKA occuring (preventable factors) are now collected for audit purposes.
 
 ## [v1.3.5] - 2022-12-06 08:55
 
