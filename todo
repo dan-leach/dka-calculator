@@ -1,5 +1,9 @@
+1. Add MDI vs pump if pre-existing diabetes - this could inform markings on PDF
+
 Before launch:
 
 1. Test limits
 2. Legacy
 3. Update info panel on landing page
+4. htaccess redirect for app level routes
+
