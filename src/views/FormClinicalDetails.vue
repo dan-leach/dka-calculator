@@ -454,7 +454,7 @@ onMounted(() => {
     </div>
     <!--insulinDeliveryMethod-->
     <transition>
-      <div class="mb-4" v-if="data.inputs.preExistingDiabetes.val">
+      <div class="mb-4" v-if="data.inputs.preExistingDiabetes.val == 'true'">
         <p class="text-center m-2">
           {{ data.inputs.insulinDeliveryMethod.label }}
           <font-awesome-icon

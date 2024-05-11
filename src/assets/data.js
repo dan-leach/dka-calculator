@@ -569,6 +569,8 @@ export const data = ref({
       info: "If the patient has pre-existing diabetes used to indicate the approach to managing existing insulin therapy on the care pathway. It is stored by the DKA Calculator for audit purposes.",
       isValid: function () {
         this.errors = "";
+        if (this.val == "false")
+          data.value.inputs.insulinDeliveryMethod.val = "";
         if (!this.val)
           this.errors += "Pre-existing diabetes status must be selected. ";
         if (this.errors) return false;
@@ -584,7 +586,7 @@ export const data = ref({
       info: "The insulin delivery method that the patient uses is stored by the DKA Calculator for audit purposes.",
       isValid: function () {
         this.errors = "";
-        if (!this.val)
+        if (!this.val && data.value.inputs.preExistingDiabetes.val == "true")
           this.errors += "Insulin delivery method must be selected. ";
         if (this.errors) return false;
         return true;

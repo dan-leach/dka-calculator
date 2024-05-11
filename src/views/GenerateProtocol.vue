@@ -236,7 +236,7 @@ onMounted(() => {
       <span v-if="step.fail"
         ><font-awesome-icon :icon="['fas', 'xmark']" style="color: red"
       /></span>
-      <span v-if="index == 'calculate'">
+      <span v-if="index == 'calculate' && step.complete">
         <!--show working-->
         <button
           type="button"

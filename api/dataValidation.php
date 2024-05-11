@@ -56,6 +56,12 @@ $data->insulinRate = filter_var($data->insulinRate, FILTER_VALIDATE_FLOAT);
 if (!isset($data->preExistingDiabetes)) send_error_response("Pre-existing diabetes status is required.", 400);
 $data->preExistingDiabetes = htmlspecialchars($data->preExistingDiabetes);
 
+//insulinDeliveryMethod
+if ($data->preExistingDiabetes == "true") {
+    if (!isset($data->insulinDeliveryMethod)) send_error_response("Insulin delivery method is required.", 400);
+    $data->insulinDeliveryMethod = htmlspecialchars($data->insulinDeliveryMethod);
+}
+
 //episodeType 
 if (!isset($data->episodeType)) send_error_response("Episode type is required.", 400);
 $data->episodeType = htmlspecialchars($data->episodeType);
