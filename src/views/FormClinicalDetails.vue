@@ -452,6 +452,69 @@ onMounted(() => {
         {{ data.inputs.preExistingDiabetes.info }}
       </div>
     </div>
+    <!--insulinDeliveryMethod-->
+    <transition>
+      <div class="mb-4" v-if="data.inputs.preExistingDiabetes.val">
+        <p class="text-center m-2">
+          {{ data.inputs.insulinDeliveryMethod.label }}
+          <font-awesome-icon
+            :icon="['fas', 'circle-info']"
+            data-bs-toggle="collapse"
+            data-bs-target="#insulinDeliveryMethodInfo"
+            class="ms-2"
+          />
+        </p>
+        <div class="d-flex justify-content-center">
+          <div>
+            <input
+              type="radio"
+              class="btn-check"
+              name="insulinDeliveryMethod"
+              id="insulinDeliveryMethodPen"
+              value="pen"
+              v-model="data.inputs.insulinDeliveryMethod.val"
+              @change="data.inputs.insulinDeliveryMethod.isValid()"
+              autocomplete="off"
+              required
+            />
+            <label
+              class="btn btn-outline-secondary me-2"
+              for="insulinDeliveryMethodPen"
+              >Pen injections</label
+            >
+
+            <input
+              type="radio"
+              class="btn-check"
+              name="insulinDeliveryMethod"
+              id="insulinDeliveryMethodPump"
+              value="pump"
+              v-model="data.inputs.insulinDeliveryMethod.val"
+              @change="data.inputs.insulinDeliveryMethod.isValid()"
+              autocomplete="off"
+            />
+            <label
+              class="btn btn-outline-secondary"
+              for="insulinDeliveryMethodPump"
+              >Pump</label
+            >
+          </div>
+        </div>
+        <div
+          v-if="showErrors"
+          class="form-text text-danger text-center mx-1"
+          id="insulinDeliveryMethodErrors"
+        >
+          {{ data.inputs.insulinDeliveryMethod.errors }}
+        </div>
+        <div
+          class="collapse form-text text-center mx-1"
+          id="insulinDeliveryMethodInfo"
+        >
+          {{ data.inputs.insulinDeliveryMethod.info }}
+        </div>
+      </div>
+    </transition>
 
     <div class="d-flex flex-row justify-content-evenly">
       <!--back-->
@@ -491,5 +554,11 @@ onMounted(() => {
 }
 .insulin-rate-btn {
   height: 62px;
+}
+.v-enter-active {
+  transition: all 0.5s ease;
+}
+.v-enter-from {
+  opacity: 0;
 }
 </style>

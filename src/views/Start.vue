@@ -19,6 +19,69 @@ import { config } from "../assets/config.js";
       pathway (without pre-filled calculations) can be downloaded
       <a href="/DKA-ICP-2021.pdf" target="_blank">here</a>.
     </p>
+    <div class="card border-warning mb-3">
+      <div class="card-body">
+        <h5 class="card-title">What's new...</h5>
+        <p class="card-text">
+          The DKA Calculator has had a number of changes to improve the user
+          experience and audit data collection.
+          <a href="#" data-bs-toggle="collapse" data-bs-target="#changes"
+            >Read more about these changes...</a
+          >
+        </p>
+        <div class="collapse my-2" id="changes">
+          <ul>
+            <li>
+              General user interface and user experience improvements by moving
+              to single page application structure using Vue 3.
+            </li>
+            <li>
+              The code to perform calculation of variables for the care pathway
+              is now run on the server. Once the calculations are returned to
+              your device the care pathway document is generated locally.
+            </li>
+            <li>
+              DKA severity grade selection has changed to include consideration
+              of bicarbonate level. If provided, a severity level will be
+              selected based on both pH and bicarbonate with the more severe
+              option used if these differ.
+            </li>
+            <li>
+              A unique patient hash is generated from the patient NHS number and
+              date of birth using a cryptographic algorithm. This allows
+              episodes relating to the same patient to be linked for audit
+              purposes. It does not allow the NHS number or date of birth for
+              your patient to be identified from the hash.
+            </li>
+            <li>
+              The patient postcode is used to derive an index of multiple
+              deprivation (IMD) decile which is stored for audit purposes. The
+              postcode is not stored.
+            </li>
+            <li>
+              Bicarbonate, glucose and ketones may now optionally be entered and
+              will be printed on the care pathway if provided. Bicarbonate is
+              used for severity scoring as above.
+            </li>
+            <li>
+              Previously a care pathway could be generated even if the
+              diagnostic thresholds for DKA were not met. A check to prevent
+              this has been added. Ketones, if provided, must be above 3 mmol/L.
+              pH must be <= 7.3 or bicarbonate must be < 15 mmol/L. If these
+              thresholds are not met the an error will be shown which must be
+              corrected before a care pathway can be generated.
+            </li>
+            <li>
+              The patient ethnic group is now collected for audit purposes.
+            </li>
+            <li>
+              Factors that may have contributed to the episode of DKA occuring
+              (preventable factors) are now collected for audit purposes.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
     <p class="nx-1">
       We're always trying to improve the DKA Calculator. If you have suggestions
       or queries, please contact

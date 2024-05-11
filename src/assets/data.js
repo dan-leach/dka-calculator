@@ -576,6 +576,21 @@ export const data = ref({
       },
       errors: "",
     },
+    insulinDeliveryMethod: {
+      val: "",
+      label: "Which insulin delivery method does the patient use?",
+      privacyLabel: "Insulin delivery method",
+      form: 2,
+      info: "The insulin delivery method that the patient uses is stored by the DKA Calculator for audit purposes.",
+      isValid: function () {
+        this.errors = "";
+        if (!this.val)
+          this.errors += "Insulin delivery method must be selected. ";
+        if (this.errors) return false;
+        return true;
+      },
+      errors: "",
+    },
     episodeType: {
       val: "",
       label: "What is this protocol being used for?",
