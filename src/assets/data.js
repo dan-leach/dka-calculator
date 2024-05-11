@@ -583,7 +583,7 @@ export const data = ref({
       label: "Which insulin delivery method does the patient use?",
       privacyLabel: "Insulin delivery method",
       form: 2,
-      info: "The insulin delivery method that the patient uses is stored by the DKA Calculator for audit purposes.",
+      info: "The insulin delivery method that the patient uses (if they have pre-existing diabetes) is stored by the DKA Calculator for audit purposes.",
       isValid: function () {
         this.errors = "";
         if (!this.val && data.value.inputs.preExistingDiabetes.val == "true")

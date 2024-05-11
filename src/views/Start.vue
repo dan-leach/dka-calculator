@@ -21,7 +21,7 @@ import { config } from "../assets/config.js";
     </p>
     <div class="card border-warning mb-3">
       <div class="card-body">
-        <h5 class="card-title">What's new...</h5>
+        <h5 class="card-title">What's new in the 2024 update?</h5>
         <p class="card-text">
           The DKA Calculator has had a number of changes to improve the user
           experience and audit data collection.
@@ -73,6 +73,10 @@ import { config } from "../assets/config.js";
             </li>
             <li>
               The patient ethnic group is now collected for audit purposes.
+            </li>
+            <li>
+              The insulin delivery method the patient uses (if they have
+              pre-existing diabetes) is now collected for audit purposes.
             </li>
             <li>
               Factors that may have contributed to the episode of DKA occuring
