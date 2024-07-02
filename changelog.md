@@ -19,6 +19,7 @@ All notable changes to the BSPED Paediatric DKA Calculator codebase will be docu
 - The patient ethnic group is now collected for audit purposes.
 - The insulin delivery method the patient uses (if they have pre-existing diabetes) is now collected for audit purposes.
 - Factors that may have contributed to the episode of DKA occuring (preventable factors) are now collected for audit purposes.
+- When the patient has pre-existing diabetes ticks are automatically added to the not applicable boxes for ongoing insulin therapy for the mode the patient does not use on flow chart 5.
 
 ## [v1.3.5] - 2022-12-06 08:55
 
