@@ -5,7 +5,7 @@ const indicatorCoordinates = {
   //functions that return the variable coordinates for indicator boxes on the protocol document
   xAxisShock: function (req) {
     //returns x-axis coordinate for the indicator box showing if patient is shocked or not
-    if (req.shockPresent)
+    if (req.shockPresent == "true")
       return config.client.indicatorCoordinates.xAxisShock.yes;
     return config.client.indicatorCoordinates.xAxisShock.no;
   },
@@ -21,7 +21,7 @@ const indicatorCoordinates = {
   },
   xAxisDiabetic: function (req) {
     //returns x-axis coordinate for the indicator box showing if patient had pre-existing diabetes
-    if (req.preExistingDiabetes)
+    if (req.preExistingDiabetes == "true")
       return config.client.indicatorCoordinates.xAxisDiabetic.yes;
     return config.client.indicatorCoordinates.xAxisDiabetic.no;
   },
