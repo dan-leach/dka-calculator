@@ -310,11 +310,12 @@ function getDocDef(req) {
       page7: imageStore.flowChart5,
       page8: imageStore.flowChart6,
       page9: imageStore.flowChart7,
-      page10: imageStore.table1,
-      page11: imageStore.flowChart89,
-      page12: imageStore.flowChart1011,
-      page13: imageStore.flowChart12,
-      page14: imageStore.appendixBG,
+      page10: imageStore.flowChart8,
+      page11: imageStore.table1,
+      page12: imageStore.flowChart910,
+      page13: imageStore.flowChart1112,
+      page14: imageStore.flowChart13,
+      page15: imageStore.appendixBG,
       equation1: imageStore.equation1,
       equation2: imageStore.equation2,
       equation3: imageStore.equation3,
@@ -366,10 +367,13 @@ function getDocDef(req) {
         return [{ image: "page14", width: pageSize.width }];
       }
       if (currentPage == 15) {
-        return [{ image: "page14", width: pageSize.width }];
+        return [{ image: "page15", width: pageSize.width }];
       }
       if (currentPage == 16) {
-        return [{ image: "page14", width: pageSize.width }];
+        return [{ image: "page15", width: pageSize.width }];
+      }
+      if (currentPage == 17) {
+        return [{ image: "page15", width: pageSize.width }];
       }
     },
 
@@ -773,10 +777,15 @@ function getDocDef(req) {
       //page 9
       {
         text: "",
+        pageBreak: "after",
+      },
+      //page 10
+      {
+        text: "",
         pageOrientation: "landscape", //changes orientation for following page
         pageBreak: "after",
       },
-      //page 10 - adds time and date for each box on serial data sheet
+      //page 11 - adds time and date for each box on serial data sheet
       {
         text: datetimes.serialReview.time(req, 0),
         style: "timing",
@@ -902,11 +911,6 @@ function getDocDef(req) {
         pageOrientation: "portrait", //changes orientation for following page
         pageBreak: "after",
       },
-      //page 11
-      {
-        text: "",
-        pageBreak: "after",
-      },
       //page 12
       {
         text: "",
@@ -914,13 +918,18 @@ function getDocDef(req) {
       },
       //page 13
       {
+        text: "",
+        pageBreak: "after",
+      },
+      //page 14
+      {
         text: config.ispad,
         link: config.ispad,
         fontSize: 8,
         absolutePosition: { x: 220, y: 675 },
         pageBreak: "after",
       },
-      //page 14
+      //page 15
       {
         //outer table adds 20px border for whole page
         layout: "noBorders",
@@ -1091,7 +1100,7 @@ function getDocDef(req) {
         text: "",
         pageBreak: "after",
       },
-      //page 15
+      //page 16
       {
         //outer table adds 20px border for whole page
         layout: "noBorders",
@@ -1314,7 +1323,7 @@ function getDocDef(req) {
         text: "",
         pageBreak: "after",
       },
-      //page 16
+      //page 17
       {
         //outer table adds 20px border for whole page
         layout: "noBorders",

@@ -776,7 +776,7 @@ export const data = ref({
           categories: ["Lack of adherence"],
         },
         {
-          val: "Inadequate monitoring of glucose of ketones",
+          val: "Inadequate monitoring of glucose or ketones",
           categories: ["Lack of adherence"],
         },
         {
