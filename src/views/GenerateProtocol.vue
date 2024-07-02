@@ -114,14 +114,28 @@ const generate = {
   },
   buildPayload: async function () {
     let payload = {};
-    for (let input in data.value.inputs)
+    for (let input in data.value.inputs) {
       payload[input] = data.value.inputs[input].val;
+    }
+    payload.protocolStartDatetime = new Date(payload.protocolStartDatetime);
+    payload.pH = parseFloat(payload.pH);
+    payload.bicarbonate = payload.bicarbonate
+      ? parseFloat(payload.bicarbonate)
+      : null;
+    payload.glucose = payload.glucose ? parseFloat(payload.glucose) : null;
+    payload.ketones = payload.ketones ? parseFloat(payload.ketones) : null;
+    payload.weight = parseFloat(payload.weight);
+    payload.shockPresent = payload.shockPresent == "true" ? true : false;
+    payload.insulinRate = parseFloat(payload.insulinRate);
+    payload.preExistingDiabetes =
+      payload.preExistingDiabetes == "true" ? true : false;
     if (data.value.inputs.patientNHS.val && data.value.inputs.patientDOB.val)
       payload.patientHash = await this.patientHash();
     delete payload.patientName;
     delete payload.patientHospNum;
     delete payload.patientNHS;
     delete payload.patientDOB;
+    delete payload.other;
 
     payload.patientAge = data.value.inputs.patientDOB.patientAge.val;
     payload.weightLimitOverride = data.value.inputs.weight.limit.override;

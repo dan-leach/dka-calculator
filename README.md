@@ -45,15 +45,15 @@ The API accepts a POST request with a single parameter "data" as a JSON object w
 - **patientSex** string | required | accepted values: `male` or `female`
 - **patientHash** string | optional | accepted values: SHA-256 output hash
 - **patientPostcode** string | optional | accepted values: any valid UK postcode
-- **protocolStartDatetime** string | required | accepted values: datetime with format `YYYY-MM-DDTHH:MM`
-- **pH** string | required | accepted values: number `>=6.5` and `<7.3`
-- **bicarbonate** string | optional | accepted values: number `>=0` and `<15` (if used for severity calculation)
-- **glucose** string | optional | accepted values: any number,
-- **ketones** string | optional | accepted values: number `>=3` (if provided)
-- **weight** string | required | accepted values: any number (but fluid and insulin calculations will be capped as for 75kg patient if value exceeds this)
-- **shockPresent** string | required | accepted values: `true` or `false`
-- **insulinRate** string | required | accepted values: `0.05` or `0.1`
-- **preExistingDiabetes** string | required | accepted values: `true` or `false`
+- **protocolStartDatetime** datetime object | required | accepted values: any
+- **pH** float | required | accepted values: `>=6.5` and `<7.3`
+- **bicarbonate** float | optional | accepted values: `>=0` and `<15` (if used for severity calculation)
+- **glucose** float | optional | accepted values: any,
+- **ketones** float | optional | accepted values: `>=3` (if provided)
+- **weight** float | required | accepted values: any (but fluid and insulin calculations will be capped as for 75kg patient if value exceeds this)
+- **shockPresent** boolean | required | accepted values: any
+- **insulinRate** float | required | accepted values: `0.05` or `0.1`
+- **preExistingDiabetes** boolean | required | accepted values: any
 - **insulinDeliveryMethod** string | required (if preExistingDiabetes is `true`) | accepted values: `pen` or `pump`
 - **episodeType**: string | required | accepted values: `real` or `test`
 - **region** string | required | accepted values: any (expected per list in src/assets/config.js but not validated)
@@ -63,7 +63,7 @@ The API accepts a POST request with a single parameter "data" as a JSON object w
 - **preventableFactors** array | required | accepted values: array of minimum length 1 (expected contents of array per list in src/assets/data.js but not validated)
 - **weightLimitOverride** boolean | required | accepted values: `true` or `false`
 - **appVersion** string | required | accepted values: any (expected per value in src/assets/config.js but not validated)
-- **clientDatetime** string | required | accepted values: any (expected client device datetime generated at API call but not validated)
+- **clientDatetime** datetime object | required | accepted values: any (expected client device datetime generated at API call but not validated)
 - **clientUseragent** string | required | accepted values: any (expected client navigator.userAgent but not validated)
 
 ### API response
