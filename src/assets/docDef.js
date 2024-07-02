@@ -167,6 +167,41 @@ const hospNHSNumber = (req) => {
     : "Hospital number: " + req.patientHospNum;
 };
 
+const tickCanvasArrays = {
+  pumpStoppedNA: function (req) {
+    if (req.preExistingDiabetes == "false") return [];
+    if (req.insulinDeliveryMethod == "pump") return [];
+    return [
+      {
+        type: "polyline",
+        lineWidth: 2,
+        closePath: false,
+        points: [
+          { x: 240, y: 44 },
+          { x: 245, y: 49 },
+          { x: 249, y: 40 },
+        ],
+      },
+    ];
+  },
+  longActingStoppedNA: function (req) {
+    if (req.preExistingDiabetes == "false") return [];
+    if (req.insulinDeliveryMethod == "pen") return [];
+    return [
+      {
+        type: "polyline",
+        lineWidth: 2,
+        closePath: false,
+        points: [
+          { x: 241, y: 131 },
+          { x: 246, y: 136 },
+          { x: 250, y: 127 },
+        ],
+      },
+    ];
+  },
+};
+
 function getDocDef(req) {
   const docDef = {
     pageSize: "A4",
@@ -712,6 +747,12 @@ function getDocDef(req) {
             lineWidth: 10,
           },
         ],
+      },
+      {
+        canvas: tickCanvasArrays.pumpStoppedNA(req),
+      },
+      {
+        canvas: tickCanvasArrays.longActingStoppedNA(req),
       },
       //insulin hourly rate
       {
