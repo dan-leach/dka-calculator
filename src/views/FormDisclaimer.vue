@@ -11,6 +11,26 @@ const continueClick = () => {
 onMounted(() => {
   document.body.scrollTop = 0; // For Safari
   document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+  //testing purposes
+  data.value.inputs.legalAgreement.val = true;
+  data.value.inputs.patientName.val = "Joe Bloggs";
+  data.value.inputs.patientDOB.val = "2010-01-01";
+  data.value.inputs.patientSex.val = "male";
+  data.value.inputs.patientNHS.val = "1234567890";
+  data.value.inputs.patientPostcode.val = "BS419DL";
+  data.value.inputs.protocolStartDatetime.val = "2024-07-02T19:10";
+  data.value.inputs.pH.val = "7.00";
+  data.value.inputs.weight.val = "40.0";
+  data.value.inputs.shockPresent.val = "false";
+  data.value.inputs.insulinRate.val = "0.05";
+  data.value.inputs.preExistingDiabetes.val = "true";
+  data.value.inputs.insulinDeliveryMethod.val = "pump";
+  data.value.inputs.episodeType.val = "test";
+  data.value.inputs.region.val = "test region";
+  data.value.inputs.centre.val = "test centre";
+  data.value.inputs.ethnicGroup.val = "test ethnic group";
+  data.value.inputs.ethnicSubgroup.val = "test ethnic subgroup";
+  data.value.inputs.preventableFactors.val = ["No"];
 });
 </script>
 

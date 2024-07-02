@@ -196,6 +196,8 @@ const generate = {
   },
 };
 
+let showWorkingBtnText = ref("Show working");
+
 onMounted(() => {
   if (!data.value.form.isValid(0)) {
     router.push("/form-disclaimer");
@@ -212,6 +214,16 @@ onMounted(() => {
     router.push("/form-audit-details");
   } else {
     generate.start();
+
+    let showWorkingCollapse = document.getElementById("showWorking");
+    showWorkingCollapse.addEventListener(
+      "hidden.bs.collapse",
+      () => (showWorkingBtnText.value = "Show working")
+    );
+    showWorkingCollapse.addEventListener(
+      "shown.bs.collapse",
+      () => (showWorkingBtnText.value = "Hide working")
+    );
   }
 });
 </script>
@@ -237,290 +249,299 @@ onMounted(() => {
       <span v-if="step.fail"
         ><font-awesome-icon :icon="['fas', 'xmark']" style="color: red"
       /></span>
-      <span v-if="index == 'calculate' && step.complete">
+      <span v-if="index == 'calculate'">
         <!--show working-->
         <button
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#showWorking"
           class="btn btn-sm btn-primary mx-2"
+          :disabled="!step.complete"
         >
-          Show working
+          {{ showWorkingBtnText }}
         </button>
 
         <div class="collapse my-2" id="showWorking">
-          <!--bolus volume-->
-          <div class="card mb-4">
-            <div class="card-header">Bolus volumes</div>
-            <div class="card-body">
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Formula</span>
-                  <span v-html="data.calculations.bolusVolume.formula"></span>
+          <div v-if="step.complete">
+            <!--bolus volume-->
+            <div class="card mb-4">
+              <div class="card-header">Bolus volumes</div>
+              <div class="card-body">
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Formula</span>
+                    <span v-html="data.calculations.bolusVolume.formula"></span>
+                  </div>
                 </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Limit*</span>
-                  <span v-html="data.calculations.bolusVolume.limit"></span>
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Limit*</span>
+                    <span v-html="data.calculations.bolusVolume.limit"></span>
+                  </div>
                 </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Working</span>
-                  <span v-html="data.calculations.bolusVolume.working"></span>
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Working</span>
+                    <span v-html="data.calculations.bolusVolume.working"></span>
+                  </div>
                 </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Output</span>
-                  {{ data.calculations.bolusVolume.val.toFixed(0) }}mL
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--deficit percentage-->
-          <div class="card mb-4">
-            <div class="card-header">Deficit percentage</div>
-            <div class="card-body">
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Formula</span>
-                  <span
-                    v-html="data.calculations.deficit.percentage.formula"
-                  ></span>
-                </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Working</span>
-                  <span
-                    v-html="data.calculations.deficit.percentage.working"
-                  ></span>
-                </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Output</span>
-                  {{ data.calculations.deficit.percentage.val }}%
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Output</span>
+                    {{ data.calculations.bolusVolume.val.toFixed(0) }}mL
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <!--deficit volume-->
-          <div class="card mb-4">
-            <div class="card-header">Deficit volume</div>
-            <div class="card-body">
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Formula</span>
-                  <span
-                    v-html="data.calculations.deficit.volume.formula"
-                  ></span>
+            <!--deficit percentage-->
+            <div class="card mb-4">
+              <div class="card-header">Deficit percentage</div>
+              <div class="card-body">
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Formula</span>
+                    <span
+                      v-html="data.calculations.deficit.percentage.formula"
+                    ></span>
+                  </div>
                 </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Limit*</span>
-                  <span v-html="data.calculations.deficit.volume.limit"></span>
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Working</span>
+                    <span
+                      v-html="data.calculations.deficit.percentage.working"
+                    ></span>
+                  </div>
                 </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Working</span>
-                  <span
-                    v-html="data.calculations.deficit.volume.working"
-                  ></span>
-                </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Output</span>
-                  {{ data.calculations.deficit.volume.val.toFixed(0) }}mL
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Output</span>
+                    {{ data.calculations.deficit.percentage.val }}%
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <!--deficit volume less bolus-->
-          <div class="card mb-4">
-            <div class="card-header">Deficit volume less bolus</div>
-            <div class="card-body">
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Formula</span>
-                  <span
-                    v-html="data.calculations.deficit.volumeLessBolus.formula"
-                  ></span>
+            <!--deficit volume-->
+            <div class="card mb-4">
+              <div class="card-header">Deficit volume</div>
+              <div class="card-body">
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Formula</span>
+                    <span
+                      v-html="data.calculations.deficit.volume.formula"
+                    ></span>
+                  </div>
                 </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Working</span>
-                  <span
-                    v-html="data.calculations.deficit.volumeLessBolus.working"
-                  ></span>
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Limit*</span>
+                    <span
+                      v-html="data.calculations.deficit.volume.limit"
+                    ></span>
+                  </div>
                 </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Output</span>
-                  {{
-                    data.calculations.deficit.volumeLessBolus.val.toFixed(0)
-                  }}mL
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Working</span>
+                    <span
+                      v-html="data.calculations.deficit.volume.working"
+                    ></span>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <!--deficit rate-->
-          <div class="card mb-4">
-            <div class="card-header">Deficit replacement rate</div>
-            <div class="card-body">
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Formula</span>
-                  <span v-html="data.calculations.deficit.rate.formula"></span>
-                </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Working</span>
-                  <span v-html="data.calculations.deficit.rate.working"></span>
-                </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Output</span>
-                  {{ data.calculations.deficit.rate.val.toFixed(1) }}mL
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Output</span>
+                    {{ data.calculations.deficit.volume.val.toFixed(0) }}mL
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <!--maintenance volume-->
-          <div class="card mb-4">
-            <div class="card-header">Daily maintenance volume</div>
-            <div class="card-body">
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Formula</span>
-                  <span
-                    v-html="data.calculations.maintenance.volume.formula"
-                  ></span>
+            <!--deficit volume less bolus-->
+            <div class="card mb-4">
+              <div class="card-header">Deficit volume less bolus</div>
+              <div class="card-body">
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Formula</span>
+                    <span
+                      v-html="data.calculations.deficit.volumeLessBolus.formula"
+                    ></span>
+                  </div>
                 </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Limit*</span>
-                  <span
-                    v-html="data.calculations.maintenance.volume.limit"
-                  ></span>
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Working</span>
+                    <span
+                      v-html="data.calculations.deficit.volumeLessBolus.working"
+                    ></span>
+                  </div>
                 </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Working</span>
-                  <span
-                    v-html="data.calculations.maintenance.volume.working"
-                  ></span>
-                </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Output</span>
-                  {{ data.calculations.maintenance.volume.val.toFixed(0) }}mL
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Output</span>
+                    {{
+                      data.calculations.deficit.volumeLessBolus.val.toFixed(0)
+                    }}mL
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <!--maintenance rate-->
-          <div class="card mb-4">
-            <div class="card-header">Daily maintenance rate</div>
-            <div class="card-body">
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Formula</span>
-                  <span
-                    v-html="data.calculations.maintenance.rate.formula"
-                  ></span>
+            <!--deficit rate-->
+            <div class="card mb-4">
+              <div class="card-header">Deficit replacement rate</div>
+              <div class="card-body">
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Formula</span>
+                    <span
+                      v-html="data.calculations.deficit.rate.formula"
+                    ></span>
+                  </div>
                 </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Working</span>
-                  <span
-                    v-html="data.calculations.maintenance.rate.working"
-                  ></span>
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Working</span>
+                    <span
+                      v-html="data.calculations.deficit.rate.working"
+                    ></span>
+                  </div>
                 </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Output</span>
-                  {{ data.calculations.maintenance.rate.val.toFixed(1) }}mL
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--starting fluid rate-->
-          <div class="card mb-4">
-            <div class="card-header">Starting fluid rate</div>
-            <div class="card-body">
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Formula</span>
-                  <span
-                    v-html="data.calculations.startingFluidRate.formula"
-                  ></span>
-                </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Working</span>
-                  <span
-                    v-html="data.calculations.startingFluidRate.working"
-                  ></span>
-                </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Output</span>
-                  {{ data.calculations.startingFluidRate.val.toFixed(1) }}mL
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Output</span>
+                    {{ data.calculations.deficit.rate.val.toFixed(1) }}mL
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <!--insulin rate-->
-          <div class="card mb-4">
-            <div class="card-header">Insulin rate</div>
-            <div class="card-body">
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Formula</span>
-                  <span v-html="data.calculations.insulinRate.formula"></span>
+            <!--maintenance volume-->
+            <div class="card mb-4">
+              <div class="card-header">Daily maintenance volume</div>
+              <div class="card-body">
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Formula</span>
+                    <span
+                      v-html="data.calculations.maintenance.volume.formula"
+                    ></span>
+                  </div>
                 </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Limit*</span>
-                  <span v-html="data.calculations.insulinRate.limit"></span>
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Limit*</span>
+                    <span
+                      v-html="data.calculations.maintenance.volume.limit"
+                    ></span>
+                  </div>
                 </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Working</span>
-                  <span v-html="data.calculations.insulinRate.working"></span>
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Working</span>
+                    <span
+                      v-html="data.calculations.maintenance.volume.working"
+                    ></span>
+                  </div>
                 </div>
-              </div>
-              <div class="mb-2">
-                <div class="card p-2">
-                  <span class="text-muted m-0">Output</span>
-                  {{ data.calculations.insulinRate.val.toFixed(2) }}
-                  Units/hour
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Output</span>
+                    {{ data.calculations.maintenance.volume.val.toFixed(0) }}mL
+                  </div>
                 </div>
               </div>
             </div>
+            <!--maintenance rate-->
+            <div class="card mb-4">
+              <div class="card-header">Daily maintenance rate</div>
+              <div class="card-body">
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Formula</span>
+                    <span
+                      v-html="data.calculations.maintenance.rate.formula"
+                    ></span>
+                  </div>
+                </div>
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Working</span>
+                    <span
+                      v-html="data.calculations.maintenance.rate.working"
+                    ></span>
+                  </div>
+                </div>
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Output</span>
+                    {{ data.calculations.maintenance.rate.val.toFixed(1) }}mL
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--starting fluid rate-->
+            <div class="card mb-4">
+              <div class="card-header">Starting fluid rate</div>
+              <div class="card-body">
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Formula</span>
+                    <span
+                      v-html="data.calculations.startingFluidRate.formula"
+                    ></span>
+                  </div>
+                </div>
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Working</span>
+                    <span
+                      v-html="data.calculations.startingFluidRate.working"
+                    ></span>
+                  </div>
+                </div>
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Output</span>
+                    {{ data.calculations.startingFluidRate.val.toFixed(1) }}mL
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--insulin rate-->
+            <div class="card mb-4">
+              <div class="card-header">Insulin rate</div>
+              <div class="card-body">
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Formula</span>
+                    <span v-html="data.calculations.insulinRate.formula"></span>
+                  </div>
+                </div>
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Limit*</span>
+                    <span v-html="data.calculations.insulinRate.limit"></span>
+                  </div>
+                </div>
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Working</span>
+                    <span v-html="data.calculations.insulinRate.working"></span>
+                  </div>
+                </div>
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Output</span>
+                    {{ data.calculations.insulinRate.val.toFixed(2) }}
+                    Units/hour
+                  </div>
+                </div>
+              </div>
+            </div>
+            *limits set based on weight of 75kg<br />
+            Note: Insulin should NOT be started immediately. Refer to the BSPED
+            Paediatric DKA care pathway for how to use these calculated values.
           </div>
-          *limits set based on weight of 75kg<br />
-          Note: Insulin should NOT be started immediately. Refer to the BSPED
-          Paediatric DKA care pathway for how to use these calculated values.
         </div>
       </span>
       <div v-if="step.fail">

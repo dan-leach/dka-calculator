@@ -184,22 +184,6 @@ const tickCanvasArrays = {
       },
     ];
   },
-  longActingStoppedNA: function (req) {
-    if (req.preExistingDiabetes == "false") return [];
-    if (req.insulinDeliveryMethod == "pen") return [];
-    return [
-      {
-        type: "polyline",
-        lineWidth: 2,
-        closePath: false,
-        points: [
-          { x: 241, y: 131 },
-          { x: 246, y: 136 },
-          { x: 250, y: 127 },
-        ],
-      },
-    ];
-  },
 };
 
 function getDocDef(req) {
@@ -748,11 +732,9 @@ function getDocDef(req) {
           },
         ],
       },
+      //tick in n/a box for pump stopped if patient uses pens
       {
         canvas: tickCanvasArrays.pumpStoppedNA(req),
-      },
-      {
-        canvas: tickCanvasArrays.longActingStoppedNA(req),
       },
       //insulin hourly rate
       {
