@@ -12,7 +12,7 @@ onMounted(() => {
   document.body.scrollTop = 0; // For Safari
   document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
   //testing purposes
-  /*
+
   data.value.inputs.legalAgreement.val = true;
   data.value.inputs.patientName.val = "Joe Bloggs";
   data.value.inputs.patientDOB.val = "2010-01-01";
@@ -32,7 +32,6 @@ onMounted(() => {
   data.value.inputs.ethnicGroup.val = "test ethnic group";
   data.value.inputs.ethnicSubgroup.val = "test ethnic subgroup";
   data.value.inputs.preventableFactors.val = ["No"];
-  */
 });
 </script>
 

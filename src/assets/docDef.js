@@ -39,8 +39,10 @@ const capAlert = {
       //message for capped bolus
       if (req.calculations.bolusVolume.isCapped)
         return (
-          "*Bolus capped to 10mL/kg for " +
-          config.value.client.weightLimits.max +
+          "*Bolus capped to " +
+          req.calculations.bolusVolume.mlsPerKg +
+          "mL/kg for " +
+          config.client.weightLimits.max +
           "kg."
         );
       return "";
@@ -56,9 +58,9 @@ const capAlert = {
       if (req.calculations.deficit.volume.isCapped)
         return (
           "*Deficit capped to volume for " +
-          config.value.weightLimits.max +
+          config.client.weightLimits.max +
           "kg with " +
-          req.calculations.deficit.volume.percentage +
+          req.calculations.deficit.percentage.val +
           "% dehydration."
         );
       return "";
@@ -74,7 +76,7 @@ const capAlert = {
       if (req.calculations.maintenance.volume.isCapped)
         return (
           "*Maintenance capped to volume for " +
-          config.value.client.weightLimits.max +
+          config.client.weightLimits.max +
           "kg."
         );
       return "";
@@ -90,9 +92,47 @@ const capAlert = {
       if (req.calculations.insulinRate.isCapped)
         return (
           "*Insulin rate capped to " +
-          req.inputs.insulinRate +
+          req.insulinRate +
           " Units/kg/hour for " +
-          config.value.client.weightLimits.max +
+          config.client.weightLimits.max +
+          "kg."
+        );
+      return "";
+    },
+  },
+  glucoseBolus: {
+    asterisk: function (req) {
+      //asterisk for capped glucose bolus
+      if (req.calculations.glucoseBolusVolume.isCapped) return "*";
+      return "";
+    },
+    message: function (req) {
+      //message for capped glucose bolus
+      if (req.calculations.glucoseBolusVolume.isCapped)
+        return (
+          "*Glucose bolus capped to " +
+          req.calculations.glucoseBolusVolume.mlsPerKg +
+          "mL/kg for " +
+          config.client.weightLimits.max +
+          "kg."
+        );
+      return "";
+    },
+  },
+  hhsBolus: {
+    asterisk: function (req) {
+      //asterisk for capped hhs bolus
+      if (req.calculations.hhsBolusVolume.isCapped) return "*";
+      return "";
+    },
+    message: function (req) {
+      //message for capped hhs bolus
+      if (req.calculations.hhsBolusVolume.isCapped)
+        return (
+          "*HHS bolus capped to " +
+          req.calculations.hhsBolusVolume.mlsPerKg +
+          "mL/kg for " +
+          config.client.weightLimits.max +
           "kg."
         );
       return "";
@@ -918,10 +958,46 @@ function getDocDef(req) {
       },
       //page 13
       {
+        text: req.calculations.glucoseBolusVolume.val.toFixed(),
+        fontSize: 18,
+        absolutePosition: { x: 105, y: 200 },
+      },
+      //* if glucose bolus capped
+      {
+        text: capAlert.bolus.asterisk(req),
+        fontSize: 18,
+        absolutePosition: { x: 135, y: 200 },
+        color: "red",
+      },
+      {
+        text: capAlert.bolus.message(req),
+        fontSize: 14,
+        absolutePosition: { x: 40, y: 270 },
+        color: "red",
+      },
+      {
         text: "",
         pageBreak: "after",
       },
       //page 14
+      {
+        text: req.calculations.hhsBolusVolume.val.toFixed(),
+        fontSize: 18,
+        absolutePosition: { x: 140, y: 280 },
+      },
+      //* if hhs bolus capped
+      {
+        text: capAlert.bolus.asterisk(req),
+        fontSize: 18,
+        absolutePosition: { x: 180, y: 280 },
+        color: "red",
+      },
+      {
+        text: capAlert.bolus.message(req),
+        fontSize: 14,
+        absolutePosition: { x: 70, y: 340 },
+        color: "red",
+      },
       {
         text: config.ispad,
         link: config.ispad,

@@ -60,6 +60,7 @@ function bolusVolumeWorking($mlsPerKg) {
 }
 $calculations->bolusVolume = new StdClass;
 $calculations->bolusVolume->val = bolusVolume($settings->bolusMlsPerKg);
+$calculations->bolusVolume->mlsPerKg = $settings->bolusMlsPerKg;
 $calculations->bolusVolume->isCapped = bolusVolumeIsCapped($settings->bolusMlsPerKg);
 $calculations->bolusVolume->formula = bolusVolumeFormula($settings->bolusMlsPerKg);
 $calculations->bolusVolume->limit = bolusVolumeLimit($settings->bolusMlsPerKg);
@@ -284,6 +285,84 @@ $calculations->insulinRate->isCapped = insulinIsCapped();
 $calculations->insulinRate->formula = insulinRateFormula();
 $calculations->insulinRate->limit = insulinRateLimit();
 $calculations->insulinRate->working = insulinRateWorking();
+
+//functions related to calculation of glucose bolus for hypoglycaemia volumes
+function glucoseBolusVolumeUncapped($mlsPerKg){ //returns literal glucose bolus volume based on given mL/kg for given patient weight
+    global $data;
+    return $data->weight*$mlsPerKg;
+}
+function glucoseBolusVolumeCapped(){ //returns the set limit of the glucose bolus volume
+    global $settings;
+    return $settings->caps->glucoseBolus;
+}
+function glucoseBolusVolumeIsCapped($mlsPerKg){ //returns true if the uncapped glucose bolus volume exceeds the cap
+    if (glucoseBolusVolumeUncapped($mlsPerKg) > glucoseBolusVolumeCapped()) return true;
+    return false;
+}
+function glucoseBolusVolume($mlsPerKg){ //returns the glucose bolus volume to be used, selecting between capped or uncapped volume
+    if (glucoseBolusVolumeIsCapped($mlsPerKg)){
+        return glucoseBolusVolumeCapped();
+    } else {
+        return glucoseBolusVolumeUncapped($mlsPerKg);
+    }
+}
+function glucoseBolusVolumeFormula($mlsPerKg) {
+    return "[".$mlsPerKg."mL/kg] x [Patient weight (kg)]";
+}
+function glucoseBolusVolumeLimit($mlsPerKg) {
+    global $settings;
+    return $settings->caps->glucoseBolus . "mL";
+}
+function glucoseBolusVolumeWorking($mlsPerKg) {
+    global $data;
+    return "[".$mlsPerKg."mL/kg] x [".number_format($data->weight,1)."kg] = ".number_format(glucoseBolusVolume($mlsPerKg),0)."mL";
+}
+$calculations->glucoseBolusVolume = new StdClass;
+$calculations->glucoseBolusVolume->val = glucoseBolusVolume($settings->glucoseBolusMlsPerKg);
+$calculations->glucoseBolusVolume->mlsPerKg = $settings->glucoseBolusMlsPerKg;
+$calculations->glucoseBolusVolume->isCapped = glucoseBolusVolumeIsCapped($settings->glucoseBolusMlsPerKg);
+$calculations->glucoseBolusVolume->formula = glucoseBolusVolumeFormula($settings->glucoseBolusMlsPerKg);
+$calculations->glucoseBolusVolume->limit = glucoseBolusVolumeLimit($settings->glucoseBolusMlsPerKg);
+$calculations->glucoseBolusVolume->working = glucoseBolusVolumeWorking($settings->glucoseBolusMlsPerKg);
+
+//functions related to calculation of bolus for HHS
+function hhsBolusVolumeUncapped($mlsPerKg){ //returns literal hhs bolus volume based on given mL/kg for given patient weight
+    global $data;
+    return $data->weight*$mlsPerKg;
+}
+function hhsBolusVolumeCapped(){ //returns the set limit of the hhs bolus volume
+    global $settings;
+    return $settings->caps->hhsBolus;
+}
+function hhsBolusVolumeIsCapped($mlsPerKg){ //returns true if the uncapped hhs bolus volume exceeds the cap
+    if (hhsBolusVolumeUncapped($mlsPerKg) > hhsBolusVolumeCapped()) return true;
+    return false;
+}
+function hhsBolusVolume($mlsPerKg){ //returns the hhs bolus volume to be used, selecting between capped or uncapped volume
+    if (hhsBolusVolumeIsCapped($mlsPerKg)){
+        return hhsBolusVolumeCapped();
+    } else {
+        return hhsBolusVolumeUncapped($mlsPerKg);
+    }
+}
+function hhsBolusVolumeFormula($mlsPerKg) {
+    return "[".$mlsPerKg."mL/kg] x [Patient weight (kg)]";
+}
+function hhsBolusVolumeLimit($mlsPerKg) {
+    global $settings;
+    return $settings->caps->hhsBolus . "mL";
+}
+function hhsBolusVolumeWorking($mlsPerKg) {
+    global $data;
+    return "[".$mlsPerKg."mL/kg] x [".number_format($data->weight,1)."kg] = ".number_format(hhsBolusVolume($mlsPerKg),0)."mL";
+}
+$calculations->hhsBolusVolume = new StdClass;
+$calculations->hhsBolusVolume->val = hhsBolusVolume($settings->hhsBolusMlsPerKg);
+$calculations->hhsBolusVolume->mlsPerKg = $settings->hhsBolusMlsPerKg;
+$calculations->hhsBolusVolume->isCapped = hhsBolusVolumeIsCapped($settings->hhsBolusMlsPerKg);
+$calculations->hhsBolusVolume->formula = hhsBolusVolumeFormula($settings->hhsBolusMlsPerKg);
+$calculations->hhsBolusVolume->limit = hhsBolusVolumeLimit($settings->hhsBolusMlsPerKg);
+$calculations->hhsBolusVolume->working = hhsBolusVolumeWorking($settings->hhsBolusMlsPerKg);
 
 $calculationsJSON = json_encode($calculations);
 
