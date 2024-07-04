@@ -1,7 +1,7 @@
 <?php
 
 // Generate unique short ID
-$permitted_chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+$permitted_chars = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
 do {
     $pass = 0;
     $auditID = substr(str_shuffle($permitted_chars), 0, 6);    
