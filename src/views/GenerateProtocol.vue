@@ -180,6 +180,7 @@ const generate = {
           shockPresent: data.value.inputs.shockPresent.val,
           preExistingDiabetes: data.value.inputs.preExistingDiabetes.val,
           insulinDeliveryMethod: data.value.inputs.insulinDeliveryMethod.val,
+          preventableFactors: data.value.inputs.preventableFactors.val,
           patientSex: data.value.inputs.patientSex.val,
           insulinRate: data.value.inputs.insulinRate.val,
           protocolStartDatetime: data.value.inputs.protocolStartDatetime.val,

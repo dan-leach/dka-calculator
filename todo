@@ -1,6 +1,6 @@
-1. Fix export issue on lucid chart then export all replacement charts and rebuild Base64 images
+1. Export all replacement charts and rebuild Base64 images
 2. Agree update to static version ICP to 1.4 - replace the fallback version hosted on site
-3. Add conditional text for preventable factors page - QR code or link to provide/update factors - list of already selected factors
+3. Build /update page to accept retrospective data entry
 
 Before launch:
 

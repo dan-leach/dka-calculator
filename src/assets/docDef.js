@@ -226,6 +226,36 @@ const tickCanvasArrays = {
   },
 };
 
+const preventableFactors = {
+  main: function (req) {
+    let msg = "";
+    if (req.preventableFactors[0] == "No") {
+      msg =
+        "When this protocol was generated the user indicated that there were no preventable/modifiable factors which may have led to this episode of DKA. If you now have information to suggest there were preventable/modifiable factors please update the audit data using the instructions below.";
+    } else if (req.preventableFactors[0] == "Not yet known") {
+      msg =
+        "When this protocol was generated the user indicated that it was not yet known if there were preventable/modifiable factors which may have led to this episode of DKA. Please update the audit data using the instructions below.";
+    } else {
+      msg =
+        "When this protocol was generated the user indicated the following preventable/modifiable factors may have led to this episode of DKA: ";
+      let factorsString = "";
+      for (let factor of req.preventableFactors)
+        factorsString += factor.toLowerCase() + ", ";
+      factorsString = factorsString.slice(0, -2); //remove trailing comma and space
+      msg +=
+        factorsString +
+        ". If you now know that other preventable/modifiable factors apply, or no longer feel the selected factors are representative, please update the audit data using the instructions below.";
+    }
+    return msg;
+  },
+  instructions: function (req) {
+    return (
+      "To update the preventable/modifiable factors data for this episode go to dka-calculator.co.uk/update and enter the audit ID: " +
+      req.auditID
+    );
+  },
+};
+
 function getDocDef(req) {
   const docDef = {
     pageSize: "A4",
@@ -820,6 +850,33 @@ function getDocDef(req) {
         pageBreak: "after",
       },
       //page 10
+      {
+        //outer table adds 20px border for whole page
+        layout: "noBorders",
+        fontSize: 10,
+        table: {
+          headerRows: 0,
+          widths: [30, "*", 20],
+          body: [
+            ["", " ", ""],
+            ["", " ", ""],
+            ["", " ", ""],
+            ["", " ", ""],
+            ["", " ", ""],
+            ["", " ", ""],
+            ["", " ", ""],
+            ["", " ", ""],
+            ["", " ", ""],
+            ["", " ", ""],
+            ["", " ", ""],
+            ["", " ", ""],
+            ["", " ", ""],
+            ["", preventableFactors.main(req), ""],
+            ["", " ", ""],
+            ["", preventableFactors.instructions(req), ""],
+          ],
+        },
+      },
       {
         text: "",
         pageOrientation: "landscape", //changes orientation for following page
