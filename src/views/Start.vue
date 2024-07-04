@@ -4,6 +4,18 @@ import { config } from "../assets/config.js";
 
 <template>
   <div class="container my-4 needs-validation">
+    <div class="card border-danger mb-3">
+      <div class="card-body">
+        <h5 class="card-title">Development version</h5>
+        <p class="card-text">
+          This development version is for demonstration/testing of the
+          forthcoming 2024 update.
+          <br />Do NOT use for real clinical cases. Use
+          <a href="https://dka-calculator.co.uk">dka-calculator.co.uk</a> for
+          real patients.
+        </p>
+      </div>
+    </div>
     <h2 class="display-3">Welcome</h2>
     <p class="mx-1">
       The BSPED Paediatric DKA Calculator allows clinicians to generate an

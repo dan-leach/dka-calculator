@@ -283,8 +283,12 @@ onMounted(() => {
           v-if="data.inputs.preventableFactors.options.val.includes('Yes')"
           class="form-text text-center"
         >
-          Please select all preventable factors which apply, using the
-          categories below.
+          Please select <strong>all</strong> preventable factors which apply,
+          using the categories below.<br />
+          You do not need to be certain that a particular factor caused the
+          episode of DKA.<br />If addressing a factor
+          <strong>might possibly</strong> have allowed the episode of DKA to be
+          avoided, please select it.
         </div>
         <div
           v-else-if="

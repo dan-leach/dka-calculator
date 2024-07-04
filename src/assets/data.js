@@ -736,7 +736,7 @@ export const data = ref({
           categories: ["Missed/delayed diagnosis"],
         },
         {
-          val: "Incorrect investigation/referral by primary care",
+          val: "Suboptimal or incorrect investigation/referral by primary care",
           categories: ["Missed/delayed diagnosis"],
         },
         {
@@ -744,7 +744,7 @@ export const data = ref({
           categories: ["Missed/delayed diagnosis"],
         },
         {
-          val: "Incorrect management by secondary/tertiary care",
+          val: "Suboptimal or incorrect management by secondary/tertiary care",
           categories: ["Missed/delayed diagnosis"],
         },
         {
@@ -752,15 +752,15 @@ export const data = ref({
           categories: ["Missed/delayed diagnosis"],
         },
         {
-          val: "Malfunction of insulin pump",
+          val: "Concern of insulin pump malfunction",
           categories: ["Diabetes technology issue"],
         },
         {
-          val: "Insulin pump used incorrectly",
+          val: "Concern insulin pump used incorrectly",
           categories: ["Diabetes technology issue", "Lack of adherence"],
         },
         {
-          val: "Malfunction of glucose sensor",
+          val: "Concern of glucose sensor malfunction",
           categories: ["Diabetes technology issue"],
         },
         {
@@ -768,19 +768,19 @@ export const data = ref({
           categories: ["Diabetes technology issue"],
         },
         {
-          val: "Inadequate supervision by parent/carer",
+          val: "Concern of inadequate supervision by parent/carer",
           categories: ["Lack of adherence", "Social factors"],
         },
         {
-          val: "Lack of adherence to usual insulin therapy by child/young person",
+          val: "Concern of lack of adherence to usual insulin therapy by child/young person",
           categories: ["Lack of adherence"],
         },
         {
-          val: "Inadequate monitoring of glucose or ketones",
+          val: "Suboptimal monitoring of glucose or ketones",
           categories: ["Lack of adherence"],
         },
         {
-          val: "Failure to follow sick day rules",
+          val: "Sick day rules not followed optimally",
           categories: ["Lack of adherence"],
         },
         {
