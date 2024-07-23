@@ -1,34 +1,45 @@
 <?php
 
+// Sanitize and format the postcode
 $postcode = str_replace(' ', '', $data->patientPostcode);
-$postcode = "'" . substr_replace(strtoupper($postcode), ' ', -3, 0) . "'";
+$postcode = substr_replace(strtoupper($postcode), ' ', -3, 0);
 
-$db = new PDO('sqlite:./imd/db/imd.sqlite3');
+try {
+    // Create a new PDO instance
+    $db = new PDO('sqlite:./imd/db/imd.sqlite3');
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$imd_data_count = $db->query("SELECT COUNT() FROM onspd_aug19 WHERE onspd_aug19.pcds IN ( $postcode )");
-$row_count = (int) $imd_data_count->fetchColumn();
+    // Prepare and execute the query to get the data
+    $stmt = $db->prepare("
+        SELECT
+            onspd.pcds,
+            imd.lsoa_name_11,
+            imd.imd_rank,
+            imd.imd_decile
+        FROM
+            imd19 AS imd
+        INNER JOIN
+            onspd_aug19 AS onspd ON imd.lsoa_code_11 = onspd.lsoa11
+        WHERE
+            onspd.pcds = :postcode
+        LIMIT 1
+    ");
+    $stmt->bindParam(':postcode', $postcode, PDO::PARAM_STR);
+    $stmt->execute();
 
-$imd_data = $db->query(
-    "SELECT
-    onspd.pcds,
-    imd.lsoa_name_11,
-    imd.imd_rank,
-    imd.imd_decile
-  FROM
-    imd19 AS imd
-  INNER JOIN
-    onspd_aug19 AS onspd ON imd.lsoa_code_11 = onspd.lsoa11
-  WHERE
-    onspd.pcds IN (	$postcode )"
-);
+    // Fetch the data
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-function output($row)
-{
-    return intval($row['imd_decile']);
+    $imdDecile = null;
+    if ($row) {
+        $imdDecile = intval($row['imd_decile']);
+    }
+
+    // Use $imdDecile as needed...
+
+} catch (PDOException $e) {
+    // Handle PDO exception
+    echo 'Connection failed: ' . $e->getMessage();
 }
-
-$imdDecile = null;
-
-foreach ($imd_data as $row) $imdDecile = output($row);
 
 ?>
