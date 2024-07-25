@@ -4,7 +4,7 @@ import { data } from "../assets/data.js";
 import router from "../router";
 
 /**
- * Function to handle the 'Continue' button click event.
+ * Function to handle the 'Continue' button click event
  * Sets the weight limit override confirmation and navigates to the audit details form.
  */
 const continueClick = () => {

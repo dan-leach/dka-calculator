@@ -4,7 +4,7 @@ import { data } from "../assets/data.js";
 import Swal from "sweetalert2";
 import router from "../router";
 
-// Reactive variable to control error display
+// Reactive variable to control error display.
 let showErrors = ref(false);
 
 /**

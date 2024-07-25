@@ -9,7 +9,8 @@ export const config = reactive({
     name: "Dan Leach",
     url: "https://danleach.uk",
     email: "admin@dka-calculator.co.uk",
-    acknowledgement: "With thanks to ? for peer-review of the current version.",
+    acknowledgement:
+      "With thanks to ? for peer-review of the current version. ",
   },
   repo: {
     main: "https://github.com/dan-leach/dka-calculator",

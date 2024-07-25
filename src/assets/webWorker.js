@@ -2,7 +2,7 @@ import { getDocDef } from "@/assets/docDef.js";
 import pdfMake from "pdfmake/build/pdfmake.js";
 import pdfFonts from "@/assets/pdfFonts";
 
-// Error handler function to post messages containing error objects to the main thread
+// Error handler function to post messages containing error objects to the main thread.
 function errHandler(e) {
   console.error("Error in webWorker.js: ", e);
   postMessage(e);

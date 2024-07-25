@@ -1,4 +1,4 @@
-// Importing necessary styles and libraries
+// Importing necessary styles and libraries.
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
 import "./assets/main.css";

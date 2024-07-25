@@ -5,7 +5,7 @@ import { config } from "../assets/config.js";
 import router from "../router";
 
 /**
- * Function to handle the 'Continue' button click event.
+ * Function to handle the 'Continue' button click event
  * Sets the legal agreement to true and navigates to the patient details form.
  */
 const continueClick = () => {

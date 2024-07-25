@@ -3,7 +3,7 @@ import { ref, onMounted } from "vue";
 import { data } from "../assets/data.js";
 import router from "../router";
 
-// Reactive variable to control error display
+// Reactive variable to control error display.
 const showErrors = ref(false);
 
 /**

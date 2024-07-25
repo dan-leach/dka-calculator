@@ -5,7 +5,7 @@ import { config } from "../assets/config.js";
 import router from "../router";
 import { api } from "@/assets/api.js";
 
-// Steps of the generation process
+// Steps of the generation process.
 const generateSteps = ref({
   transmit: {
     text: "Transmitting data to DKA Calculator",
