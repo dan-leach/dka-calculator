@@ -1,19 +1,86 @@
 import { ref } from "vue";
 import { config } from "./config.js";
 
+// Utility functions
+/**
+ * Checks the length of a string value against given min and max lengths.
+ * @param {string} val - The value to check.
+ * @param {number} minLength - Minimum allowable length.
+ * @param {number} maxLength - Maximum allowable length.
+ * @param {Array} errors - Array to store error messages.
+ * @param {string} fieldName - Name of the field being validated.
+ */
+const checkLength = (val, minLength, maxLength, errors, fieldName) => {
+  if (val.length < minLength)
+    errors.push(`${fieldName} must be at least ${minLength} characters.`);
+  if (val.length > maxLength)
+    errors.push(`${fieldName} must be no more than ${maxLength} characters.`);
+};
+
+/**
+ * Checks if a number is within a specified range.
+ * @param {number} val - The value to check.
+ * @param {string} units - The units applicable to the value being checked.
+ * @param {number} min - Minimum allowable value.
+ * @param {number} max - Maximum allowable value.
+ * @param {Array} errors - Array to store error messages.
+ * @param {string} fieldName - Name of the field being validated.
+ */
+const checkNumberRange = (val, units, min, max, errors, fieldName) => {
+  if (val < min) errors.push(`${fieldName} must be at least ${min}${units}.`);
+  if (val > max)
+    errors.push(`${fieldName} must be no more than ${max}${units}.`);
+};
+
+/**
+ * Formats a UK postcode by converting to uppercase and removing spaces.
+ * @param {string} val - The postcode to format.
+ * @returns {string} - The formatted postcode.
+ */
+const formatPostcode = (val) => val.toUpperCase().replace(/\s/g, "");
+
+/**
+ * Builds an ISO string for the given date.
+ * @param {Date} date - The date to format.
+ * @returns {string} - The formatted date string.
+ */
+const buildDateString = (date) => {
+  const pad = (num) => (num < 10 ? `0${num}` : num);
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
+    date.getDate()
+  )}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+};
+
+/**
+ * Calculates age in years from the given date of birth.
+ * @param {string} dob - Date of birth in ISO format.
+ * @returns {number} - Age in years.
+ */
+const ageInYears = (dob) => {
+  const today = new Date();
+  const birthDate = new Date(dob);
+  let age = today.getFullYear() - birthDate.getFullYear();
+  if (
+    today.getMonth() < birthDate.getMonth() ||
+    (today.getMonth() === birthDate.getMonth() &&
+      today.getDate() < birthDate.getDate())
+  ) {
+    age--;
+  }
+  return age;
+};
+
 export const data = ref({
   form: {
-    isValid: function (formIndex) {
-      let formValid = true;
-      for (let i in data.value.inputs)
-        if (
-          data.value.inputs[i].form === formIndex &&
-          !data.value.inputs[i].isValid()
-        )
-          formValid = false;
-
-      if (formValid) return true;
-      return false;
+    /**
+     * Checks if the form with the given index is valid.
+     * @param {number} formIndex - The index of the form to validate.
+     * @returns {boolean} - True if the form is valid, false otherwise.
+     */
+    isValid(formIndex) {
+      return Object.values(data.value.inputs).every(
+        (input) => input.form !== formIndex || input.isValid()
+      );
     },
   },
   inputs: {
@@ -22,9 +89,8 @@ export const data = ref({
       label: "Agreement to legal disclaimer",
       info: "Your agreement to the legal disclaimer is recorded.",
       form: 0,
-      isValid: function () {
-        if (!this.val) return false;
-        return true;
+      isValid() {
+        return this.val;
       },
     },
     patientName: {
@@ -34,23 +100,15 @@ export const data = ref({
       info: "Patient name is printed onto the generated care pathway document in the patient demographics area. It is not stored by the DKA Calculator.",
       minLength: 5,
       maxLength: 80,
-      isValid: function () {
-        this.errors = "";
-
-        if (this.val.length < this.minLength)
-          this.errors +=
-            "Name must be at least " +
-            this.minLength +
-            " characters in length. ";
-
-        if (this.val.length > this.maxLength)
-          this.errors +=
-            "Name must be no more than " +
-            this.maxLength +
-            " characters in length. ";
-
-        if (this.errors) return false;
-        return true;
+      /**
+       * Validates the patient name.
+       * @returns {boolean} - True if the name is valid, false otherwise.
+       */
+      isValid() {
+        const errors = [];
+        checkLength(this.val, this.minLength, this.maxLength, errors, "Name");
+        this.errors = errors.join(" ");
+        return !errors.length;
       },
       errors: "",
     },
@@ -60,67 +118,62 @@ export const data = ref({
       form: 1,
       info: "Patient date of birth is printed onto the generated care pathway document in the patient demographics area. It is not stored directly by the DKA Calculator, but is used to calculate a patient age (in years) which is stored for audit purposes. To allow linkage of audit data between episodes the patient date of birth is used to generate a unique patient ID which is stored. The patient date of birth cannot be found from the calculated unique patient ID (<a href='https://www.codecademy.com/resources/blog/what-is-hashing/' target='_blank'>read more about secure cryptographic hashing</a>).",
       withinYears: 19, //date of birth must be between today and 19 years ago - allowance for adult patients not yet transitioned to adult services
+      /**
+       * Builds the patient's age in years from the date of birth.
+       */
       patientAge: {
-        build: function () {
-          const today = new Date();
-          const birthDate = new Date(data.value.inputs.patientDOB.val);
-          let age = today.getFullYear() - birthDate.getFullYear();
-          const m = today.getMonth() - birthDate.getMonth();
-
-          if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate()))
-            age--;
-
-          this.val = age;
+        build() {
+          this.val = ageInYears(data.value.inputs.patientDOB.val);
         },
       },
-      val: null,
-      minDate: function () {
-        const today = new Date();
-        const minDate = new Date(
-          today.getFullYear() - this.withinYears,
-          today.getMonth(),
-          today.getDate()
-        );
+      /**
+       * Computes the minimum allowable date of birth based on age limit.
+       * @returns {Date} - The minimum allowable date.
+       */
+      minDate() {
+        const minDate = new Date();
+        minDate.setFullYear(minDate.getFullYear() - this.withinYears);
         return minDate;
       },
-      ageMonths: function () {
-        let months;
-        let today = new Date();
-        let dob = new Date(data.value.inputs.patientDOB.val);
-        months = (today.getFullYear() - dob.getFullYear()) * 12;
-        months -= dob.getMonth();
-        months += today.getMonth();
-        return months <= 0 ? 0 : months;
-      },
-      isValid: function () {
-        this.errors = "";
-        if (isNaN(Date.parse(this.val))) {
-          this.errors += "A valid date must be entered for date of birth. ";
-          return false;
-        }
-        const dateVal = new Date(this.val);
+      /**
+       * Calculates the age in months from the date of birth.
+       * @returns {number} - Age in months.
+       */
+      ageMonths() {
         const today = new Date();
-        if (dateVal > today)
-          this.errors += "Date of birth cannot be after today. ";
-
-        if (dateVal < this.minDate)
-          this.errors +=
-            "Date of birth cannot be more than " +
-            this.withinYears +
-            " years ago. ";
-
-        if (this.errors) return false;
+        const dob = new Date(this.val);
+        return (
+          (today.getFullYear() - dob.getFullYear()) * 12 +
+          today.getMonth() -
+          dob.getMonth()
+        );
+      },
+      /**
+       * Validates the date of birth.
+       * @returns {boolean} - True if the date of birth is valid, false otherwise.
+       */
+      isValid() {
+        const errors = [];
+        const dateVal = new Date(this.val);
+        const minDate = this.minDate();
+        if (isNaN(Date.parse(this.val)))
+          errors.push("A valid date must be entered for date of birth.");
+        if (dateVal > new Date())
+          errors.push("Date of birth cannot be after today.");
+        if (dateVal < minDate)
+          errors.push(
+            `Date of birth cannot be more than ${this.withinYears} years ago.`
+          );
 
         this.patientAge.build();
         if (this.patientAge.val > config.client.ageLimit) {
-          this.errors +=
-            "Patient age cannot be greater than " +
-            config.client.ageLimit +
-            " years. ";
-          return false;
+          errors.push(
+            `Patient age cannot be greater than ${config.client.ageLimit} years.`
+          );
         }
 
-        return true;
+        this.errors = errors.join(" ");
+        return !errors.length;
       },
       errors: "",
     },
@@ -129,11 +182,13 @@ export const data = ref({
       label: "Patient sex",
       form: 1,
       info: "Patient sex is printed onto the generated care pathway. It is stored by the DKA Calculator for audit purposes.",
-      isValid: function () {
-        this.errors = "";
-        if (!this.val) this.errors += "Patient sex must be selected. ";
-        if (this.errors) return false;
-        return true;
+      /**
+       * Validates the patient sex.
+       * @returns {boolean} - True if the sex is selected, false otherwise.
+       */
+      isValid() {
+        this.errors = this.val ? "" : "Patient sex must be selected.";
+        return !this.errors;
       },
       errors: "",
     },
@@ -142,12 +197,14 @@ export const data = ref({
       label: "NHS number",
       form: 1,
       info: "If provided, patient NHS number is printed onto the generated care pathway document in the patient demographics area. It is not stored directly by the DKA Calculator. To allow linkage of audit data between episodes the NHS number is used to generate a unique patient ID which is stored. The patient NHS number cannot be found from the calculated unique patient ID (<a href='https://www.codecademy.com/resources/blog/what-is-hashing/' target='_blank'>read more about secure cryptographic hashing</a>).",
-      min: 1000000000,
-      max: 9999999999,
-      isValid: function () {
-        this.errors = "";
+      min: 1000000000, //a 10 digit integer (length of an NHS number) cannot have a value less than this
+      max: 9999999999, //a 10 digit integer (length of an NHS number) cannot have a value greater than this
+      /**
+       * Validates the NHS number.
+       * @returns {boolean} - True if the NHS number is valid, false otherwise.
+       */
+      isValid() {
         if (this.optOut.val) return true;
-
         if (this.val < this.min)
           this.errors +=
             "NHS number must be at least " +
@@ -159,9 +216,7 @@ export const data = ref({
             "NHS number must be no more than " +
             this.max.toString().length +
             " characters in length. ";
-
-        if (this.errors) return false;
-        return true;
+        return !this.errors;
       },
       errors: "",
       optOut: {
@@ -180,25 +235,22 @@ export const data = ref({
       info: "If used instead of the patient NHS number, patient hospital number is printed onto the generated care pathway document in the patient demographics area. It is not stored by the DKA Calculator.",
       minLength: 4,
       maxLength: 20,
-      isValid: function () {
-        this.errors = "";
-
+      /**
+       * Validates the hospital number.
+       * @returns {boolean} - True if the hospital number is valid, false otherwise.
+       */
+      isValid() {
+        const errors = [];
         if (!data.value.inputs.patientNHS.optOut.val) return true;
-
-        if (this.val.length < this.minLength)
-          this.errors +=
-            "Hospital number must be at least " +
-            this.minLength +
-            " characters in length. ";
-
-        if (this.val.length > this.maxLength)
-          this.errors +=
-            "Hospital number must be no more than " +
-            this.maxLength +
-            " characters in length. ";
-
-        if (this.errors) return false;
-        return true;
+        checkLength(
+          this.val,
+          this.minLength,
+          this.maxLength,
+          errors,
+          "Hospital number"
+        );
+        this.errors = errors.join(" ");
+        return !errors.length;
       },
       errors: "",
     },
@@ -207,39 +259,36 @@ export const data = ref({
       label: "Postcode",
       form: 1,
       info: "The patient postcode is not stored by the DKA Calculator. If provided, it is used to find an Index of Multiple Deprivation (IMD) decile which is stored for audit purposes.",
-      minLength: 5,
-      maxLength: 8,
+      minLength: 5, //valid postcodes will never be shorter than this
+      maxLength: 8, //valid postcodes will never be longer than this
       pattern:
         "([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))s?[0-9][A-Za-z]{2})",
-      formatVal: function () {
-        this.val = this.val.toUpperCase();
-        this.val = this.val.replaceAll(/\s/g, "");
+      /**
+       * Formats the postcode by converting to uppercase and removing spaces.
+       */
+      formatVal() {
+        this.val = formatPostcode(this.val);
       },
-      isValid: function () {
+      /**
+       * Validates the postcode
+
+.
+       * @returns {boolean} - True if the postcode is valid, false otherwise.
+       */
+      isValid() {
         this.formatVal();
-        this.errors = "";
-
-        if (this.optOut.val) return true;
-
-        const regex = new RegExp(this.pattern, "g");
-
-        if (this.val.length < this.minLength) {
-          this.errors +=
-            "Postcode must be at least " +
-            this.minLength +
-            " characters in length. ";
-        } else if (this.val.length > this.maxLength) {
-          this.errors +=
-            "Postcode must be no more than " +
-            this.maxLength +
-            " characters in length. ";
-        } else if (!regex.test(this.val)) {
-          //uses else if rather than consecutive ifs to avoid adding further invalid error message for short/long postcodes
-          this.errors += "Postcode is not valid. ";
-        }
-
-        if (this.errors) return false;
-        return true;
+        const errors = [];
+        checkLength(
+          this.val,
+          this.minLength,
+          this.maxLength,
+          errors,
+          "Postcode"
+        );
+        if (!new RegExp(this.pattern).test(this.val))
+          errors.push("Postcode must match the pattern.");
+        this.errors = errors.join(" ");
+        return !errors.length;
       },
       errors: "",
       optOut: {
@@ -258,25 +307,21 @@ export const data = ref({
       info: "The protocol start date/time is used to calculated recommended review date/times on the serial data sheet on the care pathway. It is stored by the DKA Calculator for audit purposes.",
       withinHours: 24,
       todayString: {
-        build: function () {
-          const today = new Date();
-          let todayString = today.getFullYear();
-          todayString +=
-            "-" + (today.getMonth() < 9 ? "0" : "") + (today.getMonth() + 1);
-          todayString +=
-            "-" + (today.getDate() < 10 ? "0" : "") + today.getDate();
-          todayString +=
-            "T" + (today.getHours() < 10 ? "0" : "") + today.getHours();
-          todayString +=
-            ":" + (today.getMinutes() < 10 ? "0" : "") + today.getMinutes();
-          this.val = todayString;
+        /**
+         * Generates a string for today's date and assigns it to this.val.
+         */
+        build() {
+          this.val = buildDateString(new Date());
         },
         val: "",
       },
       minDate: {
-        build: function () {
+        /**
+         * Generates a datetime object of the earliest allowable time the protocolStartDatetime can be set to and assigns it to this.val.
+         */
+        build() {
           const today = new Date();
-          const minDate = new Date(
+          this.val = new Date(
             today.getFullYear(),
             today.getMonth(),
             today.getDate(),
@@ -284,32 +329,27 @@ export const data = ref({
               data.value.inputs.protocolStartDatetime.withinHours,
             today.getMinutes()
           );
-          this.val = minDate;
         },
         val: null,
       },
       minDateString: {
-        build: function () {
-          let minDate = data.value.inputs.protocolStartDatetime.minDate.val;
-          let minDateString = minDate.getFullYear();
-          minDateString +=
-            "-" +
-            (minDate.getMonth() < 9 ? "0" : "") +
-            (minDate.getMonth() + 1);
-          minDateString +=
-            "-" + (minDate.getDate() < 10 ? "0" : "") + minDate.getDate();
-          minDateString +=
-            "T" + (minDate.getHours() < 10 ? "0" : "") + minDate.getHours();
-          minDateString +=
-            ":" + (minDate.getMinutes() < 10 ? "0" : "") + minDate.getMinutes();
-          this.val = minDateString;
+        /**
+         * Generates a string for minDate and assigns that value to this.val.
+         */
+        build() {
+          this.val = buildDateString(
+            data.value.inputs.protocolStartDatetime.minDate.val
+          );
         },
         val: "",
       },
       maxDate: {
-        build: function () {
+        /**
+         * Generates a datetime object of the latest allowable time the protocolStartDatetime can be set to and assigns it to this.val.
+         */
+        build() {
           const today = new Date();
-          const maxDate = new Date(
+          this.val = new Date(
             today.getFullYear(),
             today.getMonth(),
             today.getDate(),
@@ -317,43 +357,36 @@ export const data = ref({
               data.value.inputs.protocolStartDatetime.withinHours,
             today.getMinutes()
           );
-          this.val = maxDate;
         },
         val: null,
       },
       maxDateString: {
-        build: function () {
-          let maxDate = data.value.inputs.protocolStartDatetime.maxDate.val;
-          let maxDateString = maxDate.getFullYear();
-          maxDateString +=
-            "-" +
-            (maxDate.getMonth() < 9 ? "0" : "") +
-            (maxDate.getMonth() + 1);
-          maxDateString +=
-            "-" + (maxDate.getDate() < 10 ? "0" : "") + maxDate.getDate();
-          maxDateString +=
-            "T" + (maxDate.getHours() < 10 ? "0" : "") + maxDate.getHours();
-          maxDateString +=
-            ":" + (maxDate.getMinutes() < 10 ? "0" : "") + maxDate.getMinutes();
-          this.val = maxDateString;
+        /**
+         * Generates a string for maxDate and assigns that value to this.val.
+         */
+        build() {
+          this.val = buildDateString(
+            data.value.inputs.protocolStartDatetime.maxDate.val
+          );
         },
         val: "",
       },
-      isValid: function () {
+      /**
+       * Validates the protocol start date/time.
+       * @returns {boolean} - True if the date/time is valid, false otherwise.
+       */
+      isValid() {
         this.errors = "";
         if (isNaN(Date.parse(this.val))) {
-          this.errors +=
+          this.errors =
             "A valid date/time must be entered for protocol start date/time. ";
           return false;
         }
         const dateVal = new Date(this.val);
-        if (dateVal <= this.minDate.val || dateVal >= this.maxDate.val)
-          this.errors +=
-            "Protocol start must be within " +
-            this.withinHours +
-            " hours of the current date/time. ";
-
-        if (this.errors) return false;
+        if (dateVal <= this.minDate.val || dateVal >= this.maxDate.val) {
+          this.errors = `Protocol start must be within ${this.withinHours} hours of the current date/time. `;
+          return false;
+        }
         return true;
       },
       errors: "",
@@ -366,21 +399,20 @@ export const data = ref({
       min: 6.2,
       max: 7.5,
       step: 0.01,
-      isValid: function () {
-        this.errors = "";
-        if (!this.val) {
-          this.errors += "pH must be provided. ";
+      /**
+       * Validates the pH value.
+       * @returns {boolean} - True if the pH value is valid, false otherwise.
+       */
+      isValid() {
+        const errors = [];
+        if (this.val === null) {
+          errors.push("pH must be provided. ");
         } else {
           this.val = Number.parseFloat(this.val).toFixed(2);
-
-          if (this.val < this.min)
-            this.errors += "pH must be at least " + this.min + ". ";
-
-          if (this.val > this.max)
-            this.errors += "pH must be no more than " + this.max + ". ";
+          checkNumberRange(this.val, "", this.min, this.max, errors, "pH");
         }
-        if (this.errors) return false;
-        return true;
+        this.errors = errors.join(" ");
+        return !this.errors;
       },
       errors: "",
     },
@@ -394,22 +426,27 @@ export const data = ref({
       min: 0,
       max: 35,
       step: 0.1,
-      isValid: function () {
-        this.errors = "";
-        if (this.val) {
-          this.val = Number.parseFloat(this.val).toFixed(1);
-
-          if (this.val < this.min)
-            this.errors +=
-              "Bicarbonate must be at least " + this.min + " mmol/L. ";
-
-          if (this.val > this.max)
-            this.errors +=
-              "Bicarbonate must be no more than " + this.max + " mmol/L. ";
+      /**
+       * Validates the bicarbonate value.
+       * @returns {boolean} - True if the bicarbonate value is valid, false otherwise.
+       */
+      isValid() {
+        if (this.val === null) {
+          this.errors = "";
+          return true;
         }
-
-        if (this.errors) return false;
-        return true;
+        const errors = [];
+        this.val = Number.parseFloat(this.val).toFixed(1);
+        checkNumberRange(
+          this.val,
+          "mmol/L",
+          this.min,
+          this.max,
+          errors,
+          "Bicarbonate"
+        );
+        this.errors = errors.join(" ");
+        return !this.errors;
       },
       errors: "",
     },
@@ -422,21 +459,27 @@ export const data = ref({
       min: 3,
       max: 50,
       step: 0.1,
-      isValid: function () {
-        this.errors = "";
-        if (this.val) {
-          this.val = Number.parseFloat(this.val).toFixed(1);
-
-          if (this.val < this.min)
-            this.errors += "Glucose must be at least " + this.min + " mmol/L. ";
-
-          if (this.val > this.max)
-            this.errors +=
-              "Glucose must be no more than " + this.max + " mmol/L. ";
+      /**
+       * Validates the glucose value.
+       * @returns {boolean} - True if the glucose value is valid, false otherwise.
+       */
+      isValid() {
+        if (this.val === null) {
+          this.errors = "";
+          return true;
         }
-
-        if (this.errors) return false;
-        return true;
+        const errors = [];
+        this.val = Number.parseFloat(this.val).toFixed(1);
+        checkNumberRange(
+          this.val,
+          "mmol/L",
+          this.min,
+          this.max,
+          errors,
+          "Glucose"
+        );
+        this.errors = errors.join(" ");
+        return !this.errors;
       },
       errors: "",
     },
@@ -447,24 +490,29 @@ export const data = ref({
         "If provided, ketone level will be added to the relevant field in the care pathway. Ketone level is used to check the diagnostic threshold for DKA is reached. It is stored by the DKA Calculator for audit purposes.",
       form: 2,
       min: 0,
-      max: 15,
+      max: 10,
       step: 0.1,
-      isValid: function () {
-        this.errors = "";
-        if (this.val) {
-          this.val = Number.parseFloat(this.val).toFixed(1);
-
-          if (this.val < this.min)
-            this.errors +=
-              "Ketone level must be at least " + this.min + " mmol/L. ";
-
-          if (this.val > this.max)
-            this.errors +=
-              "Ketone level must be no more than " + this.max + " mmol/L. ";
+      /**
+       * Validates the ketone level.
+       * @returns {boolean} - True if the ketone level is valid, false otherwise.
+       */
+      isValid() {
+        if (this.val === null) {
+          this.errors = "";
+          return true;
         }
-
-        if (this.errors) return false;
-        return true;
+        const errors = [];
+        this.val = Number.parseFloat(this.val).toFixed(1);
+        checkNumberRange(
+          this.val,
+          "mmol/L",
+          this.min,
+          this.max,
+          errors,
+          "Ketones"
+        );
+        this.errors = errors.join(" ");
+        return !this.errors;
       },
       errors: "",
     },
@@ -477,11 +525,19 @@ export const data = ref({
       max: 150,
       step: 0.1,
       limit: {
-        lower: function () {
+        /**
+         * Returns the lower weight limit based on patient sex and age in months.
+         * @returns {number} - The lower weight limit.
+         */
+        lower() {
           return config.client.weightLimits[data.value.inputs.patientSex.val]
             .lower[data.value.inputs.patientDOB.ageMonths()];
         },
-        upper: function () {
+        /**
+         * Returns the upper weight limit based on patient sex and age in months, capped by the maximum allowed weight.
+         * @returns {number} - The upper weight limit.
+         */
+        upper() {
           let upper =
             config.client.weightLimits[data.value.inputs.patientSex.val].upper[
               data.value.inputs.patientDOB.ageMonths()
@@ -495,8 +551,11 @@ export const data = ref({
         overrideConfirm: false,
         overrideLabel: "Override weight limit",
       },
-      isValid: function () {
-        this.errors = "";
+      /**
+       * Validates the weight.
+       * @returns {boolean} - True if the weight is valid, false otherwise.
+       */
+      isValid() {
         if (!this.val) {
           this.errors += "Weight must be provided. ";
           return false;
@@ -504,22 +563,16 @@ export const data = ref({
 
         this.val = Number.parseFloat(this.val).toFixed(1);
 
-        if (this.val < this.min)
-          this.errors += "Weight must be at least " + this.min + " kg. ";
-        if (this.val > this.max)
-          this.errors += "Weight must be no more than " + this.max + " kg. ";
-        if (this.errors) return false;
+        const errors = [];
+        checkNumberRange(this.val, "", this.min, this.max, errors, "Weight");
+        this.errors = errors.join(" ");
+        if (errors.length) return false;
 
         if (this.val < this.limit.lower() || this.val > this.limit.upper()) {
           if (!this.limit.override)
-            this.errors +=
-              "Weight must be within 2 standard deviations of the mean for age (upper limit " +
-              config.client.weightLimits.max +
-              "kg) (range " +
-              this.limit.lower() +
-              "kg to " +
-              this.limit.upper() +
-              "kg).";
+            this.errors += `Weight must be within 2 standard deviations of the mean for age (upper limit ${
+              config.client.weightLimits.max
+            } kg) (range ${this.limit.lower()} kg to ${this.limit.upper()} kg).`;
           this.limit.exceeded = true;
         } else {
           this.limit.exceeded = false;
@@ -528,7 +581,7 @@ export const data = ref({
         if (this.errors) return false;
         return true;
       },
-      errors: "x",
+      errors: "",
     },
     shockPresent: {
       val: "",
@@ -536,12 +589,15 @@ export const data = ref({
       privacyLabel: "Clinical shock status",
       form: 2,
       info: "Clinical shock status is used to indicate initial resuscitation strategy on the care pathway and to determine if the initial bolus is subtracted from the fluid deficit as part of the fluid calculations. It is stored by the DKA Calculator for audit purposes.",
-      isValid: function () {
+      /**
+       * Validates the clinical shock status.
+       * @returns {boolean} - True if the status is selected, false otherwise.
+       */
+      isValid() {
         this.errors = "";
         if (!this.val)
           this.errors += "Clinical shock status must be selected. ";
-        if (this.errors) return false;
-        return true;
+        return !this.errors;
       },
       errors: "",
     },
@@ -550,13 +606,16 @@ export const data = ref({
       label: "What starting rate of insulin is required?",
       privacyLabel: "Insulin starting rate",
       form: 2,
-      info: "Insulin starting rate (in Units/kg/hour) is used to calculate a insulin rate in Units/hr. It is stored by the DKA Calculator for audit purposes.",
-      isValid: function () {
+      info: "Insulin starting rate (in Units/kg/hour) is used to calculate an insulin rate in Units/hr. It is stored by the DKA Calculator for audit purposes.",
+      /**
+       * Validates the insulin starting rate.
+       * @returns {boolean} - True if the rate is selected, false otherwise.
+       */
+      isValid() {
         this.errors = "";
         if (!this.val)
           this.errors += "Insulin starting rate must be selected. ";
-        if (this.errors) return false;
-        return true;
+        return !this.errors;
       },
       errors: "",
     },
@@ -566,15 +625,18 @@ export const data = ref({
         "Was the patient known to have diabetes prior to the current episode of DKA?",
       privacyLabel: "Pre-existing diabetes status",
       form: 2,
-      info: "If the patient has pre-existing diabetes used to indicate the approach to managing existing insulin therapy on the care pathway. It is stored by the DKA Calculator for audit purposes.",
-      isValid: function () {
+      info: "If the patient has pre-existing diabetes, it is used to indicate the approach to managing existing insulin therapy on the care pathway. It is stored by the DKA Calculator for audit purposes.",
+      /**
+       * Validates the pre-existing diabetes status.
+       * @returns {boolean} - True if the status is selected, false otherwise.
+       */
+      isValid() {
         this.errors = "";
         if (this.val == "false")
           data.value.inputs.insulinDeliveryMethod.val = "";
         if (!this.val)
           this.errors += "Pre-existing diabetes status must be selected. ";
-        if (this.errors) return false;
-        return true;
+        return !this.errors;
       },
       errors: "",
     },
@@ -584,12 +646,15 @@ export const data = ref({
       privacyLabel: "Insulin delivery method",
       form: 2,
       info: "The insulin delivery method that the patient uses (if they have pre-existing diabetes) is stored by the DKA Calculator for audit purposes.",
-      isValid: function () {
+      /**
+       * Validates the insulin delivery method.
+       * @returns {boolean} - True if the method is selected, false otherwise.
+       */
+      isValid() {
         this.errors = "";
         if (!this.val && data.value.inputs.preExistingDiabetes.val == "true")
           this.errors += "Insulin delivery method must be selected. ";
-        if (this.errors) return false;
-        return true;
+        return !this.errors;
       },
       errors: "",
     },
@@ -599,11 +664,14 @@ export const data = ref({
       privacyLabel: "Episode type",
       form: 3,
       info: "Episode type is stored by the DKA Calculator for audit purposes.",
-      isValid: function () {
+      /**
+       * Validates the episode type.
+       * @returns {boolean} - True if the type is selected, false otherwise.
+       */
+      isValid() {
         this.errors = "";
         if (!this.val) this.errors += "Episode type must be selected. ";
-        if (this.errors) return false;
-        return true;
+        return !this.errors;
       },
       errors: "",
     },
@@ -613,7 +681,11 @@ export const data = ref({
       privacyLabel: "Region",
       form: 3,
       info: "Region is stored by the DKA Calculator for audit purposes.",
-      isValid: function () {
+      /**
+       * Validates the region selection and updates the centre options based on the selected region.
+       * @returns {boolean} - True if the region is selected, false otherwise.
+       */
+      isValid() {
         this.errors = "";
         if (!this.val) {
           this.errors += "Region must be selected. ";
@@ -623,8 +695,7 @@ export const data = ref({
               data.value.inputs.centre.options = region.centres;
           }
         }
-        if (this.errors) return false;
-        return true;
+        return !this.errors;
       },
       errors: "",
     },
@@ -635,11 +706,14 @@ export const data = ref({
       options: [],
       form: 3,
       info: "Treating centre is stored by the DKA Calculator for audit purposes.",
-      isValid: function () {
+      /**
+       * Validates the treating centre selection.
+       * @returns {boolean} - True if the centre is selected, false otherwise.
+       */
+      isValid() {
         this.errors = "";
         if (!this.val) this.errors += "Treating centre must be selected. ";
-        if (this.errors) return false;
-        return true;
+        return !this.errors;
       },
       errors: "",
     },
@@ -649,7 +723,11 @@ export const data = ref({
       privacyLabel: "Patient ethnic group",
       form: 3,
       info: "Patient ethnic group is stored by the DKA Calculator for audit purposes. The list of ethnic groups is taken from the Office for National Statistics.",
-      isValid: function () {
+      /**
+       * Validates the patient ethnic group selection and updates the ethnic subgroup options based on the selected group.
+       * @returns {boolean} - True if the ethnic group is selected, false otherwise.
+       */
+      isValid() {
         this.errors = "";
         if (!this.val) {
           this.errors += "Patient ethnic group must be selected. ";
@@ -659,8 +737,7 @@ export const data = ref({
               data.value.inputs.ethnicSubgroup.options = ethnicGroup.subgroups;
           }
         }
-        if (this.errors) return false;
-        return true;
+        return !this.errors;
       },
       errors: "",
     },
@@ -671,12 +748,15 @@ export const data = ref({
       options: [],
       form: 3,
       info: "Patient ethnic subgroup is stored by the DKA Calculator for audit purposes. The list of ethnic groups is taken from the Office for National Statistics.",
-      isValid: function () {
+      /**
+       * Validates the patient ethnic subgroup selection.
+       * @returns {boolean} - True if the ethnic subgroup is selected, false otherwise.
+       */
+      isValid() {
         this.errors = "";
         if (!this.val)
           this.errors += "Patient ethnic subgroup must be selected. ";
-        if (this.errors) return false;
-        return true;
+        return !this.errors;
       },
       errors: "",
     },
@@ -688,10 +768,14 @@ export const data = ref({
       options: {
         val: [],
         list: ["Yes", "No", "Not yet known"],
-        change: function (selected) {
+        /**
+         * Updates the preventable factors and resets or sets categories based on the selected option.
+         * @param {string} selected - The selected option for preventable factors.
+         */
+        change(selected) {
           this.val = [];
           this.val.push(selected);
-          if (selected == "Yes") {
+          if (selected === "Yes") {
             data.value.inputs.preventableFactors.categories.val = [];
             data.value.inputs.preventableFactors.val = [];
           } else {
@@ -798,12 +882,16 @@ export const data = ref({
       ],
       form: 3,
       info: "Preventable factors are stored by the DKA Calculator for audit purposes.",
-      isValid: function () {
+      /**
+       * Validates the preventable factors selection.
+       * @returns {boolean} - True if an option is selected, false otherwise.
+       */
+      isValid() {
         this.errors = "";
-        if (!this.val.length)
+        if (!this.val.length) {
           this.errors += "An option for preventable factors must be selected. ";
-        if (this.errors) return false;
-        return true;
+        }
+        return !this.errors;
       },
       errors: "",
     },
