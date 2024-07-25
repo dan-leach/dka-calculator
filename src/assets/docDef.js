@@ -1,261 +1,165 @@
 import { config } from "./config.js";
 import { imageStore } from "./imageStore.js";
 
+// Functions to get coordinates for indicator boxes on the protocol document
 const indicatorCoordinates = {
-  //functions that return the variable coordinates for indicator boxes on the protocol document
-  xAxisShock: function (req) {
-    //returns x-axis coordinate for the indicator box showing if patient is shocked or not
-    if (req.shockPresent == "true")
-      return config.client.indicatorCoordinates.xAxisShock.yes;
-    return config.client.indicatorCoordinates.xAxisShock.no;
+  xAxisShock: (req) =>
+    req.shockPresent === "true"
+      ? config.client.indicatorCoordinates.xAxisShock.yes
+      : config.client.indicatorCoordinates.xAxisShock.no,
+
+  yAxisSeverity: (req) => {
+    const severityMap = {
+      severe: config.client.indicatorCoordinates.yAxisSeverity.severe,
+      moderate: config.client.indicatorCoordinates.yAxisSeverity.moderate,
+      mild: config.client.indicatorCoordinates.yAxisSeverity.mild,
+    };
+    const severity = severityMap[req.calculations.severity];
+    if (!severity) throw new Error("Unable to select yAxisSeverity");
+    return severity;
   },
-  yAxisSeverity: function (req) {
-    //returns y-axis coordinate for the indicator box showing severity of DKA
-    if (req.calculations.severity == "severe")
-      return config.client.indicatorCoordinates.yAxisSeverity.severe;
-    if (req.calculations.severity == "moderate")
-      return config.client.indicatorCoordinates.yAxisSeverity.moderate;
-    if (req.calculations.severity == "mild")
-      return config.client.indicatorCoordinates.yAxisSeverity.mild;
-    throw new Error("Unable to select yAxisSeverity");
+
+  xAxisDiabetic: (req) =>
+    req.preExistingDiabetes === "true"
+      ? config.client.indicatorCoordinates.xAxisDiabetic.yes
+      : config.client.indicatorCoordinates.xAxisDiabetic.no,
+};
+
+// Functions to generate messages for capped variables
+const generateCapAlert = (isCapped, message) => (isCapped ? `*${message}` : "");
+
+const capAlert = {
+  bolus: {
+    asterisk: (req) => (req.calculations.bolusVolume.isCapped ? "*" : ""),
+    message: (req) =>
+      generateCapAlert(
+        req.calculations.bolusVolume.isCapped,
+        `Bolus capped to ${req.calculations.bolusVolume.mlsPerKg}mL/kg for ${config.client.weightLimits.max}kg.`
+      ),
   },
-  xAxisDiabetic: function (req) {
-    //returns x-axis coordinate for the indicator box showing if patient had pre-existing diabetes
-    if (req.preExistingDiabetes == "true")
-      return config.client.indicatorCoordinates.xAxisDiabetic.yes;
-    return config.client.indicatorCoordinates.xAxisDiabetic.no;
+  deficit: {
+    asterisk: (req) => (req.calculations.deficit.volume.isCapped ? "*" : ""),
+    message: (req) =>
+      generateCapAlert(
+        req.calculations.deficit.volume.isCapped,
+        `Deficit capped to volume for ${config.client.weightLimits.max}kg with ${req.calculations.deficit.percentage.val}% dehydration.`
+      ),
+  },
+  maintenance: {
+    asterisk: (req) =>
+      req.calculations.maintenance.volume.isCapped ? "*" : "",
+    message: (req) =>
+      generateCapAlert(
+        req.calculations.maintenance.volume.isCapped,
+        `Maintenance capped to volume for ${config.client.weightLimits.max}kg.`
+      ),
+  },
+  insulin: {
+    asterisk: (req) => (req.calculations.insulinRate.isCapped ? "*" : ""),
+    message: (req) =>
+      generateCapAlert(
+        req.calculations.insulinRate.isCapped,
+        `Insulin rate capped to ${req.insulinRate} Units/kg/hour for ${config.client.weightLimits.max}kg.`
+      ),
+  },
+  glucoseBolus: {
+    asterisk: (req) =>
+      req.calculations.glucoseBolusVolume.isCapped ? "*" : "",
+    message: (req) =>
+      generateCapAlert(
+        req.calculations.glucoseBolusVolume.isCapped,
+        `Glucose bolus capped to ${req.calculations.glucoseBolusVolume.mlsPerKg}mL/kg for ${config.client.weightLimits.max}kg.`
+      ),
+  },
+  hhsBolus: {
+    asterisk: (req) => (req.calculations.hhsBolusVolume.isCapped ? "*" : ""),
+    message: (req) =>
+      generateCapAlert(
+        req.calculations.hhsBolusVolume.isCapped,
+        `HHS bolus capped to ${req.calculations.hhsBolusVolume.mlsPerKg}mL/kg for ${config.client.weightLimits.max}kg.`
+      ),
   },
 };
 
-const capAlert = {
-  //if a calculated variable is capped, returns asterisks and message to appear on protocol
-  bolus: {
-    asterisk: function (req) {
-      //asterisk for capped bolus
-      if (req.calculations.bolusVolume.isCapped) return "*";
-      return "";
-    },
-    message: function (req) {
-      //message for capped bolus
-      if (req.calculations.bolusVolume.isCapped)
-        return (
-          "*Bolus capped to " +
-          req.calculations.bolusVolume.mlsPerKg +
-          "mL/kg for " +
-          config.client.weightLimits.max +
-          "kg."
-        );
-      return "";
-    },
-  },
-  deficit: {
-    asterisk: function (req) {
-      //asterisk for capped deficit
-      if (req.calculations.deficit.volume.isCapped) return "*";
-    },
-    message: function (req) {
-      //message for capped deficit
-      if (req.calculations.deficit.volume.isCapped)
-        return (
-          "*Deficit capped to volume for " +
-          config.client.weightLimits.max +
-          "kg with " +
-          req.calculations.deficit.percentage.val +
-          "% dehydration."
-        );
-      return "";
-    },
-  },
-  maintenance: {
-    asterisk: function (req) {
-      //asterisk for capped maintenance
-      if (req.calculations.maintenance.volume.isCapped) return "*";
-    },
-    message: function (req) {
-      //message for capped maintenance
-      if (req.calculations.maintenance.volume.isCapped)
-        return (
-          "*Maintenance capped to volume for " +
-          config.client.weightLimits.max +
-          "kg."
-        );
-      return "";
-    },
-  },
-  insulin: {
-    asterisk: function (req) {
-      //asterisk for capped insulin
-      if (req.calculations.insulinRate.isCapped) return "*";
-    },
-    message: function (req) {
-      //message for capped insulin
-      if (req.calculations.insulinRate.isCapped)
-        return (
-          "*Insulin rate capped to " +
-          req.insulinRate +
-          " Units/kg/hour for " +
-          config.client.weightLimits.max +
-          "kg."
-        );
-      return "";
-    },
-  },
-  glucoseBolus: {
-    asterisk: function (req) {
-      //asterisk for capped glucose bolus
-      if (req.calculations.glucoseBolusVolume.isCapped) return "*";
-      return "";
-    },
-    message: function (req) {
-      //message for capped glucose bolus
-      if (req.calculations.glucoseBolusVolume.isCapped)
-        return (
-          "*Glucose bolus capped to " +
-          req.calculations.glucoseBolusVolume.mlsPerKg +
-          "mL/kg for " +
-          config.client.weightLimits.max +
-          "kg."
-        );
-      return "";
-    },
-  },
-  hhsBolus: {
-    asterisk: function (req) {
-      //asterisk for capped hhs bolus
-      if (req.calculations.hhsBolusVolume.isCapped) return "*";
-      return "";
-    },
-    message: function (req) {
-      //message for capped hhs bolus
-      if (req.calculations.hhsBolusVolume.isCapped)
-        return (
-          "*HHS bolus capped to " +
-          req.calculations.hhsBolusVolume.mlsPerKg +
-          "mL/kg for " +
-          config.client.weightLimits.max +
-          "kg."
-        );
-      return "";
-    },
-  },
+// Functions to format date and time
+const formatDateTime = (date, format) => {
+  const pad = (num) => (num < 10 ? "0" : "") + num;
+  const dateString = `${pad(date.getDate())}/${pad(
+    date.getMonth() + 1
+  )}/${date.getFullYear()}`;
+  const timeString = `${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  return format === "date" ? dateString : timeString;
 };
 
 const datetimes = {
   protocolStart: {
-    time: function (str) {
-      let protocolStartDatetime = new Date(str);
-      let output =
-        (protocolStartDatetime.getHours() < 10 ? "0" : "") +
-        protocolStartDatetime.getHours();
-      output +=
-        ":" +
-        (protocolStartDatetime.getMinutes() < 10 ? "0" : "") +
-        protocolStartDatetime.getMinutes();
-      return output;
-    },
-    date: function (str) {
-      let protocolStartDatetime = new Date(str);
-      let output =
-        (protocolStartDatetime.getDate() < 10 ? "0" : "") +
-        protocolStartDatetime.getDate();
-      output +=
-        "/" +
-        (protocolStartDatetime.getMonth() < 9 ? "0" : "") +
-        (protocolStartDatetime.getMonth() + 1);
-      output += "/" + protocolStartDatetime.getFullYear();
-      return output;
-    },
+    time: (str) => formatDateTime(new Date(str), "time"),
+    date: (str) => formatDateTime(new Date(str), "date"),
   },
   serialReview: {
-    time: function (req, h) {
-      let dt = new Date(req.protocolStartDatetime);
-      dt.setTime(dt.getTime() + h * 60 * 60 * 1000);
-      let output = (dt.getHours() < 10 ? "0" : "") + dt.getHours();
-      output += ":" + (dt.getMinutes() < 10 ? "0" : "") + dt.getMinutes();
-      return output;
+    time: (req, h) => {
+      const dt = new Date(req.protocolStartDatetime);
+      dt.setHours(dt.getHours() + h);
+      return formatDateTime(dt, "time");
     },
-    date: function (req, h) {
-      let dt = new Date(req.protocolStartDatetime);
-      dt.setTime(dt.getTime() + h * 60 * 60 * 1000);
-      let output = (dt.getDate() < 10 ? "0" : "") + dt.getDate();
-      output += "/" + (dt.getMonth() < 9 ? "0" : "") + (dt.getMonth() + 1);
-      output += "/" + dt.getFullYear();
-      return output;
+    date: (req, h) => {
+      const dt = new Date(req.protocolStartDatetime);
+      dt.setHours(dt.getHours() + h);
+      return formatDateTime(dt, "date");
     },
   },
-  generated: function () {
-    let now = new Date();
-    let output = (now.getHours() < 10 ? "0" : "") + now.getHours();
-    output += ":" + (now.getMinutes() < 10 ? "0" : "") + now.getMinutes();
-    output += " " + (now.getDate() < 10 ? "0" : "") + now.getDate();
-    output += "/" + (now.getMonth() < 9 ? "0" : "") + (now.getMonth() + 1);
-    output += "/" + now.getFullYear();
-    return output;
-  },
-  dob: function (str) {
-    let dob = new Date(str);
-    let output = (dob.getDate() < 10 ? "0" : "") + dob.getDate();
-    output += "/" + (dob.getMonth() < 9 ? "0" : "") + (dob.getMonth() + 1);
-    output += "/" + dob.getFullYear();
-    return output;
-  },
+  generated: () =>
+    formatDateTime(new Date(), "time") +
+    " " +
+    formatDateTime(new Date(), "date"),
+  dob: (str) => formatDateTime(new Date(str), "date"),
 };
 
-const hospNHSNumber = (req) => {
-  return req.patientNHS
-    ? "NHS number: " + req.patientNHS
-    : "Hospital number: " + req.patientHospNum;
-};
+// Function to get the patient's NHS number, or hospital number if no NHS number provided
+const hospNHSNumber = (req) =>
+  req.patientNHS
+    ? `NHS number: ${req.patientNHS}`
+    : `Hospital number: ${req.patientHospNum}`;
 
+// Function to generate a tick symbol if stopping pump not applicable
 const tickCanvasArrays = {
-  pumpStoppedNA: function (req) {
-    if (req.preExistingDiabetes == "false") return [];
-    if (req.insulinDeliveryMethod == "pump") return [];
-    return [
-      {
-        type: "polyline",
-        lineWidth: 2,
-        closePath: false,
-        points: [
-          { x: 240, y: 44 },
-          { x: 245, y: 49 },
-          { x: 249, y: 40 },
+  pumpStoppedNA: (req) =>
+    req.preExistingDiabetes === "false" || req.insulinDeliveryMethod === "pump"
+      ? []
+      : [
+          {
+            type: "polyline",
+            lineWidth: 2,
+            closePath: false,
+            points: [
+              { x: 240, y: 44 },
+              { x: 245, y: 49 },
+              { x: 249, y: 40 },
+            ],
+          },
         ],
-      },
-    ];
-  },
 };
 
+// Function to generate messages for preventable factors page
 const preventableFactors = {
-  main: function (req) {
-    let msg = "";
-    if (req.preventableFactors[0] == "No") {
-      msg =
-        "When this protocol was generated the user indicated that there were no preventable/modifiable factors which may have led to this episode of DKA. If you now have information to suggest there were preventable/modifiable factors please update the audit data using the instructions below.";
-    } else if (req.preventableFactors[0] == "Not yet known") {
-      msg =
-        "When this protocol was generated the user indicated that it was not yet known if there were preventable/modifiable factors which may have led to this episode of DKA. Please update the audit data using the instructions below.";
-    } else {
-      msg =
-        "When this protocol was generated the user indicated the following preventable/modifiable factors may have led to this episode of DKA: ";
-      let factorsString = "";
-      for (let factor of req.preventableFactors)
-        factorsString += factor.toLowerCase() + ", ";
-      factorsString = factorsString.slice(0, -2); //remove trailing comma and space
-      msg +=
-        factorsString +
-        ". If you now know that other preventable/modifiable factors apply, or no longer feel the selected factors are representative, please update the audit data using the instructions below.";
+  main: (req) => {
+    const factors = req.preventableFactors;
+    if (factors[0] === "No") {
+      return "When this protocol was generated the user indicated that there were no preventable/modifiable factors which may have led to this episode of DKA. If you now have information to suggest there were preventable/modifiable factors please update the audit data using the instructions below.";
     }
-    return msg;
+    if (factors[0] === "Not yet known") {
+      return "When this protocol was generated the user indicated that it was not yet known if there were preventable/modifiable factors which may have led to this episode of DKA. Please update the audit data using the instructions below.";
+    }
+    const factorsString = factors
+      .map((factor) => factor.toLowerCase())
+      .join(", ");
+    return `When this protocol was generated the user indicated the following preventable/modifiable factors may have led to this episode of DKA: ${factorsString}. If you now know that other preventable/modifiable factors apply, or no longer feel the selected factors are representative, please update the audit data using the instructions below.`;
   },
-  instructions: function (req) {
-    return (
-      "To update the preventable/modifiable factors data for this episode go to dka-calculator.co.uk/update and enter the audit ID: " +
-      req.auditID
-    );
-  },
+  instructions: (req) =>
+    `To update the preventable/modifiable factors data for this episode go to dka-calculator.co.uk/update and enter the audit ID: ${req.auditID}`,
 };
 
+// Function to generate the document definition
 function getDocDef(req) {
   const docDef = {
     pageSize: "A4",
@@ -296,77 +200,70 @@ function getDocDef(req) {
       italics: false,
     },
 
-    header: function (currentPage, pageCount) {
+    header: (currentPage, pageCount) => {
+      if (currentPage === 1) return "";
       // adds demographic, page number, generation datetime stamp and calculator URL to all headers except title page
-      if (currentPage == 1) {
-        return "";
-      } else {
-        return {
-          table: {
-            widths: ["2%", "33%", "30%", "33%", "2%"],
-            body: [
-              [
-                { text: "" },
-                {
-                  text: "Name: " + req.patientName,
-                  alignment: "left",
-                  style: "header",
-                },
-                {
-                  text:
-                    config.url.replace("https://", "") +
-                    " (v" +
-                    config.version +
-                    ")",
-                  alignment: "center",
-                  style: "header",
-                },
-                {
-                  text: "Protocol page " + currentPage + " of " + pageCount,
-                  alignment: "right",
-                  style: "header",
-                },
-                { text: "" },
-              ],
-              [
-                { text: "" },
-                {
-                  text: "Date of birth: " + datetimes.dob(req.patientDOB),
-                  alignment: "left",
-                  style: "header",
-                },
-                { text: "" },
-                {
-                  text: "Audit ID: " + req.auditID,
-                  alignment: "right",
-                  style: "header",
-                },
-                { text: "" },
-              ],
-              [
-                { text: "" },
-                {
-                  text: hospNHSNumber(req),
-                  alignment: "left",
-                  style: "header",
-                },
-                { text: "" },
-                {
-                  text:
-                    "Protocol start: " +
-                    datetimes.protocolStart.time(req.protocolStartDatetime) +
-                    " " +
-                    datetimes.protocolStart.date(req.protocolStartDatetime),
-                  alignment: "right",
-                  style: "header",
-                },
-                { text: "" },
-              ],
+      return {
+        table: {
+          widths: ["2%", "33%", "30%", "33%", "2%"],
+          body: [
+            [
+              { text: "" },
+              {
+                text: `Name: ${req.patientName}`,
+                alignment: "left",
+                style: "header",
+              },
+              {
+                text: `${config.url.replace("https://", "")} (v${
+                  config.version
+                })`,
+                alignment: "center",
+                style: "header",
+              },
+              {
+                text: `Protocol page ${currentPage} of ${pageCount}`,
+                alignment: "right",
+                style: "header",
+              },
+              { text: "" },
             ],
-          },
-          layout: "noBorders",
-        };
-      }
+            [
+              { text: "" },
+              {
+                text: `Date of birth: ${datetimes.dob(req.patientDOB)}`,
+                alignment: "left",
+                style: "header",
+              },
+              { text: "" },
+              {
+                text: `Audit ID: ${req.auditID}`,
+                alignment: "right",
+                style: "header",
+              },
+              { text: "" },
+            ],
+            [
+              { text: "" },
+              {
+                text: hospNHSNumber(req),
+                alignment: "left",
+                style: "header",
+              },
+              { text: "" },
+              {
+                text: `Protocol start: ${datetimes.protocolStart.time(
+                  req.protocolStartDatetime
+                )} ${datetimes.protocolStart.date(req.protocolStartDatetime)}`,
+                alignment: "right",
+                style: "header",
+              },
+              { text: "" },
+            ],
+          ],
+        },
+        layout: "noBorders",
+      };
     },
 
     images: {
@@ -452,12 +349,12 @@ function getDocDef(req) {
       //page 1
       //patient demographics box
       {
-        text: "Name: " + req.patientName,
+        text: `Name: ${req.patientName}`,
         fontSize: 12,
         absolutePosition: { x: 60, y: 306 },
       },
       {
-        text: "Date of birth: " + datetimes.dob(req.patientDOB),
+        text: `Date of birth: ${datetimes.dob(req.patientDOB)}`,
         fontSize: 12,
         absolutePosition: { x: 60, y: 324 },
       },
@@ -467,12 +364,12 @@ function getDocDef(req) {
         absolutePosition: { x: 60, y: 342 },
       },
       {
-        text: "Audit ID: " + req.auditID,
+        text: `Audit ID: ${req.auditID}`,
         fontSize: 12,
         absolutePosition: { x: 60, y: 360 },
       },
       {
-        text: "Generated: " + datetimes.generated(),
+        text: `Generated: ${datetimes.generated()}`,
         fontSize: 12,
         absolutePosition: { x: 60, y: 378 },
       },
@@ -489,65 +386,54 @@ function getDocDef(req) {
       },
       //calculator input check box
       {
-        text:
-          "This protocol was generated at " +
-          config.url.replace("https://", "") +
-          " and certain elements of the document, such as fluid",
+        text: `This protocol was generated at ${config.url.replace(
+          "https://",
+          ""
+        )} and certain elements of the document, such as fluid`,
         link: config.url,
         fontSize: 10,
         absolutePosition: { x: 65, y: 645 },
       },
       {
-        text: "calculations have been pre-filled. The following values were used and should be checked for accuracy before",
+        text: `calculations have been pre-filled. The following values were used and should be checked for accuracy before`,
         link: config.url,
         fontSize: 10,
         absolutePosition: { x: 65, y: 661 },
       },
       {
-        text: "using this protocol. Please read the disclaimer at the end of this document before use.",
+        text: `using this protocol. Please read the disclaimer at the end of this document before use.`,
         fontSize: 10,
         absolutePosition: { x: 65, y: 677 },
       },
       {
-        text:
-          "Weight: " +
-          req.weight +
-          "kg (Weight safety limit override? " +
-          req.override +
-          ")",
+        text: `Weight: ${req.weight}kg (Weight safety limit override? ${req.override})`,
         fontSize: 10,
         absolutePosition: { x: 65, y: 709 },
       },
       {
-        text:
-          "pH: " +
-          req.pH +
-          (req.bicarbonate
-            ? "     Bicarbonate: " + req.bicarbonate + "mmol/L"
-            : ""),
+        text: `pH: ${req.pH} ${
+          req.bicarbonate ? `Bicarbonate: ${req.bicarbonate} mmol/L` : ""
+        }`,
         fontSize: 10,
         absolutePosition: { x: 325, y: 709 },
       },
       {
-        text: "Patient clinically shocked? " + req.shockPresent,
+        text: `Patient clinically shocked? ${req.shockPresent}`,
         fontSize: 10,
         absolutePosition: { x: 65, y: 725 },
       },
       {
-        text:
-          "Starting insulin infusion rate: " +
-          req.insulinRate +
-          " Units/kg/hour",
+        text: `Starting insulin infusion rate: ${req.insulinRate} Units/kg/hour`,
         fontSize: 10,
         absolutePosition: { x: 325, y: 725 },
       },
       {
-        text: "Pre-existing diabetes? " + req.preExistingDiabetes,
+        text: `Pre-existing diabetes? ${req.preExistingDiabetes}`,
         fontSize: 10,
         absolutePosition: { x: 65, y: 741 },
       },
       {
-        text: "Sex: " + req.patientSex,
+        text: `Sex: " ${req.patientSex}`,
         fontSize: 10,
         absolutePosition: { x: 325, y: 741 },
       },
@@ -1426,10 +1312,10 @@ function getDocDef(req) {
             [
               "",
               {
-                text:
-                  "For worked examples, refer to the full guideline (" +
-                  config.bsped.dkaGuidelines.replace("https://", "") +
-                  ").",
+                text: `For worked examples, refer to the full guideline (${config.bsped.dkaGuidelines.replace(
+                  "https://",
+                  ""
+                )}).`,
                 link: config.bsped.dkaGuidelines,
               },
               "",
@@ -1482,10 +1368,10 @@ function getDocDef(req) {
             [
               "",
               {
-                text:
-                  "For worked examples, refer to the full guideline (" +
-                  config.bsped.dkaGuidelines.replace("https://", "") +
-                  ").",
+                text: `For worked examples, refer to the full guideline (${config.bsped.dkaGuidelines.replace(
+                  "https://",
+                  ""
+                )}).`,
                 link: config.bsped.dkaGuidelines,
               },
               "",
@@ -1625,9 +1511,10 @@ function getDocDef(req) {
             ],
             [
               "",
-              "Important: Decisions about patient care remains the treating clinician's responsibility. By using this care pathway you confirm that you accept in full the terms of the disclaimer found at " +
-                config.url.replace("https://", "") +
-                ". If you do not agree to the terms, you must not use this care pathway.",
+              `Important: Decisions about patient care remains the treating clinician's responsibility. By using this care pathway you confirm that you accept in full the terms of the disclaimer found at ${config.url.replace(
+                "https://",
+                ""
+              )}. If you do not agree to the terms, you must not use this care pathway.`,
               "",
             ],
             ["", " ", ""],
@@ -1646,6 +1533,7 @@ function getDocDef(req) {
       },
     ],
   };
+
   return docDef;
 }
 
