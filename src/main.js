@@ -1,3 +1,4 @@
+// Importing necessary styles and libraries
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
 import "./assets/main.css";
@@ -6,22 +7,28 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 
-/* import the fontawesome core */
+/* Import FontAwesome core and Vue component */
 import { library } from "@fortawesome/fontawesome-svg-core";
-/* import font awesome icon component */
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-/* import specific icons */
+/* Import specific FontAwesome icons */
 import {
   faQuestionCircle,
   faInfoCircle,
   faCheck,
-  faXmark
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-/* add icons to the library */
+
+/* Add icons to the FontAwesome library */
 library.add(faQuestionCircle, faInfoCircle, faCheck, faXmark);
 
+/* Create Vue application */
 const app = createApp(App);
 
+/* Register FontAwesomeIcon component globally */
+app.component("font-awesome-icon", FontAwesomeIcon);
+
+/* Use Vue Router */
 app.use(router);
 
+/* Mount Vue application to the DOM */
 app.mount("#app");

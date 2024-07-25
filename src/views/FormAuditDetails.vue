@@ -1,18 +1,32 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { data } from "../assets/data.js";
 import { config } from "../assets/config.js";
 import router from "../router";
 
+// Reactive variable to control error display
 let showErrors = ref(false);
 
+/**
+ * Handles the 'Continue' button click event.
+ * Shows validation errors and navigates to the next step if the form is valid.
+ */
 const continueClick = () => {
   showErrors.value = true;
+  // Add validation class to the form
   document.getElementById("form-audit-details").classList.add("was-validated");
-  if (data.value.form.isValid(3)) router.push("/generate-protocol");
+
+  // Check if the form is valid and navigate to the next route
+  if (data.value.form.isValid(3)) {
+    router.push("/generate-protocol");
+  }
 };
 
+/**
+ * Lifecycle hook that runs when the component is mounted.
+ * Checks the validity of previous form steps and redirects if necessary.
+ * Scrolls to the top of the page.
+ */
 onMounted(() => {
   if (!data.value.form.isValid(0)) {
     router.push("/form-disclaimer");
@@ -26,8 +40,8 @@ onMounted(() => {
   ) {
     router.push("/form-override-confirm");
   } else {
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    // Scroll to top
+    window.scrollTo(0, 0);
   }
 });
 </script>

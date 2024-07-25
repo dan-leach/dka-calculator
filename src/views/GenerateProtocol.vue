@@ -1,12 +1,11 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { data } from "../assets/data.js";
 import { config } from "../assets/config.js";
-import Swal from "sweetalert2";
 import router from "../router";
 import { api } from "@/assets/api.js";
 
+// Steps of the generation process
 const generateSteps = ref({
   transmit: {
     text: "Transmitting data to DKA Calculator",
@@ -41,6 +40,10 @@ const generateSteps = ref({
 });
 
 const generate = {
+  /**
+   * Starts the generation process by executing each step in sequence.
+   * Handles errors and updates the status of each step.
+   */
   start: async function () {
     for (let step in generateSteps.value) {
       generateSteps.value[step].fail = "";
@@ -48,7 +51,7 @@ const generate = {
       generateSteps.value[step].current = false;
     }
 
-    //generate payload to send to server
+    // Generate payload to send to server
     let payload = {};
     generateSteps.value.transmit.current = true;
     try {
@@ -62,7 +65,7 @@ const generate = {
       return;
     }
 
-    //send the payload to server and receive calculations and auditID
+    // Send the payload to server and receive calculations and auditID
     generateSteps.value.calculate.current = true;
     try {
       const res = await api("fetchCalculations", payload);
@@ -78,20 +81,20 @@ const generate = {
       return;
     }
 
-    //build and download care pathway
+    // Build and download care pathway
     generateSteps.value.build.current = true;
     try {
       let myWorker = this.startWebWorker();
-      myWorker.onmessage = function (res) {
-        //once response received from webWorker triggers download of pdf
+      myWorker.onmessage = (res) => {
         if (res.data.stack) {
+          // Handle errors from web worker
           //if res.data.stack is defined then it's an error being returned by web worker so pass res.data to errHandler
           generateSteps.value.build.current = false;
           generateSteps.value.build.fail = res.data;
           console.error(res.data);
           return;
         } else {
-          //otherwise use the returned blob to create the download
+          // Create the download from the returned blob
           generateSteps.value.build.complete = true;
           generateSteps.value.build.current = false;
           generateSteps.value.download.current = true;
@@ -112,6 +115,11 @@ const generate = {
       return;
     }
   },
+
+  /**
+   * Builds the payload to send to the server.
+   * @returns {Object} Payload containing input values.
+   */
   buildPayload: async function () {
     let payload = {};
     for (let input in data.value.inputs) {
@@ -129,8 +137,10 @@ const generate = {
     payload.insulinRate = parseFloat(payload.insulinRate);
     payload.preExistingDiabetes =
       payload.preExistingDiabetes == "true" ? true : false;
-    if (data.value.inputs.patientNHS.val && data.value.inputs.patientDOB.val)
+
+    if (data.value.inputs.patientNHS.val && data.value.inputs.patientDOB.val) {
       payload.patientHash = await this.patientHash();
+    }
     delete payload.patientName;
     delete payload.patientHospNum;
     delete payload.patientNHS;
@@ -144,6 +154,11 @@ const generate = {
     payload.clientUseragent = navigator.userAgent;
     return payload;
   },
+
+  /**
+   * Generates a hash of the patient's NHS number and DOB.
+   * @returns {string} Hash string.
+   */
   patientHash: async function () {
     return Array.from(
       new Uint8Array(
@@ -157,13 +172,17 @@ const generate = {
       (byte) => byte.toString(16).padStart(2, "0")
     ).join("");
   },
+
+  /**
+   * Starts the web worker to generate the PDF blob.
+   * @returns {Worker} The web worker instance.
+   */
   startWebWorker: function () {
-    //launches the web worker that will generate the PDF blob
     console.log("main: starting webWorker.js...");
     const myWorker = new Worker(
       new URL("@/assets/webWorker.js", import.meta.url),
       { type: "module" }
-    ); //start instance of webWorkerPDF.js
+    );
     myWorker.postMessage(
       JSON.parse(
         JSON.stringify({
@@ -192,9 +211,13 @@ const generate = {
     console.log("main: request sent to webWorker.js...");
     return myWorker;
   },
+
+  /**
+   * Handles the response from the web worker, triggering the PDF download.
+   * @param {MessageEvent} res - The message event from the web worker.
+   */
   handleWorkerResponse: function (res) {
     console.log("main: response received from webWorker.js...");
-    // Automatically start file download
     const anchor = document.createElement("a");
     document.body.appendChild(anchor);
     anchor.href = window.URL.createObjectURL(res.data.pdfBlob);
@@ -204,16 +227,27 @@ const generate = {
     console.log("main: pdf download triggered...");
     this.success();
   },
+
+  /**
+   * Shows the success modal after the PDF is downloaded.
+   */
   success: function () {
-    //show the success modal
     generateSteps.value.download.complete = true;
     generateSteps.value.download.current = false;
   },
 };
 
+// Reactive variable to control button text
 let showWorkingBtnText = ref("Show working");
 
+/**
+ * Lifecycle hook that runs when the component is mounted.
+ * Checks the validity of previous form steps and redirects if necessary.
+ * Scrolls to the top of the page.
+ * Starts the protocol generation process
+ */
 onMounted(() => {
+  // Validate previous form steps and redirect if necessary
   if (!data.value.form.isValid(0)) {
     router.push("/form-disclaimer");
   } else if (!data.value.form.isValid(1)) {
@@ -228,8 +262,12 @@ onMounted(() => {
   } else if (!data.value.form.isValid(3)) {
     router.push("/form-audit-details");
   } else {
+    // Scroll to top
+    window.scrollTo(0, 0);
+    // Start the generation process
     generate.start();
 
+    // Handle show/hide working button text
     let showWorkingCollapse = document.getElementById("showWorking");
     showWorkingCollapse.addEventListener(
       "hidden.bs.collapse",

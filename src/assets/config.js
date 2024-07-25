@@ -25,6 +25,7 @@ export const config = reactive({
   disclaimer:
     "Decisions about patient care remain the treating clinician's responsibility.",
   client: {
+    joeBloggsMode: true,
     regions: [
       //each array is of the hospitals in that region
       {
