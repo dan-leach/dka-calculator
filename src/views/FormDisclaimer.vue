@@ -1,37 +1,48 @@
 <script setup>
 import { onMounted } from "vue";
 import { data } from "../assets/data.js";
+import { config } from "../assets/config.js";
 import router from "../router";
 
+/**
+ * Function to handle the 'Continue' button click event.
+ * Sets the legal agreement to true and navigates to the patient details form.
+ */
 const continueClick = () => {
   data.value.inputs.legalAgreement.val = true;
   router.push("/form-patient-details");
 };
 
+/**
+ * Lifecycle hook that runs when the component is mounted.
+ * Ensures the page is scrolled to the top.
+ */
 onMounted(() => {
-  document.body.scrollTop = 0; // For Safari
-  document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-  //testing purposes
+  // Scroll to the top of the page
+  window.scrollTo(0, 0);
 
-  data.value.inputs.legalAgreement.val = true;
-  data.value.inputs.patientName.val = "Joe Bloggs";
-  data.value.inputs.patientDOB.val = "2010-01-01";
-  data.value.inputs.patientSex.val = "male";
-  data.value.inputs.patientNHS.val = "1234567890";
-  data.value.inputs.patientPostcode.val = "BS419DL";
-  data.value.inputs.protocolStartDatetime.val = "2024-07-02T19:10";
-  data.value.inputs.pH.val = "7.00";
-  data.value.inputs.weight.val = "40.0";
-  data.value.inputs.shockPresent.val = "false";
-  data.value.inputs.insulinRate.val = "0.05";
-  data.value.inputs.preExistingDiabetes.val = "true";
-  data.value.inputs.insulinDeliveryMethod.val = "pump";
-  data.value.inputs.episodeType.val = "test";
-  data.value.inputs.region.val = "test region";
-  data.value.inputs.centre.val = "test centre";
-  data.value.inputs.ethnicGroup.val = "test ethnic group";
-  data.value.inputs.ethnicSubgroup.val = "test ethnic subgroup";
-  data.value.inputs.preventableFactors.val = ["No"];
+  // Pre-fill form data for testing purposes if joeBloggsMode on
+  if (config.client.joeBloggsMode) {
+    data.value.inputs.legalAgreement.val = true;
+    data.value.inputs.patientName.val = "Joe Bloggs";
+    data.value.inputs.patientDOB.val = "2010-01-01";
+    data.value.inputs.patientSex.val = "male";
+    data.value.inputs.patientNHS.val = "1234567890";
+    data.value.inputs.patientPostcode.val = "BS419DL";
+    data.value.inputs.protocolStartDatetime.val = "2024-07-02T19:10";
+    data.value.inputs.pH.val = "7.00";
+    data.value.inputs.weight.val = "40.0";
+    data.value.inputs.shockPresent.val = "false";
+    data.value.inputs.insulinRate.val = "0.05";
+    data.value.inputs.preExistingDiabetes.val = "true";
+    data.value.inputs.insulinDeliveryMethod.val = "pump";
+    data.value.inputs.episodeType.val = "test";
+    data.value.inputs.region.val = "test region";
+    data.value.inputs.centre.val = "test centre";
+    data.value.inputs.ethnicGroup.val = "test ethnic group";
+    data.value.inputs.ethnicSubgroup.val = "test ethnic subgroup";
+    data.value.inputs.preventableFactors.val = ["No"];
+  }
 });
 </script>
 

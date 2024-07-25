@@ -1,44 +1,56 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { data } from "../assets/data.js";
 import router from "../router";
 
-let showErrors = ref(false);
+// Reactive variable to control error display
+const showErrors = ref(false);
 
+/**
+ * Handle continue button click event
+ * Show validation errors and navigate based on form validity
+ */
 const continueClick = () => {
   showErrors.value = true;
   document
     .getElementById("form-clinical-details")
     .classList.add("was-validated");
+
   if (data.value.form.isValid(2)) {
-    if (data.value.inputs.weight.limit.override) {
-      router.push("/form-override-confirm");
-    } else {
-      router.push("/form-audit-details");
-    }
+    const nextRoute = data.value.inputs.weight.limit.override
+      ? "/form-override-confirm"
+      : "/form-audit-details";
+    router.push(nextRoute);
   }
 };
 
+/**
+ * Lifecycle hook that runs when the component is mounted.
+ * Checks the validity of previous form steps and redirects if necessary.
+ * Sets initial form state.
+ * Scrolls to the top of the page.
+ */
 onMounted(() => {
   if (!data.value.form.isValid(0)) {
     router.push("/form-disclaimer");
   } else if (!data.value.form.isValid(1)) {
     router.push("/form-patient-details");
   } else {
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-    data.value.inputs.protocolStartDatetime.todayString.build();
-    data.value.inputs.protocolStartDatetime.val =
-      data.value.inputs.protocolStartDatetime.todayString.val;
-    data.value.inputs.protocolStartDatetime.minDate.build();
-    data.value.inputs.protocolStartDatetime.minDateString.build();
-    document.getElementById("protocolStartDatetime").min =
-      data.value.inputs.protocolStartDatetime.minDateString.val;
-    data.value.inputs.protocolStartDatetime.maxDate.build();
-    data.value.inputs.protocolStartDatetime.maxDateString.build();
-    document.getElementById("protocolStartDatetime").max =
-      data.value.inputs.protocolStartDatetime.maxDateString.val;
+    // Scroll to top
+    window.scrollTo(0, 0);
+
+    // Build date-related values and set input min/max attributes
+    const { protocolStartDatetime } = data.value.inputs;
+    protocolStartDatetime.todayString.build();
+    protocolStartDatetime.val = protocolStartDatetime.todayString.val;
+    protocolStartDatetime.minDate.build();
+    protocolStartDatetime.minDateString.build();
+    protocolStartDatetime.maxDate.build();
+    protocolStartDatetime.maxDateString.build();
+
+    const protocolInput = document.getElementById("protocolStartDatetime");
+    protocolInput.min = protocolStartDatetime.minDateString.val;
+    protocolInput.max = protocolStartDatetime.maxDateString.val;
   }
 });
 </script>
