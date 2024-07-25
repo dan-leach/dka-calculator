@@ -1,20 +1,29 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { data } from "../assets/data.js";
 import Swal from "sweetalert2";
 import router from "../router";
 
+// Reactive variable to control error display
 let showErrors = ref(false);
 
+/**
+ * Function to handle the 'Continue' button click event.
+ * Validates the patient details form and navigates to the clinical details form if valid.
+ */
 const continueClick = () => {
   showErrors.value = true;
   document
     .getElementById("form-patient-details")
     .classList.add("was-validated");
-  if (data.value.form.isValid(1)) router.push("/form-clinical-details");
+  if (data.value.form.isValid(1)) {
+    router.push("/form-clinical-details");
+  }
 };
 
+/**
+ * Sets the minimum and maximum allowed dates for the patient date of birth input field.
+ */
 const setMinMaxPatientDOB = () => {
   const today = new Date();
   document.getElementById("patientDOB").max = today
@@ -26,26 +35,40 @@ const setMinMaxPatientDOB = () => {
     .substring(0, 10);
 };
 
+/**
+ * Handles the opt-out click event for the NHS number or postcode inputs.
+ * Displays an alert if not shown previously, and clears input value if opt-out confirmed.
+ * @param {string} i - The input identifier.
+ */
 const optOutClick = (i) => {
   let input = data.value.inputs[i];
-  if (input.optOut.msg.show)
+  if (input.optOut.msg.show) {
     Swal.fire({
       text: input.optOut.msg.text,
       confirmButtonColor: "#0d6efd",
     });
+  }
   input.optOut.msg.show = false;
-  if (input.optOut.val) input.val = "";
-  if (!input.optOut.val && i == "patientNHS")
+  if (input.optOut.val) {
+    input.val = "";
+  }
+  if (!input.optOut.val && i === "patientNHS") {
     data.value.inputs.patientHospNum.val = "";
+  }
 };
 
+/**
+ * Lifecycle hook that runs when the component is mounted.
+ * Checks the validity of previous form steps and redirects if necessary.
+ * Scrolls to the top of the page.
+ */
 onMounted(() => {
   if (!data.value.form.isValid(0)) {
     router.push("/form-disclaimer");
   } else {
     setMinMaxPatientDOB();
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    // Scroll to top
+    window.scrollTo(0, 0);
   }
 });
 </script>
