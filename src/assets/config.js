@@ -1298,7 +1298,8 @@ export const config = reactive({
     },
   },
   api: {
-    url: "https://api.dka-calculator.co.uk",
+    //url: "https://api.dka-calculator.co.uk/",
+    url: "http://localhost:3000/",
     timeoutDuration: 15000,
     showConsole: true,
   },
