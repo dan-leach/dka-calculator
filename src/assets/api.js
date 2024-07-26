@@ -30,7 +30,8 @@ async function api(route, data) {
       }),
       signal: controller.signal,
     });
-
+    //temp addition during API testing...
+    console.log(JSON.stringify(data));
     // Clear the timeout
     clearTimeout(timeoutId);
 
@@ -48,6 +49,10 @@ async function api(route, data) {
         );
       }
     }
+
+    const responseText = await response.text();
+    alert(responseText);
+    return;
 
     // Parse and return the response JSON
     const responseJson = await response.json();

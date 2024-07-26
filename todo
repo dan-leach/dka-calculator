@@ -6,3 +6,6 @@ Before launch:
 1. Test limits
 2. Legacy
 3. htaccess redirect for app level routes
+4. remove from assets/api.js:
+   //temp addition during API testing...
+   console.log(JSON.stringify(data));
