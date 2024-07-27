@@ -9,7 +9,7 @@ import { config } from "./config.js";
  * @returns {Promise<Object>} - A promise that resolves with the API response as a JSON object.
  */
 async function api(route, data) {
-  const url = config.api.url;
+  const url = config.api.url + route;
   const timeoutDuration = config.api.timeoutDuration;
   const showConsole = config.api.showConsole;
 
@@ -17,58 +17,47 @@ async function api(route, data) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutDuration);
 
+  if (showConsole) {
+    console.log(data ? data : "", ` --> ${route}`);
+  }
+
   try {
     // Prepare and send the request
     const response = await fetch(url, {
       method: "POST",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type": "application/json",
       },
-      body: new URLSearchParams({
-        route,
-        data: JSON.stringify(data),
-      }),
+      body: JSON.stringify(data),
       signal: controller.signal,
     });
-    //temp addition during API testing...
-    console.log(JSON.stringify(data));
+
     // Clear the timeout
     clearTimeout(timeoutId);
 
-    // Check if the response is OK
-    if (!response.ok) {
-      const errorText = await response.text();
-      try {
-        const errorJson = JSON.parse(errorText);
-        console.error("API error", errorJson);
-        throw errorJson;
-      } catch (e) {
-        console.error("API error", e);
-        throw new Error(
-          `API error: status ${response.status} (${response.statusText}) ${errorText}`
-        );
-      }
-    }
-
-    const responseText = await response.text();
-    alert(responseText);
-    return;
-
-    // Parse and return the response JSON
-    const responseJson = await response.json();
+    //parse the JSON response
+    const jsonResponse = await response.json();
     if (showConsole) {
-      console.log(`${route} -->`, responseJson);
+      console.log(`${route} -->`, jsonResponse);
     }
-    return responseJson;
-  } catch (error) {
-    // Handle request timeout or network errors
-    if (error.name === "AbortError") {
-      throw new Error(
-        "Your request timed out. Please check your internet connection."
+
+    // Check if the response is okay
+    if (!response.ok) {
+      console.error(
+        `HTTP error. Status: ${response.status} (${response.statusText})`,
+        jsonResponse
       );
     }
-    console.error("Network or fetch error", error);
-    throw error;
+
+    //Return the JSON response
+    return jsonResponse;
+  } catch (error) {
+    // Handle errors (including timeout and network issues)
+    if (error.name === "AbortError") {
+      console.error("The request timed out.");
+    } else {
+      console.error("Fetch error: ", error);
+    }
   }
 }
 
