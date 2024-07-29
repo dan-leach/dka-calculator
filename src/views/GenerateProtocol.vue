@@ -68,7 +68,7 @@ const generate = {
     // Send the payload to server and receive calculations and auditID
     generateSteps.value.calculate.current = true;
     try {
-      const res = await api("fetchCalculations", payload);
+      const res = await api("calculate", payload);
       data.value.auditID = res.auditID;
       data.value.calculations = res.calculations;
       generateSteps.value.calculate.current = false;
@@ -125,13 +125,24 @@ const generate = {
     for (let input in data.value.inputs) {
       payload[input] = data.value.inputs[input].val;
     }
+
     payload.protocolStartDatetime = new Date(payload.protocolStartDatetime);
     payload.pH = parseFloat(payload.pH);
-    payload.bicarbonate = payload.bicarbonate
-      ? parseFloat(payload.bicarbonate)
-      : null;
-    payload.glucose = payload.glucose ? parseFloat(payload.glucose) : null;
-    payload.ketones = payload.ketones ? parseFloat(payload.ketones) : null;
+    if (payload.glucose) {
+      payload.glucose = parseFloat(payload.glucose);
+    } else {
+      delete payload.glucose;
+    }
+    if (payload.bicarbonate) {
+      payload.bicarbonate = parseFloat(payload.bicarbonate);
+    } else {
+      delete payload.bicarbonate;
+    }
+    if (payload.ketones) {
+      payload.ketones = parseFloat(payload.ketones);
+    } else {
+      delete payload.ketones;
+    }
     payload.weight = parseFloat(payload.weight);
     payload.shockPresent = payload.shockPresent == "true" ? true : false;
     payload.insulinRate = parseFloat(payload.insulinRate);

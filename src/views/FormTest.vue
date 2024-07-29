@@ -41,7 +41,7 @@ const apiTest = {
     // Generate payload to send to server
     let payload = {};
     payload = await this.buildPayload();
-    const res = await api("fetchCalculations", payload);
+    const res = await api("calculate", payload);
   },
 
   /**
@@ -53,10 +53,11 @@ const apiTest = {
       legalAgreement: true,
       patientSex: "male",
       patientPostcode: "BS419DL",
-      protocolStartDatetime: "2024-07-27T14:32:00.000Z",
-      pH: 6.5,
+      protocolStartDatetime: "2024-07-28T14:32:00.000Z",
+      pH: 7.4,
       bicarbonate: 5,
-      ketones: 1,
+      ketones: 4,
+      glucose: 25,
       weight: 40,
       shockPresent: false,
       insulinRate: 0.1,

@@ -37,16 +37,13 @@ async function api(route, data) {
 
     //parse the JSON response
     const jsonResponse = await response.json();
-    if (showConsole) {
+
+    // Show the response if required
+    if (showConsole && response.ok) {
       console.log(`${route} -->`, jsonResponse);
     }
-
-    // Check if the response is okay
     if (!response.ok) {
-      console.error(
-        `HTTP error. Status: ${response.status} (${response.statusText})`,
-        jsonResponse
-      );
+      console.error(`${route} -->`, jsonResponse);
     }
 
     //Return the JSON response
