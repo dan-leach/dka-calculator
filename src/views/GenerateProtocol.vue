@@ -5,8 +5,18 @@ import { config } from "../assets/config.js";
 import router from "../router";
 import { api } from "@/assets/api.js";
 
-// Steps of the generation process.
-const generateSteps = ref({
+/**
+ * Steps of the generation process.
+ * @type {Object<string, Step>}
+ */
+ const generateSteps = ref({
+  /**
+   * @typedef {Object} Step
+   * @property {string} text - Description of the step.
+   * @property {boolean} complete - Indicates if the step is complete.
+   * @property {string} fail - Error message if the step fails.
+   * @property {boolean} current - Indicates if the step is currently being executed.
+   */
   transmit: {
     text: "Transmitting data to DKA Calculator",
     complete: false,
@@ -40,11 +50,11 @@ const generateSteps = ref({
 });
 
 const generate = {
-  /**
-   * Starts the generation process by executing each step in sequence.
+   /**
+   * Performs the generation process by executing each step in sequence.
    * Handles errors and updates the status of each step.
    */
-  start: async function () {
+   start: async function () {
     for (let step in generateSteps.value) {
       generateSteps.value[step].fail = "";
       generateSteps.value[step].complete = false;
@@ -53,174 +63,156 @@ const generate = {
 
     // Generate payload to send to server
     let payload = {};
-    generateSteps.value.transmit.current = true;
-    try {
-      payload = await this.buildPayload();
-      generateSteps.value.transmit.current = false;
-      generateSteps.value.transmit.complete = true;
-    } catch (error) {
-      generateSteps.value.transmit.current = false;
-      generateSteps.value.transmit.fail = error;
-      console.error(error);
-      return;
-    }
+    if (!await generate.executeStep('transmit', generate.buildPayload, payload)) return;
 
     // Send the payload to server and receive calculations and auditID
-    generateSteps.value.calculate.current = true;
-    try {
-      const res = await api("calculate", payload);
-      data.value.auditID = res.auditID;
-      data.value.calculations = res.calculations;
-      generateSteps.value.calculate.current = false;
-      generateSteps.value.calculate.complete = true;
-      generateSteps.value.audit.complete = true;
-    } catch (error) {
-      generateSteps.value.calculate.current = false;
-      generateSteps.value.calculate.fail = error;
-      console.error(error);
-      return;
-    }
+    const res = await api("calculate", payload);
+    data.value.auditID = res.auditID;
+    data.value.calculations = res.calculations;
+    if (!await generate.executeStep('calculate')) return;
+    generateSteps.value.audit.complete = true;
 
     // Build and download care pathway
-    generateSteps.value.build.current = true;
+    if (!await generate.executeStep('build', generate.startWebWorker)) return;
+  },
+
+  /**
+   * Executes a step in the generation process.
+   * @param {string} step - The step name.
+   * @param {Function} [action] - The action to execute.
+   * @param {...any} [params] - Parameters for the action.
+   * @returns {boolean} - Returns true if the step is successful, false otherwise.
+   */
+  executeStep: async function (step, action, ...params) {
+    generateSteps.value[step].current = true;
     try {
-      let myWorker = this.startWebWorker();
-      myWorker.onmessage = (res) => {
-        if (res.data.stack) {
-          // Handle errors from web worker
-          //if res.data.stack is defined then it's an error being returned by web worker so pass res.data to errHandler
-          generateSteps.value.build.current = false;
-          generateSteps.value.build.fail = res.data;
-          console.error(res.data);
-          return;
-        } else {
-          // Create the download from the returned blob
-          generateSteps.value.build.complete = true;
-          generateSteps.value.build.current = false;
-          generateSteps.value.download.current = true;
-          try {
-            generate.handleWorkerResponse(res);
-          } catch (error) {
-            generateSteps.value.download.current = false;
-            generateSteps.value.download.fail = res.error;
-            console.error(error);
-            return;
-          }
-        }
-      };
+      if (action) {
+        await action(...params);
+      }
+      generateSteps.value[step].complete = true;
     } catch (error) {
-      generateSteps.value.build.current = false;
-      generateSteps.value.build.fail = res.data;
+      generateSteps.value[step].fail = [{ msg: error.toString() }];
       console.error(error);
-      return;
+      return false;
+    } finally {
+      generateSteps.value[step].current = false;
     }
+    return true;
   },
 
   /**
    * Builds the payload to send to the server.
    * @returns {Object} Payload containing input values.
    */
-  buildPayload: async function () {
-    let payload = {};
+   buildPayload: async function (payload) {
     for (let input in data.value.inputs) {
       payload[input] = data.value.inputs[input].val;
     }
 
     payload.protocolStartDatetime = new Date(payload.protocolStartDatetime);
     payload.pH = parseFloat(payload.pH);
-    if (payload.glucose) {
-      payload.glucose = parseFloat(payload.glucose);
-    } else {
-      delete payload.glucose;
-    }
-    if (payload.bicarbonate) {
-      payload.bicarbonate = parseFloat(payload.bicarbonate);
-    } else {
-      delete payload.bicarbonate;
-    }
-    if (payload.ketones) {
-      payload.ketones = parseFloat(payload.ketones);
-    } else {
-      delete payload.ketones;
-    }
+    payload.glucose = payload.glucose ? parseFloat(payload.glucose) : undefined;
+    payload.bicarbonate = payload.bicarbonate ? parseFloat(payload.bicarbonate) : undefined;
+    payload.ketones = payload.ketones ? parseFloat(payload.ketones) : undefined;
     payload.weight = parseFloat(payload.weight);
-    payload.shockPresent = payload.shockPresent == "true" ? true : false;
+    payload.shockPresent = payload.shockPresent == "true";
     payload.insulinRate = parseFloat(payload.insulinRate);
-    payload.preExistingDiabetes =
-      payload.preExistingDiabetes == "true" ? true : false;
+    payload.preExistingDiabetes = payload.preExistingDiabetes == "true";
 
     if (data.value.inputs.patientNHS.val && data.value.inputs.patientDOB.val) {
-      payload.patientHash = await this.patientHash();
+      payload.patientHash = await generate.patientHash();
     }
-    delete payload.patientName;
-    delete payload.patientHospNum;
-    delete payload.patientNHS;
-    delete payload.patientDOB;
-    delete payload.other;
+
+    const excludedFields = [
+      'patientName', 'patientHospNum', 'patientNHS', 'patientDOB', 'other'
+    ];
+    for (const field of excludedFields) {
+      delete payload[field];
+    }
 
     payload.patientAge = data.value.inputs.patientDOB.patientAge.val;
     payload.weightLimitOverride = data.value.inputs.weight.limit.override;
     payload.appVersion = config.version;
     payload.clientDatetime = new Date();
     payload.clientUseragent = navigator.userAgent;
+
     return payload;
   },
 
-  /**
-   * Generates a hash of the patient's NHS number and DOB.
-   * @returns {string} Hash string.
-   */
   patientHash: async function () {
-    return Array.from(
-      new Uint8Array(
-        await crypto.subtle.digest(
-          "SHA-256",
-          new TextEncoder().encode(
-            data.value.inputs.patientNHS.val + data.value.inputs.patientDOB.val
-          )
-        )
-      ),
-      (byte) => byte.toString(16).padStart(2, "0")
+    const dataToHash = new TextEncoder().encode(
+      data.value.inputs.patientNHS.val + data.value.inputs.patientDOB.val
+    );
+    const hashBuffer = await crypto.subtle.digest("SHA-256", dataToHash);
+    return Array.from(new Uint8Array(hashBuffer), byte =>
+      byte.toString(16).padStart(2, "0")
     ).join("");
   },
 
   /**
    * Starts the web worker to generate the PDF blob.
-   * @returns {Worker} The web worker instance.
+   * @returns {Promise<void>} A promise that resolves when the worker is started.
    */
-  startWebWorker: function () {
-    console.log("main: starting webWorker.js...");
-    const myWorker = new Worker(
-      new URL("@/assets/webWorker.js", import.meta.url),
-      { type: "module" }
-    );
-    myWorker.postMessage(
-      JSON.parse(
-        JSON.stringify({
-          patientName: data.value.inputs.patientName.val,
-          patientDOB: data.value.inputs.patientDOB.val,
-          patientNHS: data.value.inputs.patientNHS.val,
-          patientHospNum: data.value.inputs.patientHospNum.val,
-          weight: data.value.inputs.weight.val,
-          override: data.value.inputs.weight.limit.override,
-          pH: data.value.inputs.pH.val,
-          bicarbonate: data.value.inputs.bicarbonate.val,
-          glucose: data.value.inputs.glucose.val,
-          ketones: data.value.inputs.ketones.val,
-          shockPresent: data.value.inputs.shockPresent.val,
-          preExistingDiabetes: data.value.inputs.preExistingDiabetes.val,
-          insulinDeliveryMethod: data.value.inputs.insulinDeliveryMethod.val,
-          preventableFactors: data.value.inputs.preventableFactors.val,
-          patientSex: data.value.inputs.patientSex.val,
-          insulinRate: data.value.inputs.insulinRate.val,
-          protocolStartDatetime: data.value.inputs.protocolStartDatetime.val,
-          calculations: data.value.calculations,
-          auditID: data.value.auditID,
-        })
-      )
-    );
-    console.log("main: request sent to webWorker.js...");
-    return myWorker;
+   startWebWorker: function () {
+    return new Promise((resolve, reject) => {
+      console.log("main: starting webWorker.js...");
+      const myWorker = new Worker(
+        new URL("@/assets/webWorker.js", import.meta.url),
+        { type: "module" }
+      );
+      const workerData = JSON.parse(JSON.stringify(generate.prepareWorkerData()))
+      myWorker.postMessage(workerData);
+      console.log("main: request sent to webWorker.js...");
+
+      myWorker.onmessage = (res) => {
+        if (res.data.stack) {
+          generate.handleWorkerError(res.data);
+          reject(new Error(res.data.toString()));
+        } else {
+          generate.handleWorkerResponse(res);
+          resolve();
+        }
+      };
+    });
+  },
+
+  /**
+   * Prepares the data to be sent to the web worker.
+   * @returns {Object} The data to be sent.
+   */
+  prepareWorkerData: function () {
+    const inputs = data.value.inputs;
+    return {
+      patientName: inputs.patientName.val,
+      patientDOB: inputs.patientDOB.val,
+      patientNHS: inputs.patientNHS.val,
+      patientHospNum: inputs.patientHospNum.val,
+      weight: inputs.weight.val,
+      override: inputs.weight.limit.override,
+      pH: inputs.pH.val,
+      bicarbonate: inputs.bicarbonate.val,
+      glucose: inputs.glucose.val,
+      ketones: inputs.ketones.val,
+      shockPresent: inputs.shockPresent.val,
+      preExistingDiabetes: inputs.preExistingDiabetes.val,
+      insulinDeliveryMethod: inputs.insulinDeliveryMethod.val,
+      preventableFactors: inputs.preventableFactors.val,
+      patientSex: inputs.patientSex.val,
+      insulinRate: inputs.insulinRate.val,
+      protocolStartDatetime: inputs.protocolStartDatetime.val,
+      calculations: data.value.calculations,
+      auditID: data.value.auditID,
+    };
+  },
+
+  /**
+   * Handles errors from the web worker.
+   * @param {Object} errorData - The error data from the web worker.
+   */
+  handleWorkerError: function (errorData) {
+    generateSteps.value.build.current = false;
+    generateSteps.value.build.fail = [{ msg: errorData.toString() }];
+    console.error(errorData);
   },
 
   /**
@@ -232,11 +224,10 @@ const generate = {
     const anchor = document.createElement("a");
     document.body.appendChild(anchor);
     anchor.href = window.URL.createObjectURL(res.data.pdfBlob);
-    anchor.download =
-      "DKA Protocol for " + data.value.inputs.patientName.val + ".pdf";
+    anchor.download = `DKA Protocol for ${data.value.inputs.patientName.val}.pdf`;
     anchor.click();
     console.log("main: pdf download triggered...");
-    this.success();
+    generate.success();
   },
 
   /**
@@ -609,7 +600,7 @@ onMounted(() => {
         </div>
       </span>
       <div v-if="step.fail">
-        <p class="text-danger ms-2">{{ step.fail }}</p>
+        <p class="text-danger ms-2" v-for="error in step.fail">{{ error.msg }}</p>
         <!--retry-->
         <button
           type="button"
