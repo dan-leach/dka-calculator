@@ -70,6 +70,7 @@ const generate = {
 
     // Send the payload to server and receive calculations and auditID
     try {
+      generateSteps.value.calculate.current = true;
       const res = await api("calculate", payload);
       data.value.auditID = res.auditID;
       data.value.calculations = res.calculations;
