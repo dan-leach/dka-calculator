@@ -1055,13 +1055,13 @@ function getDocDef(req) {
       },
       //* if glucose bolus capped
       {
-        text: capAlert.bolus.asterisk(req),
+        text: capAlert.glucoseBolus.asterisk(req),
         fontSize: 18,
         absolutePosition: { x: 135, y: 200 },
         color: "red",
       },
       {
-        text: capAlert.bolus.message(req),
+        text: capAlert.glucoseBolus.message(req),
         fontSize: 14,
         absolutePosition: { x: 40, y: 270 },
         color: "red",
@@ -1078,13 +1078,13 @@ function getDocDef(req) {
       },
       //* if hhs bolus capped
       {
-        text: capAlert.bolus.asterisk(req),
+        text: capAlert.hhsBolus.asterisk(req),
         fontSize: 18,
         absolutePosition: { x: 180, y: 280 },
         color: "red",
       },
       {
-        text: capAlert.bolus.message(req),
+        text: capAlert.hhsBolus.message(req),
         fontSize: 14,
         absolutePosition: { x: 70, y: 340 },
         color: "red",
