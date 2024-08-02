@@ -9,7 +9,7 @@ import { api } from "@/assets/api.js";
  * Steps of the generation process.
  * @type {Object<string, Step>}
  */
- const generateSteps = ref({
+const generateSteps = ref({
   /**
    * @typedef {Object} Step
    * @property {string} text - Description of the step.
@@ -50,11 +50,11 @@ import { api } from "@/assets/api.js";
 });
 
 const generate = {
-   /**
+  /**
    * Performs the generation process by executing each step in sequence.
    * Handles errors and updates the status of each step.
    */
-   start: async function () {
+  start: async function () {
     for (let step in generateSteps.value) {
       generateSteps.value[step].fail = "";
       generateSteps.value[step].complete = false;
@@ -63,17 +63,26 @@ const generate = {
 
     // Generate payload to send to server
     let payload = {};
-    if (!await generate.executeStep('transmit', generate.buildPayload, payload)) return;
+    if (
+      !(await generate.executeStep("transmit", generate.buildPayload, payload))
+    )
+      return;
 
     // Send the payload to server and receive calculations and auditID
-    const res = await api("calculate", payload);
-    data.value.auditID = res.auditID;
-    data.value.calculations = res.calculations;
-    if (!await generate.executeStep('calculate')) return;
+    try {
+      const res = await api("calculate", payload);
+      data.value.auditID = res.auditID;
+      data.value.calculations = res.calculations;
+    } catch (error) {
+      generateSteps.value.calculate.fail = error;
+      return;
+    }
+    if (!(await generate.executeStep("calculate"))) return;
     generateSteps.value.audit.complete = true;
 
     // Build and download care pathway
-    if (!await generate.executeStep('build', generate.startWebWorker)) return;
+    if (!(await generate.executeStep("build", generate.startWebWorker))) return;
+    return true;
   },
 
   /**
@@ -104,7 +113,7 @@ const generate = {
    * Builds the payload to send to the server.
    * @returns {Object} Payload containing input values.
    */
-   buildPayload: async function (payload) {
+  buildPayload: async function (payload) {
     for (let input in data.value.inputs) {
       payload[input] = data.value.inputs[input].val;
     }
@@ -112,7 +121,9 @@ const generate = {
     payload.protocolStartDatetime = new Date(payload.protocolStartDatetime);
     payload.pH = parseFloat(payload.pH);
     payload.glucose = payload.glucose ? parseFloat(payload.glucose) : undefined;
-    payload.bicarbonate = payload.bicarbonate ? parseFloat(payload.bicarbonate) : undefined;
+    payload.bicarbonate = payload.bicarbonate
+      ? parseFloat(payload.bicarbonate)
+      : undefined;
     payload.ketones = payload.ketones ? parseFloat(payload.ketones) : undefined;
     payload.weight = parseFloat(payload.weight);
     payload.shockPresent = payload.shockPresent == "true";
@@ -124,7 +135,11 @@ const generate = {
     }
 
     const excludedFields = [
-      'patientName', 'patientHospNum', 'patientNHS', 'patientDOB', 'other'
+      "patientName",
+      "patientHospNum",
+      "patientNHS",
+      "patientDOB",
+      "other",
     ];
     for (const field of excludedFields) {
       delete payload[field];
@@ -144,7 +159,7 @@ const generate = {
       data.value.inputs.patientNHS.val + data.value.inputs.patientDOB.val
     );
     const hashBuffer = await crypto.subtle.digest("SHA-256", dataToHash);
-    return Array.from(new Uint8Array(hashBuffer), byte =>
+    return Array.from(new Uint8Array(hashBuffer), (byte) =>
       byte.toString(16).padStart(2, "0")
     ).join("");
   },
@@ -153,14 +168,16 @@ const generate = {
    * Starts the web worker to generate the PDF blob.
    * @returns {Promise<void>} A promise that resolves when the worker is started.
    */
-   startWebWorker: function () {
+  startWebWorker: function () {
     return new Promise((resolve, reject) => {
       console.log("main: starting webWorker.js...");
       const myWorker = new Worker(
         new URL("@/assets/webWorker.js", import.meta.url),
         { type: "module" }
       );
-      const workerData = JSON.parse(JSON.stringify(generate.prepareWorkerData()))
+      const workerData = JSON.parse(
+        JSON.stringify(generate.prepareWorkerData())
+      );
       myWorker.postMessage(workerData);
       console.log("main: request sent to webWorker.js...");
 
@@ -600,7 +617,9 @@ onMounted(() => {
         </div>
       </span>
       <div v-if="step.fail">
-        <p class="text-danger ms-2" v-for="error in step.fail">{{ error.msg }}</p>
+        <span class="text-danger ms-2" v-for="error in step.fail">
+          {{ error.msg }}<br /> </span
+        ><br />
         <!--retry-->
         <button
           type="button"

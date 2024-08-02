@@ -43,24 +43,25 @@ async function api(route, data) {
       console.log(`${route} -->`, jsonResponse);
     }
     if (!response.ok) {
-      throw jsonResponse
+      throw jsonResponse;
     }
 
     //Return the JSON response
     return jsonResponse;
   } catch (error) {
-    console.log(error)
     // Handle errors (including timeout and network issues)
     if (error.name === "AbortError") {
-      const errorStr = "API error: The request timed out."
+      const errorStr = "API error: The request timed out.";
       console.error(errorStr);
-      throw [{msg: errorStr}]
-    } else if (error.errors) { //is a jsonResponse with errors array
+      throw [{ msg: errorStr }];
+    } else if (error.errors) {
+      //is a jsonResponse with errors array
       console.error("API errors: ", error.errors);
-      throw error.errors
-    } else { //another unexpected error
-      console.log("API error: ", error)
-      throw [{msg: "API error: " + error.toString()}]
+      throw error.errors;
+    } else {
+      //another unexpected error
+      console.log("API error: ", error);
+      throw [{ msg: "API error: " + error.toString() }];
     }
   }
 }
