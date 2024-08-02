@@ -1,13 +1,26 @@
 import { config } from "./config.js";
 import { imageStore } from "./imageStore.js";
 
-// Functions to get coordinates for indicator boxes on the protocol document
+/**
+ * Functions to get coordinates for indicator boxes on the protocol document.
+ */
 const indicatorCoordinates = {
+  /**
+   * Gets the x-axis coordinates for shock indicator.
+   * @param {Object} req - The request object.
+   * @returns {number} - The x-axis coordinate.
+   */
   xAxisShock: (req) =>
     req.shockPresent === "true"
       ? config.client.indicatorCoordinates.xAxisShock.yes
       : config.client.indicatorCoordinates.xAxisShock.no,
 
+  /**
+   * Gets the y-axis coordinates for severity indicator.
+   * @param {Object} req - The request object.
+   * @returns {number} - The y-axis coordinate.
+   * @throws Will throw an error if severity is not recognized.
+   */
   yAxisSeverity: (req) => {
     const severityMap = {
       severe: config.client.indicatorCoordinates.yAxisSeverity.severe,
@@ -19,18 +32,41 @@ const indicatorCoordinates = {
     return severity;
   },
 
+  /**
+   * Gets the x-axis coordinates for diabetic indicator.
+   * @param {Object} req - The request object.
+   * @returns {number} - The x-axis coordinate.
+   */
   xAxisDiabetic: (req) =>
     req.preExistingDiabetes === "true"
       ? config.client.indicatorCoordinates.xAxisDiabetic.yes
       : config.client.indicatorCoordinates.xAxisDiabetic.no,
 };
 
-// Functions to generate messages for capped variables
+/**
+ * Generates a cap alert message.
+ * @param {boolean} isCapped - Indicates if the value is capped.
+ * @param {string} message - The alert message.
+ * @returns {string} - The formatted cap alert message.
+ */
 const generateCapAlert = (isCapped, message) => (isCapped ? `*${message}` : "");
 
+/**
+ * Functions to generate messages for capped variables.
+ */
 const capAlert = {
   bolus: {
+    /**
+     * Generates an asterisk if the bolus volume is capped.
+     * @param {Object} req - The request object.
+     * @returns {string} - An asterisk if capped, otherwise an empty string.
+     */
     asterisk: (req) => (req.calculations.bolusVolume.isCapped ? "*" : ""),
+    /**
+     * Generates a message if the bolus volume is capped.
+     * @param {Object} req - The request object.
+     * @returns {string} - The cap alert message.
+     */
     message: (req) =>
       generateCapAlert(
         req.calculations.bolusVolume.isCapped,
@@ -38,7 +74,17 @@ const capAlert = {
       ),
   },
   deficit: {
+    /**
+     * Generates an asterisk if the deficit volume is capped.
+     * @param {Object} req - The request object.
+     * @returns {string} - An asterisk if capped, otherwise an empty string.
+     */
     asterisk: (req) => (req.calculations.deficit.volume.isCapped ? "*" : ""),
+    /**
+     * Generates a message if the deficit volume is capped.
+     * @param {Object} req - The request object.
+     * @returns {string} - The cap alert message.
+     */
     message: (req) =>
       generateCapAlert(
         req.calculations.deficit.volume.isCapped,
@@ -46,8 +92,18 @@ const capAlert = {
       ),
   },
   maintenance: {
+    /**
+     * Generates an asterisk if the maintenance volume is capped.
+     * @param {Object} req - The request object.
+     * @returns {string} - An asterisk if capped, otherwise an empty string.
+     */
     asterisk: (req) =>
       req.calculations.maintenance.volume.isCapped ? "*" : "",
+    /**
+     * Generates a message if the maintenance volume is capped.
+     * @param {Object} req - The request object.
+     * @returns {string} - The cap alert message.
+     */
     message: (req) =>
       generateCapAlert(
         req.calculations.maintenance.volume.isCapped,
@@ -55,7 +111,17 @@ const capAlert = {
       ),
   },
   insulin: {
+    /**
+     * Generates an asterisk if the insulin rate is capped.
+     * @param {Object} req - The request object.
+     * @returns {string} - An asterisk if capped, otherwise an empty string.
+     */
     asterisk: (req) => (req.calculations.insulinRate.isCapped ? "*" : ""),
+    /**
+     * Generates a message if the insulin rate is capped.
+     * @param {Object} req - The request object.
+     * @returns {string} - The cap alert message.
+     */
     message: (req) =>
       generateCapAlert(
         req.calculations.insulinRate.isCapped,
@@ -63,8 +129,18 @@ const capAlert = {
       ),
   },
   glucoseBolus: {
+    /**
+     * Generates an asterisk if the glucose bolus volume is capped.
+     * @param {Object} req - The request object.
+     * @returns {string} - An asterisk if capped, otherwise an empty string.
+     */
     asterisk: (req) =>
       req.calculations.glucoseBolusVolume.isCapped ? "*" : "",
+    /**
+     * Generates a message if the glucose bolus volume is capped.
+     * @param {Object} req - The request object.
+     * @returns {string} - The cap alert message.
+     */
     message: (req) =>
       generateCapAlert(
         req.calculations.glucoseBolusVolume.isCapped,
@@ -72,7 +148,17 @@ const capAlert = {
       ),
   },
   hhsBolus: {
+    /**
+     * Generates an asterisk if the HHS bolus volume is capped.
+     * @param {Object} req - The request object.
+     * @returns {string} - An asterisk if capped, otherwise an empty string.
+     */
     asterisk: (req) => (req.calculations.hhsBolusVolume.isCapped ? "*" : ""),
+    /**
+     * Generates a message if the HHS bolus volume is capped.
+     * @param {Object} req - The request object.
+     * @returns {string} - The cap alert message.
+     */
     message: (req) =>
       generateCapAlert(
         req.calculations.hhsBolusVolume.isCapped,
@@ -81,7 +167,12 @@ const capAlert = {
   },
 };
 
-// Functions to format date and time
+/**
+ * Formats date and time.
+ * @param {Date} date - The date object.
+ * @param {string} format - The format type ('date' or 'time').
+ * @returns {string} - The formatted date or time string.
+ */
 const formatDateTime = (date, format) => {
   const pad = (num) => (num < 10 ? "0" : "") + num;
   const dateString = `${pad(date.getDate())}/${pad(
@@ -91,37 +182,79 @@ const formatDateTime = (date, format) => {
   return format === "date" ? dateString : timeString;
 };
 
+/**
+ * Functions to format date and time for specific protocol events.
+ */
 const datetimes = {
   protocolStart: {
+    /**
+     * Formats the protocol start time.
+     * @param {string} str - The date string.
+     * @returns {string} - The formatted time string.
+     */
     time: (str) => formatDateTime(new Date(str), "time"),
+    /**
+     * Formats the protocol start date.
+     * @param {string} str - The date string.
+     * @returns {string} - The formatted date string.
+     */
     date: (str) => formatDateTime(new Date(str), "date"),
   },
   serialReview: {
+    /**
+     * Formats the serial review time.
+     * @param {Object} req - The request object.
+     * @param {number} h - The number of hours after protocol start.
+     * @returns {string} - The formatted time string.
+     */
     time: (req, h) => {
       const dt = new Date(req.protocolStartDatetime);
       dt.setHours(dt.getHours() + h);
       return formatDateTime(dt, "time");
     },
+    /**
+     * Formats the serial review date.
+     * @param {Object} req - The request object.
+     * @param {number} h - The number of hours after protocol start.
+     * @returns {string} - The formatted date string.
+     */
     date: (req, h) => {
       const dt = new Date(req.protocolStartDatetime);
       dt.setHours(dt.getHours() + h);
       return formatDateTime(dt, "date");
     },
   },
+  /**
+   * Formats the current date and time.
+   * @returns {string} - The formatted current date and time string.
+   */
   generated: () =>
     formatDateTime(new Date(), "time") +
     " " +
     formatDateTime(new Date(), "date"),
+  /**
+   * Formats the date of birth.
+   * @param {string} str - The date string.
+   * @returns {string} - The formatted date string.
+   */
   dob: (str) => formatDateTime(new Date(str), "date"),
 };
 
-// Function to get the patient's NHS number, or hospital number if no NHS number provided
+/**
+ * Gets the patient's NHS number or hospital number if no NHS number is provided.
+ * @param {Object} req - The request object.
+ * @returns {string} - The NHS number or hospital number.
+ */
 const hospNHSNumber = (req) =>
   req.patientNHS
     ? `NHS number: ${req.patientNHS}`
     : `Hospital number: ${req.patientHospNum}`;
 
-// Function to generate a tick symbol if stopping pump not applicable
+/**
+ * Generates a tick symbol if stopping pump is not applicable.
+ * @param {Object} req - The request object.
+ * @returns {Array<Object>} - An array representing the tick symbol, or an empty array if not applicable.
+ */
 const tickCanvasArrays = {
   pumpStoppedNA: (req) =>
     req.preExistingDiabetes === "false" || req.insulinDeliveryMethod === "pump"
@@ -140,8 +273,15 @@ const tickCanvasArrays = {
         ],
 };
 
-// Function to generate messages for preventable factors page
+/**
+ * Functions to generate messages for the preventable factors page.
+ */
 const preventableFactors = {
+  /**
+   * Generates the main message for preventable factors.
+   * @param {Object} req - The request object.
+   * @returns {string} - The preventable factors message.
+   */
   main: (req) => {
     const factors = req.preventableFactors;
     if (factors[0] === "No") {
@@ -155,11 +295,19 @@ const preventableFactors = {
       .join(", ");
     return `When this protocol was generated the user indicated the following preventable/modifiable factors may have led to this episode of DKA: ${factorsString}. If you now know that other preventable/modifiable factors apply, or no longer feel the selected factors are representative, please update the audit data using the instructions below.`;
   },
+  /**
+   * Generates instructions for updating preventable factors data.
+   * @param {Object} req - The request object.
+   * @returns {string} - The instructions for updating preventable factors data.
+   */
   instructions: (req) =>
     `To update the preventable/modifiable factors data for this episode go to dka-calculator.co.uk/update and enter the audit ID: ${req.auditID}`,
 };
 
-// Function to generate the document definition
+/**
+ * Function to generate the document definition.
+ * @param {Object} req - The request object.
+ */
 function getDocDef(req) {
   const docDef = {
     pageSize: "A4",
