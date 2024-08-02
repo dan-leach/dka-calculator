@@ -276,8 +276,12 @@ export const data = ref({
        * @returns {boolean} - True if the postcode is valid, false otherwise.
        */
       isValid() {
-        this.formatVal();
+        this.errors = "";
         const errors = [];
+        if (this.optOut.val) {
+          return true;
+        }
+        this.formatVal();
         checkLength(
           this.val,
           this.minLength,

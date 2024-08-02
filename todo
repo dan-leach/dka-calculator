@@ -1,6 +1,5 @@
 To fix from testing:
 
-1. Allow to proceed if no postcode and opt-out selected
 2. Add caps to form-override-confirm message for HHS and glucose boluses
 3. API escape string rather than alphanumerics only (some factors contain slashes for example)
 4. Fix no spinner while awaiting API response

@@ -69,6 +69,8 @@ onMounted(() => {
           Insulin rate is capped at 3.75 Units/hour if insulin rate of 0.05
           Units/kg/hour is selected (0.05 Units/kg/hour for 75kg patient)
         </li>
+        <li>Glucose bolus is capped at 150mL (2mL/kg for 75kg patient)</li>
+        <li>HHS bolus is capped at 1500mL (20mL/kg for 75kg patient)</li>
       </ul>
       <p>
         <strong
