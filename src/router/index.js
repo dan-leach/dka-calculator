@@ -55,6 +55,11 @@ const router = createRouter({
       component: () => import("../views/Update.vue"),
     },
     {
+      path: "/submit-update",
+      name: "submit-update",
+      component: () => import("../views/SubmitUpdate.vue"),
+    },
+    {
       path: "/:pathMatch(.*)*",
       name: "404",
       component: () => import("../views/404.vue"),

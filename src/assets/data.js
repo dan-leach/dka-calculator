@@ -78,9 +78,9 @@ export const data = ref({
      * @returns {boolean} - True if the form is valid, false otherwise.
      */
     isValid(formIndex) {
-      return Object.values(data.value.inputs).every(
-        (input) => input.form !== formIndex || input.isValid()
-      );
+      return Object.values(data.value.inputs).every((input) => {
+        return !input.form.includes(formIndex) || input.isValid();
+      });
     },
   },
   inputs: {
@@ -88,7 +88,7 @@ export const data = ref({
       val: false,
       label: "Agreement to legal disclaimer",
       info: "Your agreement to the legal disclaimer is recorded.",
-      form: 0,
+      form: [0],
       isValid() {
         return this.val;
       },
@@ -96,7 +96,7 @@ export const data = ref({
     patientName: {
       val: "",
       label: "Full name",
-      form: 1,
+      form: [1],
       info: "Patient name is printed onto the generated care pathway document in the patient demographics area. It is not stored by the DKA Calculator.",
       minLength: 5,
       maxLength: 80,
@@ -115,7 +115,7 @@ export const data = ref({
     patientDOB: {
       val: "",
       label: "Date of birth",
-      form: 1,
+      form: [1, 4],
       info: "Patient date of birth is printed onto the generated care pathway document in the patient demographics area. It is not stored directly by the DKA Calculator, but is used to calculate a patient age (in years) which is stored for audit purposes. To allow linkage of audit data between episodes the patient date of birth is used to generate a unique patient ID which is stored. The patient date of birth cannot be found from the calculated unique patient ID (<a href='https://www.codecademy.com/resources/blog/what-is-hashing/' target='_blank'>read more about secure cryptographic hashing</a>).",
       withinYears: 19, //date of birth must be between today and 19 years ago - allowance for adult patients not yet transitioned to adult services
       /**
@@ -180,7 +180,7 @@ export const data = ref({
     patientSex: {
       val: "",
       label: "Patient sex",
-      form: 1,
+      form: [1],
       info: "Patient sex is printed onto the generated care pathway. It is stored by the DKA Calculator for audit purposes.",
       /**
        * Validates the patient sex.
@@ -195,7 +195,7 @@ export const data = ref({
     patientNHS: {
       val: "",
       label: "NHS number",
-      form: 1,
+      form: [1, 4],
       info: "If provided, patient NHS number is printed onto the generated care pathway document in the patient demographics area. It is not stored directly by the DKA Calculator. To allow linkage of audit data between episodes the NHS number is used to generate a unique patient ID which is stored. The patient NHS number cannot be found from the calculated unique patient ID (<a href='https://www.codecademy.com/resources/blog/what-is-hashing/' target='_blank'>read more about secure cryptographic hashing</a>).",
       min: 1000000000, //a 10 digit integer (length of an NHS number) cannot have a value less than this
       max: 9999999999, //a 10 digit integer (length of an NHS number) cannot have a value greater than this
@@ -204,6 +204,7 @@ export const data = ref({
        * @returns {boolean} - True if the NHS number is valid, false otherwise.
        */
       isValid() {
+        this.errors = "";
         if (this.optOut.val) return true;
         if (this.val < this.min)
           this.errors +=
@@ -231,7 +232,7 @@ export const data = ref({
     patientHospNum: {
       val: "",
       label: "Hospital number",
-      form: 1,
+      form: [1],
       info: "If used instead of the patient NHS number, patient hospital number is printed onto the generated care pathway document in the patient demographics area. It is not stored by the DKA Calculator.",
       minLength: 4,
       maxLength: 20,
@@ -257,7 +258,7 @@ export const data = ref({
     patientPostcode: {
       val: "",
       label: "Postcode",
-      form: 1,
+      form: [1],
       info: "The patient postcode is not stored by the DKA Calculator. If provided, it is used to find an Index of Multiple Deprivation (IMD) decile which is stored for audit purposes.",
       minLength: 5, //valid postcodes will never be shorter than this
       maxLength: 8, //valid postcodes will never be longer than this
@@ -307,7 +308,7 @@ export const data = ref({
     protocolStartDatetime: {
       val: "",
       label: "Protocol start date/time",
-      form: 2,
+      form: [2],
       info: "The protocol start date/time is used to calculated recommended review date/times on the serial data sheet on the care pathway. It is stored by the DKA Calculator for audit purposes.",
       withinHours: 24,
       todayString: {
@@ -398,7 +399,7 @@ export const data = ref({
     pH: {
       val: null,
       label: "pH",
-      form: 2,
+      form: [2],
       info: "pH is added to the relevant field in the care pathway. pH is used to determine DKA severity which is used in fluid deficit calculations. It is stored by the DKA Calculator for audit purposes.",
       min: 6.2,
       max: 7.5,
@@ -423,7 +424,7 @@ export const data = ref({
     bicarbonate: {
       val: null,
       label: "Bicarbonate",
-      form: 2,
+      form: [2],
       info: "If provided, these values will be added to the relevant fields in the care pathway. Bicarbonate is used to determine DKA severity which is used in fluid deficit calculations. Bicarbonate, glucose and ketones are stored by the DKA Calculator for audit purposes.",
       privacyInfo:
         "If provided, bicarbonate will be added to the relevant field in the care pathway. Bicarbonate is used to determine DKA severity which is used in fluid deficit calculations. It is stored by the DKA Calculator for audit purposes.",
@@ -459,7 +460,7 @@ export const data = ref({
       label: "Glucose",
       privacyInfo:
         "If provided, glucose will be added to the relevant field in the care pathway. It is stored by the DKA Calculator for audit purposes.",
-      form: 2,
+      form: [2],
       min: 3,
       max: 50,
       step: 0.1,
@@ -492,7 +493,7 @@ export const data = ref({
       label: "Ketones",
       privacyInfo:
         "If provided, ketone level will be added to the relevant field in the care pathway. Ketone level is used to check the diagnostic threshold for DKA is reached. It is stored by the DKA Calculator for audit purposes.",
-      form: 2,
+      form: [2],
       min: 0,
       max: 10,
       step: 0.1,
@@ -523,7 +524,7 @@ export const data = ref({
     weight: {
       val: null,
       label: "Weight",
-      form: 2,
+      form: [2],
       info: "Weight is used to calculate fluid volumes for boluses, deficit replacement and maintenance. It is stored by the DKA Calculator for audit purposes. If the weight provided falls outside 2 standard deviations of the mean for age, whether or not you override this limit is also recorded.",
       min: 2,
       max: 150,
@@ -591,7 +592,7 @@ export const data = ref({
       val: "",
       label: "Is the patient clinically shocked?",
       privacyLabel: "Clinical shock status",
-      form: 2,
+      form: [2],
       info: "Clinical shock status is used to indicate initial resuscitation strategy on the care pathway and to determine if the initial bolus is subtracted from the fluid deficit as part of the fluid calculations. It is stored by the DKA Calculator for audit purposes.",
       /**
        * Validates the clinical shock status.
@@ -609,7 +610,7 @@ export const data = ref({
       val: "",
       label: "What starting rate of insulin is required?",
       privacyLabel: "Insulin starting rate",
-      form: 2,
+      form: [2],
       info: "Insulin starting rate (in Units/kg/hour) is used to calculate an insulin rate in Units/hr. It is stored by the DKA Calculator for audit purposes.",
       /**
        * Validates the insulin starting rate.
@@ -628,7 +629,7 @@ export const data = ref({
       label:
         "Was the patient known to have diabetes prior to the current episode of DKA?",
       privacyLabel: "Pre-existing diabetes status",
-      form: 2,
+      form: [2],
       info: "If the patient has pre-existing diabetes, it is used to indicate the approach to managing existing insulin therapy on the care pathway. It is stored by the DKA Calculator for audit purposes.",
       /**
        * Validates the pre-existing diabetes status.
@@ -648,7 +649,7 @@ export const data = ref({
       val: "",
       label: "Which insulin delivery method does the patient use?",
       privacyLabel: "Insulin delivery method",
-      form: 2,
+      form: [2],
       info: "The insulin delivery method that the patient uses (if they have pre-existing diabetes) is stored by the DKA Calculator for audit purposes.",
       /**
        * Validates the insulin delivery method.
@@ -666,7 +667,7 @@ export const data = ref({
       val: "",
       label: "What is this protocol being used for?",
       privacyLabel: "Episode type",
-      form: 3,
+      form: [3],
       info: "Episode type is stored by the DKA Calculator for audit purposes.",
       /**
        * Validates the episode type.
@@ -683,7 +684,7 @@ export const data = ref({
       val: "",
       label: "Please select your region",
       privacyLabel: "Region",
-      form: 3,
+      form: [3],
       info: "Region is stored by the DKA Calculator for audit purposes.",
       /**
        * Validates the region selection and updates the centre options based on the selected region.
@@ -708,7 +709,7 @@ export const data = ref({
       label: "Please select the treating centre",
       privacyLabel: "Treating centre",
       options: [],
-      form: 3,
+      form: [3],
       info: "Treating centre is stored by the DKA Calculator for audit purposes.",
       /**
        * Validates the treating centre selection.
@@ -725,7 +726,7 @@ export const data = ref({
       val: "",
       label: "Please select patient ethnic group",
       privacyLabel: "Patient ethnic group",
-      form: 3,
+      form: [3],
       info: "Patient ethnic group is stored by the DKA Calculator for audit purposes. The list of ethnic groups is taken from the Office for National Statistics.",
       /**
        * Validates the patient ethnic group selection and updates the ethnic subgroup options based on the selected group.
@@ -750,7 +751,7 @@ export const data = ref({
       label: "Please select patient ethnic subgroup",
       privacyLabel: "Patient ethnic subgroup",
       options: [],
-      form: 3,
+      form: [3],
       info: "Patient ethnic subgroup is stored by the DKA Calculator for audit purposes. The list of ethnic groups is taken from the Office for National Statistics.",
       /**
        * Validates the patient ethnic subgroup selection.
@@ -884,7 +885,7 @@ export const data = ref({
           categories: ["Social factors"],
         },
       ],
-      form: 3,
+      form: [3, 4],
       info: "Preventable factors are stored by the DKA Calculator for audit purposes.",
       /**
        * Validates the preventable factors selection.
@@ -899,8 +900,34 @@ export const data = ref({
       },
       errors: "",
     },
+    auditID: {
+      val: "",
+      label: "Audit ID",
+      form: [4],
+      info: "Audit ID is required when updating the audit data for an episode. It is used to find the correct episode record.",
+      minLength: 6,
+      maxLength: 6,
+      /**
+       * Validates the auditID.
+       * @returns {boolean} - True if the name is valid, false otherwise.
+       */
+      isValid() {
+        const errors = [];
+        checkLength(
+          this.val,
+          this.minLength,
+          this.maxLength,
+          errors,
+          "Audit ID"
+        );
+        this.errors = errors.join(" ");
+        return !errors.length;
+      },
+      errors: "",
+    },
     other: {
       privacyLabel: "Other data recorded",
+      form: [],
       privacyInfo:
         "In addition to the input fields above, the following data are recorded to enable, audit, security and performance monitoring: <ul><li>The audit ID (unique to for each care pathway generated) which is also printed on the generated PDF document and can be used for audit data linkage</li><li>Software version of the DKA Calculator used for the episode</li><li>The results of the calculations performed by the DKA Calculator including DKA severity, fluid and insulin calculations</li><li>The date/time when the protocol was generated</li><li>The browser type (useragent) used to access the DKA Calculator</li><li>The IP address of the device used to access the DKA Calculator</li></ul>",
     },

@@ -1,23 +1,321 @@
-<script setup></script>
+<script setup>
+import { ref, onMounted } from "vue";
+import { data } from "../assets/data.js";
+import { config } from "../assets/config.js";
+import router from "../router";
+
+// Reactive variable to control error display.
+let showErrors = ref(false);
+
+/**
+ * Handles the 'Submit' button click event.
+ * Shows validation errors and submits the data if the form is valid.
+ */
+const submitClick = () => {
+  showErrors.value = true;
+  // Add validation class to the form
+  document.getElementById("form-update").classList.add("was-validated");
+
+  // Check if the form is valid and navigate to the next route
+  if (data.value.form.isValid(4)) {
+    router.push("/submit-update");
+  }
+};
+
+/**
+ * Lifecycle hook that runs when the component is mounted.
+ * Scrolls to the top of the page.
+ */
+onMounted(() => {
+  // Scroll to top
+  window.scrollTo(0, 0);
+});
+</script>
 
 <template>
-  <div class="container my-4 needs-validation">
-    <h2 class="display-3">Update</h2>
-    <p class="mx-1">This feature is under construction.</p>
-    <div class="text-center my-5">
-      <button
-        type="button"
-        @click="$router.push('/')"
-        class="btn btn-lg btn-primary"
+  <form id="form-update" class="container my-4 needs-validation">
+    <h2 class="display-3">Update audit data</h2>
+    <!--auditID-->
+    <div class="mb-4">
+      <div class="input-group">
+        <div class="form-floating">
+          <input
+            type="text"
+            class="form-control"
+            id="auditID"
+            v-model="data.inputs.auditID.val"
+            @change="data.inputs.auditID.isValid()"
+            placeholder="x"
+            :minlength="data.inputs.auditID.minLength"
+            :maxlength="data.inputs.auditID.maxLength"
+            required
+            autocomplete="off"
+          />
+          <label for="auditID">{{ data.inputs.auditID.label }}</label>
+        </div>
+        <span
+          class="input-group-text"
+          data-bs-toggle="collapse"
+          data-bs-target="#auditIDInfo"
+          ><font-awesome-icon :icon="['fas', 'circle-info']"
+        /></span>
+      </div>
+      <div
+        v-if="showErrors"
+        class="form-text text-danger mx-1"
+        id="auditIDErrors"
       >
-        Go to start page
-      </button>
+        {{ data.inputs.auditID.errors }}
+      </div>
+      <div class="collapse form-text mx-1" id="auditIDInfo">
+        {{ data.inputs.auditID.info }}
+      </div>
     </div>
-  </div>
+    <!--patientDOB-->
+    <div class="mb-4">
+      <div class="input-group">
+        <div class="form-floating">
+          <input
+            type="date"
+            class="form-control"
+            id="patientDOB"
+            v-model="data.inputs.patientDOB.val"
+            @change="data.inputs.patientDOB.isValid()"
+            placeholder="x"
+            max=""
+            min=""
+            required
+            autocomplete="off"
+          />
+          <label for="patientDOB">{{ data.inputs.patientDOB.label }}</label>
+        </div>
+        <span
+          class="input-group-text"
+          data-bs-toggle="collapse"
+          data-bs-target="#patientDOBInfo"
+          ><font-awesome-icon :icon="['fas', 'circle-info']"
+        /></span>
+      </div>
+      <div
+        v-if="showErrors"
+        class="form-text text-danger mx-1"
+        id="patientDOBErrors"
+      >
+        {{ data.inputs.patientDOB.errors }}
+      </div>
+      <div
+        class="collapse form-text mx-1"
+        id="patientDOBInfo"
+        v-html="data.inputs.patientDOB.info"
+      ></div>
+    </div>
+    <!--patientNHS-->
+    <div class="mb-4">
+      <div class="input-group">
+        <div class="form-floating">
+          <input
+            type="number"
+            class="form-control"
+            id="patientNHS"
+            v-model="data.inputs.patientNHS.val"
+            @change="data.inputs.patientNHS.isValid()"
+            placeholder="x"
+            :min="data.inputs.patientNHS.min"
+            :max="data.inputs.patientNHS.max"
+            :disabled="data.inputs.patientNHS.optOut.val"
+            autocomplete="off"
+            required
+          />
+          <label for="patientNHS">{{ data.inputs.patientNHS.label }}</label>
+        </div>
+        <span
+          class="input-group-text"
+          data-bs-toggle="collapse"
+          data-bs-target="#patientNHSInfo"
+          ><font-awesome-icon :icon="['fas', 'circle-info']"
+        /></span>
+      </div>
+      <div
+        v-if="showErrors && !data.inputs.patientNHS.optOut.val"
+        class="form-text text-danger mx-1"
+        id="patientNHSErrors"
+      >
+        {{ data.inputs.patientNHS.errors }}
+      </div>
+      <div
+        class="collapse form-text mx-1"
+        id="patientNHSInfo"
+        v-html="data.inputs.patientNHS.info"
+        v-if="!data.inputs.patientNHS.optOut.val"
+      ></div>
+    </div>
+    <!--preventableFactors-->
+    <div class="mb-4">
+      <p class="text-center m-2">
+        {{ data.inputs.preventableFactors.label }}
+        <font-awesome-icon
+          :icon="['fas', 'circle-info']"
+          data-bs-toggle="collapse"
+          data-bs-target="#preventableFactorsInfo"
+          class="ms-2"
+        />
+      </p>
+      <!--options-->
+      <div class="d-flex flex-row flex-wrap justify-content-center mb-4">
+        <div v-for="option in data.inputs.preventableFactors.options.list">
+          <input
+            type="checkbox"
+            class="btn-check"
+            :id="option"
+            :value="option"
+            v-model="data.inputs.preventableFactors.options.val"
+            @change="data.inputs.preventableFactors.options.change(option)"
+            autocomplete="off"
+            required
+          />
+          <label class="btn btn-outline-secondary me-2" :for="option">{{
+            option
+          }}</label>
+        </div>
+        <div
+          v-if="data.inputs.preventableFactors.options.val.includes('Yes')"
+          class="form-text text-center"
+        >
+          Please select <strong>all</strong> preventable factors which apply,
+          using the categories below.<br />
+          You do not need to be certain that a particular factor caused the
+          episode of DKA.<br />If addressing a factor
+          <strong>might possibly</strong> have allowed the episode of DKA to be
+          avoided, please select it.
+        </div>
+        <div
+          v-else-if="
+            data.inputs.preventableFactors.options.val.includes('Not yet known')
+          "
+          class="form-text text-center"
+        >
+          A feature to allow you to submit preventable factors data at a later
+          point is under development.
+        </div>
+        <div
+          v-if="showErrors"
+          class="form-text text-danger text-center mx-1"
+          id="preventableFactorsErrors"
+        >
+          {{ data.inputs.preventableFactors.errors }}
+        </div>
+        <div
+          class="collapse form-text text-center mx-1"
+          id="preventableFactorsInfo"
+        >
+          {{ data.inputs.preventableFactors.info }}
+        </div>
+      </div>
+      <!--categories-->
+      <transition>
+        <div
+          v-if="data.inputs.preventableFactors.options.val.includes('Yes')"
+          class="d-flex flex-row flex-wrap justify-content-center mt-4"
+        >
+          <div
+            v-for="category in data.inputs.preventableFactors.categories.list"
+          >
+            <div
+              v-if="
+                category.preExistingDiabetes.includes(
+                  data.inputs.preExistingDiabetes.val
+                )
+              "
+            >
+              <input
+                type="checkbox"
+                class="btn-check"
+                :id="category.name"
+                :value="category.name"
+                v-model="data.inputs.preventableFactors.categories.val"
+                autocomplete="off"
+              />
+              <label
+                class="btn btn-outline-secondary me-2 preventable-factors-category-btn mb-2"
+                :for="category.name"
+                >{{ category.name }}</label
+              >
+              <!--factors-->
+              <div class="d-flex flex-column justify-content-center">
+                <div v-for="factor in data.inputs.preventableFactors.factors">
+                  <transition>
+                    <div
+                      v-if="
+                        factor.categories.includes(category.name) &&
+                        (data.inputs.preventableFactors.categories.val.includes(
+                          category.name
+                        ) ||
+                          data.inputs.preventableFactors.val.includes(
+                            factor.val
+                          ))
+                      "
+                    >
+                      <input
+                        type="checkbox"
+                        class="btn-check"
+                        :id="factor.val"
+                        :value="factor.val"
+                        v-model="data.inputs.preventableFactors.val"
+                        @change="data.inputs.preventableFactors.isValid()"
+                        autocomplete="off"
+                      />
+                      <label
+                        class="btn btn-outline-dark me-2 preventable-factors-factor-btn mb-1"
+                        :for="factor.val"
+                        >{{ factor.val }}</label
+                      >
+                    </div>
+                  </transition>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>
+    </div>
+    <div class="d-flex flex-row justify-content-evenly">
+      <!--submit-->
+      <div class="text-center">
+        <button
+          type="button"
+          @click="submitClick"
+          class="btn btn-lg btn-primary"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+  </form>
 </template>
 
 <style scoped>
 .container {
   max-width: 750px;
+}
+.btn-outline-secondary {
+  width: 150px;
+  background-color: white;
+}
+.episode-type-btn {
+  height: 62px;
+}
+.preventable-factors-category-btn {
+  height: 65px;
+  width: 170px;
+}
+.preventable-factors-factor-btn {
+  font-size: smaller;
+  width: 170px;
+}
+.v-enter-active {
+  transition: all 0.5s ease;
+}
+.v-enter-from {
+  opacity: 0;
 }
 </style>
