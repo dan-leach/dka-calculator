@@ -1,5 +1,5 @@
 <script setup>
-import { RouterLink } from "vue-router";
+import { RouterLink, useRoute } from "vue-router";
 import { config } from "../assets/config.js";
 </script>
 
@@ -18,7 +18,8 @@ import { config } from "../assets/config.js";
         {{ config.underDevelopment ? "Development version" : "" }}
       </h2>
       <RouterLink
-        to="/update">
+        to="/update"
+        v-if="useRoute().name == 'start'">
         <button
           type="button"
           class="btn btn-secondary"

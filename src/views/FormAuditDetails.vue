@@ -310,8 +310,7 @@ onMounted(() => {
           "
           class="form-text text-center"
         >
-          A feature to allow you to submit preventable factors data at a later
-          point is under development.
+          Instructions on how to submit retrospective preventable factors data will be printed on the generated care pathway document.
         </div>
         <div
           v-if="showErrors"

@@ -300,8 +300,13 @@ const preventableFactors = {
    * @param {Object} req - The request object.
    * @returns {string} - The instructions for updating preventable factors data.
    */
-  instructions: (req) =>
-    `To update the preventable/modifiable factors data for this episode go to dka-calculator.co.uk/update and enter the audit ID: ${req.auditID}`,
+  instructions: (req) => {
+    if (req.patientNHS) {
+      return `To update the preventable/modifiable factors data for this episode go to dka-calculator.co.uk and click 'Update audit data'. You will be asked to enter the audit ID: ${req.auditID}`
+    } else {
+      return `As an NHS number was not provided for this episode, retrospective audit data cannot be submitted.`
+    }
+  }
 };
 
 /**
