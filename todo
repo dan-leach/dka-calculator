@@ -1,8 +1,4 @@
 Todo:
-1. Change ICP update message to say unable to do update if no nhs number used. Also direct to button on start page rather than direct link.
-2. Set update API response to make clear if no patient hash - cannot update as NHS number was not provided on original episode submission
-
-
 1. Agree update to static version ICP to 1.4 - replace the fallback version hosted on site
 
 Before launch:
