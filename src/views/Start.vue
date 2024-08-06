@@ -44,6 +44,12 @@ import { config } from "../assets/config.js";
         <div class="collapse my-2" id="changes">
           <ul>
             <li>
+              There is now a facility to update limited episode data after
+              submission. This is currently limited to preventable factors and
+              pre-existing diabetes status, but may be expanded in the future to
+              allow retrospective audit data collection.
+            </li>
+            <li>
               General user interface and user experience improvements by moving
               to single page application structure using Vue 3.
             </li>
@@ -95,10 +101,9 @@ import { config } from "../assets/config.js";
               (preventable factors) are now collected for audit purposes.
             </li>
             <li>
-              When the patient has pre-existing diabetes ticks are automatically added to the not applicable boxes for ongoing insulin therapy for the mode the patient does not use on flow chart 5.
-            </li>
-            <li>
-              There is now a facility to update limited episode data after submission. This is currently limited to preventable factors and pre-existing diabetes status, but may be expanded in the future to allow retrospective audit data collection.
+              When the patient has pre-existing diabetes ticks are automatically
+              added to the not applicable boxes for ongoing insulin therapy for
+              the mode the patient does not use on flow chart 5.
             </li>
           </ul>
         </div>

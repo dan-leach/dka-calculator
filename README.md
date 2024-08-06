@@ -22,6 +22,12 @@ The view files are single-file components (SFCs). The primary view is `src/App.v
 6. Audit details `FormAuditDetails.vue`
 7. Generating care pathway `GenerateProtocol.vue`
 
+A separate progression occurs for retrospective updates to the audit data:
+
+1. Start / welcome `Start.vue`
+2. Enter data for the update `Update.vue`
+3. Submit data `SubmitUpdate.vue`
+
 A privacy policy page `PrivacyPolicy.vue` can be accessed outside the usual linear flow.
 
 ### Data handling

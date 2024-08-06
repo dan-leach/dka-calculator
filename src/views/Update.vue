@@ -35,11 +35,19 @@ onMounted(() => {
 <template>
   <form id="form-update" class="container my-4 needs-validation">
     <h2 class="display-3">Update audit data</h2>
+    <p class="mx-1">
+      To update the data the DKA Calculator holds for your patient please
+      complete the form below. For more information about how this data is used
+      click the
+      <font-awesome-icon :icon="['fas', 'circle-info']" /> icon by each field or
+      refer to the
+      <RouterLink to="/privacy-policy" class="">privacy policy</RouterLink>.
+    </p>
     <div class="card border-danger my-3">
       <div class="card-body">
-        <h5 class="card-title">Computer Misuse Act 1990</h5>
         <p class="card-text">
-          You must not to make any changes to data unless it pertains directly to patients under your care. Unauthorized modifications can result in serious legal consequences.
+          You must not to make any changes to data unless it pertains directly
+          to patients under your care.
         </p>
       </div>
     </div>
