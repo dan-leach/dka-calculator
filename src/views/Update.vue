@@ -122,7 +122,7 @@ onMounted(() => {
       <div
         class="collapse form-text mx-1"
         id="patientDOBInfo"
-        v-html="data.inputs.patientDOB.info"
+        v-html="data.inputs.patientDOB.updateInfo"
       ></div>
     </div>
     <!--patientNHS-->
@@ -161,8 +161,7 @@ onMounted(() => {
       <div
         class="collapse form-text mx-1"
         id="patientNHSInfo"
-        v-html="data.inputs.patientNHS.info"
-        v-if="!data.inputs.patientNHS.optOut.val"
+        v-html="data.inputs.patientNHS.updateInfo"
       ></div>
     </div>
     <!--preExistingDiabetes-->
@@ -223,7 +222,7 @@ onMounted(() => {
         class="collapse form-text text-center mx-1"
         id="preExistingDiabetesInfo"
       >
-        {{ data.inputs.preExistingDiabetes.info }}
+        {{ data.inputs.preExistingDiabetes.updateInfo }}
       </div>
     </div>
     <!--preventableFactors-->

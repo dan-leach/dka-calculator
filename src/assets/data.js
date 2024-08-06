@@ -117,6 +117,8 @@ export const data = ref({
       label: "Date of birth",
       form: [1, 4],
       info: "Patient date of birth is printed onto the generated care pathway document in the patient demographics area. It is not stored directly by the DKA Calculator, but is used to calculate a patient age (in years) which is stored for audit purposes. To allow linkage of audit data between episodes the patient date of birth is used to generate a unique patient ID which is stored. The patient date of birth cannot be found from the calculated unique patient ID (<a href='https://www.codecademy.com/resources/blog/what-is-hashing/' target='_blank'>read more about secure cryptographic hashing</a>).",
+      updateInfo:
+        "Patient date of birth is not stored directly by the DKA Calculator. It is used to generate a unique patient ID which is compared with the unique ID generated when the episode was created to ensure the correct record is being updated. The patient date of birth cannot be found from the calculated unique patient ID (<a href='https://www.codecademy.com/resources/blog/what-is-hashing/' target='_blank'>read more about secure cryptographic hashing</a>).",
       withinYears: 19, //date of birth must be between today and 19 years ago - allowance for adult patients not yet transitioned to adult services
       /**
        * Builds the patient's age in years from the date of birth.
@@ -197,6 +199,8 @@ export const data = ref({
       label: "NHS number",
       form: [1, 4],
       info: "If provided, patient NHS number is printed onto the generated care pathway document in the patient demographics area. It is not stored directly by the DKA Calculator. To allow linkage of audit data between episodes the NHS number is used to generate a unique patient ID which is stored. The patient NHS number cannot be found from the calculated unique patient ID (<a href='https://www.codecademy.com/resources/blog/what-is-hashing/' target='_blank'>read more about secure cryptographic hashing</a>).",
+      updateInfo:
+        "Patient NHS number is not stored directly by the DKA Calculator. It is used to generate a unique patient ID which is compared with the unique ID generated when the episode was created to ensure the correct record is being updated. The patient NHS number cannot be found from the calculated unique patient ID (<a href='https://www.codecademy.com/resources/blog/what-is-hashing/' target='_blank'>read more about secure cryptographic hashing</a>).",
       min: 1000000000, //a 10 digit integer (length of an NHS number) cannot have a value less than this
       max: 9999999999, //a 10 digit integer (length of an NHS number) cannot have a value greater than this
       /**
@@ -629,8 +633,10 @@ export const data = ref({
       label:
         "Was the patient known to have diabetes prior to the current episode of DKA?",
       privacyLabel: "Pre-existing diabetes status",
-      form: [2,4],
+      form: [2, 4],
       info: "If the patient has pre-existing diabetes, it is used to indicate the approach to managing existing insulin therapy on the care pathway. It is stored by the DKA Calculator for audit purposes.",
+      updateInfo:
+        "Pre-existing diabetes status is stored by the DKA Calculator for audit purposes.",
       /**
        * Validates the pre-existing diabetes status.
        * @returns {boolean} - True if the status is selected, false otherwise.
@@ -644,10 +650,10 @@ export const data = ref({
         return !this.errors;
       },
       isValidForUpdateView() {
-        this.isValid()
-        data.value.inputs.preventableFactors.val = []
-        data.value.inputs.preventableFactors.options.val = []
-        data.value.inputs.preventableFactors.categories.val = []
+        this.isValid();
+        data.value.inputs.preventableFactors.val = [];
+        data.value.inputs.preventableFactors.options.val = [];
+        data.value.inputs.preventableFactors.categories.val = [];
       },
       errors: "",
     },
