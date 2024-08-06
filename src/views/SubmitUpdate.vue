@@ -4,9 +4,6 @@ import { data } from "../assets/data.js";
 import router from "../router";
 import { api } from "@/assets/api.js";
 
-//to display the success message from the API
-const completeMsg = ref("")
-
 /**
  * Steps of the update process.
  * @type {Object<string, Step>}
@@ -53,12 +50,14 @@ const update = {
     // Send the payload to server and receive calculations and auditID
     try {
       updateSteps.value.update.current = true;
-      completeMsg.value = await api("update", payload);
+      await api("update", payload);
     } catch (error) {
       updateSteps.value.update.fail = error;
       updateSteps.value.update.current = false;
       return;
     }
+    //wait 2 seconds from completion before marking complete so it is clear that a process has happened
+    await new Promise(resolve => setTimeout(resolve, 2000));
     if (!(await update.executeStep("update"))) return;
 
     return true;
@@ -164,7 +163,6 @@ onMounted(() => {
         </button>
       </div>
     </div>
-    <p class="step-text">{{ completeMsg }}</p>
     <!--back-->
     <button
       type="button"

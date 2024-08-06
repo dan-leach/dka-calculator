@@ -35,6 +35,14 @@ onMounted(() => {
 <template>
   <form id="form-update" class="container my-4 needs-validation">
     <h2 class="display-3">Update audit data</h2>
+    <div class="card border-danger my-3">
+      <div class="card-body">
+        <h5 class="card-title">Computer Misuse Act 1990</h5>
+        <p class="card-text">
+          You must not to make any changes to data unless it pertains directly to patients under your care. Unauthorized modifications can result in serious legal consequences.
+        </p>
+      </div>
+    </div>
     <!--auditID-->
     <div class="mb-4">
       <div class="input-group">

@@ -13,9 +13,18 @@ import { config } from "../assets/config.js";
         <h1 class="display-5 mx-4 my-0">
           {{ config.appName }}
         </h1>
-        <h2 class="text-danger">
-          {{ config.underDevelopment ? "Development version" : "" }}
-        </h2>
+      </RouterLink>
+      <h2 class="text-danger">
+        {{ config.underDevelopment ? "Development version" : "" }}
+      </h2>
+      <RouterLink
+        to="/update">
+        <button
+          type="button"
+          class="btn btn-secondary"
+        >
+          Update audit data
+        </button>
       </RouterLink>
     </div>
   </nav>
