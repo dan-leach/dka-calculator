@@ -1,9 +1,11 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { data } from "../assets/data.js";
-import { config } from "../assets/config.js";
 import router from "../router";
 import { api } from "@/assets/api.js";
+
+//to display the success message from the API
+const completeMsg = ref("")
 
 /**
  * Steps of the update process.
@@ -51,7 +53,7 @@ const update = {
     // Send the payload to server and receive calculations and auditID
     try {
       updateSteps.value.update.current = true;
-      await api("update", payload);
+      completeMsg.value = await api("update", payload);
     } catch (error) {
       updateSteps.value.update.fail = error;
       updateSteps.value.update.current = false;
@@ -93,6 +95,7 @@ const update = {
   buildPayload: async function (payload) {
     payload.auditID = data.value.inputs.auditID.val;
     payload.patientHash = await update.patientHash();
+    payload.preExistingDiabetes = data.value.inputs.preExistingDiabetes.val == "true";
     payload.preventableFactors = data.value.inputs.preventableFactors.val;
 
     return payload;
@@ -161,6 +164,7 @@ onMounted(() => {
         </button>
       </div>
     </div>
+    <p class="step-text">{{ completeMsg }}</p>
     <!--back-->
     <button
       type="button"

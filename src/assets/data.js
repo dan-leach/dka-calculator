@@ -629,7 +629,7 @@ export const data = ref({
       label:
         "Was the patient known to have diabetes prior to the current episode of DKA?",
       privacyLabel: "Pre-existing diabetes status",
-      form: [2],
+      form: [2,4],
       info: "If the patient has pre-existing diabetes, it is used to indicate the approach to managing existing insulin therapy on the care pathway. It is stored by the DKA Calculator for audit purposes.",
       /**
        * Validates the pre-existing diabetes status.
@@ -642,6 +642,12 @@ export const data = ref({
         if (!this.val)
           this.errors += "Pre-existing diabetes status must be selected. ";
         return !this.errors;
+      },
+      isValidForUpdateView() {
+        this.isValid()
+        data.value.inputs.preventableFactors.val = []
+        data.value.inputs.preventableFactors.options.val = []
+        data.value.inputs.preventableFactors.categories.val = []
       },
       errors: "",
     },

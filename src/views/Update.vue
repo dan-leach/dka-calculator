@@ -149,6 +149,67 @@ onMounted(() => {
         v-if="!data.inputs.patientNHS.optOut.val"
       ></div>
     </div>
+    <!--preExistingDiabetes-->
+    <div class="mb-4">
+      <p class="text-center m-2">
+        {{ data.inputs.preExistingDiabetes.label }}
+        <font-awesome-icon
+          :icon="['fas', 'circle-info']"
+          data-bs-toggle="collapse"
+          data-bs-target="#preExistingDiabetesInfo"
+          class="ms-2"
+        />
+      </p>
+      <div class="d-flex justify-content-center">
+        <div>
+          <input
+            type="radio"
+            class="btn-check"
+            name="preExistingDiabetes"
+            id="preExistingDiabetesTrue"
+            value="true"
+            v-model="data.inputs.preExistingDiabetes.val"
+            @change="data.inputs.preExistingDiabetes.isValidForUpdateView()"
+            autocomplete="off"
+            required
+          />
+          <label
+            class="btn btn-outline-secondary me-2"
+            for="preExistingDiabetesTrue"
+            >Yes</label
+          >
+
+          <input
+            type="radio"
+            class="btn-check"
+            name="preExistingDiabetes"
+            id="preExistingDiabetesFalse"
+            value="false"
+            v-model="data.inputs.preExistingDiabetes.val"
+            @change="data.inputs.preExistingDiabetes.isValidForUpdateView()"
+            autocomplete="off"
+          />
+          <label
+            class="btn btn-outline-secondary"
+            for="preExistingDiabetesFalse"
+            >No</label
+          >
+        </div>
+      </div>
+      <div
+        v-if="showErrors"
+        class="form-text text-danger text-center mx-1"
+        id="preExistingDiabetesErrors"
+      >
+        {{ data.inputs.preExistingDiabetes.errors }}
+      </div>
+      <div
+        class="collapse form-text text-center mx-1"
+        id="preExistingDiabetesInfo"
+      >
+        {{ data.inputs.preExistingDiabetes.info }}
+      </div>
+    </div>
     <!--preventableFactors-->
     <div class="mb-4">
       <p class="text-center m-2">
