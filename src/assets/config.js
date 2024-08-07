@@ -15,7 +15,7 @@ export const config = reactive({
     main: "https://www.bsped.org.uk",
     dkaGuidelines:
       "https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/",
-    icpVersion: "2024",
+    icpVersion: "1.4",
   },
   ispad: "https://www.ispad.org",
   disclaimer:
