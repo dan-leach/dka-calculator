@@ -147,6 +147,7 @@ const generate = {
     }
 
     payload.patientAge = data.value.inputs.patientDOB.patientAge.val;
+    payload.patientAgeMonths = data.value.inputs.patientDOB.ageMonths();
     payload.weightLimitOverride = data.value.inputs.weight.limit.override;
     payload.appVersion = config.version;
     payload.clientDatetime = new Date();
