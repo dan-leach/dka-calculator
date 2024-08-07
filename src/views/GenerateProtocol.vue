@@ -366,6 +366,30 @@ onMounted(() => {
                 </div>
               </div>
             </div>
+            <!--severity-->
+            <div class="card mb-4">
+              <div class="card-header">Severity</div>
+              <div class="card-body">
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Formula</span>
+                    <span v-html="data.calculations.severity.formula"></span>
+                  </div>
+                </div>
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Working</span>
+                    <span v-html="data.calculations.severity.working"></span>
+                  </div>
+                </div>
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Output</span>
+                    {{ data.calculations.severity.val }}
+                  </div>
+                </div>
+              </div>
+            </div>
             <!--deficit percentage-->
             <div class="card mb-4">
               <div class="card-header">Deficit percentage</div>

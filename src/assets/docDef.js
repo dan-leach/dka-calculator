@@ -27,9 +27,9 @@ const indicatorCoordinates = {
       moderate: config.client.indicatorCoordinates.yAxisSeverity.moderate,
       mild: config.client.indicatorCoordinates.yAxisSeverity.mild,
     };
-    const severity = severityMap[req.calculations.severity];
-    if (!severity) throw new Error("Unable to select yAxisSeverity");
-    return severity;
+    const coordinate = severityMap[req.calculations.severity.val];
+    if (!coordinate) throw new Error("Unable to select yAxisSeverity");
+    return coordinate;
   },
 
   /**
@@ -302,11 +302,11 @@ const preventableFactors = {
    */
   instructions: (req) => {
     if (req.patientNHS) {
-      return `To update the preventable/modifiable factors data for this episode go to dka-calculator.co.uk and click 'Update audit data'. You will be asked to enter the audit ID: ${req.auditID}`
+      return `To update the preventable/modifiable factors data for this episode go to dka-calculator.co.uk and click 'Update audit data'. You will be asked to enter the audit ID: ${req.auditID}`;
     } else {
-      return `As an NHS number was not provided for this episode, retrospective audit data cannot be submitted.`
+      return `As an NHS number was not provided for this episode, retrospective audit data cannot be submitted.`;
     }
-  }
+  },
 };
 
 /**
