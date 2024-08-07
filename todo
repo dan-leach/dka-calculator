@@ -9,3 +9,4 @@ Before launch:
 4. remove from assets/api.js:
    //temp addition during API testing...
    console.log(JSON.stringify(data));
+5. add date/time to changelog and contributors
