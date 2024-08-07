@@ -5,7 +5,9 @@ import { config } from "../assets/config.js";
 
 <template>
   <nav id="header" class="navbar bg-grey">
-    <div class="container-fluid">
+    <div
+      class="container-fluid d-flex flex-row align-items-center justify-content-center justify-content-lg-between"
+    >
       <RouterLink
         to="/"
         class="navbar-brand d-flex flex-row flex-wrap align-items-center justify-content-center"
@@ -17,13 +19,8 @@ import { config } from "../assets/config.js";
       <h2 class="text-danger">
         {{ config.underDevelopment ? "Development version" : "" }}
       </h2>
-      <RouterLink
-        to="/update"
-        v-if="useRoute().name == 'start'">
-        <button
-          type="button"
-          class="btn btn-secondary"
-        >
+      <RouterLink to="/update" v-if="useRoute().name == 'start'">
+        <button type="button" class="btn btn-secondary my-2">
           Update audit data
         </button>
       </RouterLink>
