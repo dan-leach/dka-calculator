@@ -49,3 +49,6 @@ function generatePdfBlob(req, callback) {
     errHandler(e); // Handle errors using the proxy errHandler within the web worker
   }
 }
+
+//main thread waits for ready signal as imports for this module can be slow
+postMessage({ type: "ready" });

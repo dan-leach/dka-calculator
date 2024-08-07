@@ -1,5 +1,4 @@
-import { inject } from "vue";
-const config = inject("config");
+import { config } from "./fetchConfig.js";
 
 /**
  * Sends a POST request to the specified API route with the given data.

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { data } from "../assets/data.js";
-import { config } from "../assets/config.js";
+import { config } from "../assets/fetchConfig.js";
 import router from "../router";
 import { api } from "@/assets/api.js";
 
@@ -154,7 +154,7 @@ const generate = {
     payload.appVersion = {
       client: config.client.version,
       api: config.api.version,
-      icp: config.bsped.icpVersion,
+      icp: config.organisations.bsped.icpVersion,
     };
     payload.clientDatetime = new Date();
     payload.clientUseragent = navigator.userAgent;
@@ -174,31 +174,75 @@ const generate = {
 
   /**
    * Starts the web worker to generate the PDF blob.
-   * @returns {Promise<void>} A promise that resolves when the worker is started.
+   * @returns {Promise<void>} A promise that resolves when the worker responds.
    */
-  startWebWorker: function () {
-    return new Promise((resolve, reject) => {
-      console.log("main: starting webWorker.js...");
+  startWebWorker: async function () {
+    console.log("main: starting webWorker.js...");
+    try {
       const myWorker = new Worker(
         new URL("@/assets/webWorker.js", import.meta.url),
         { type: "module" }
       );
+
+      // Wait for the worker to signal it's ready
+      await new Promise((resolve, reject) => {
+        myWorker.onmessage = (res) => {
+          if (res.data.type === "ready") {
+            console.log("main: webWorker.js is ready.");
+            resolve();
+          } else {
+            reject(
+              new Error("Unexpected message from worker during initialization.")
+            );
+          }
+        };
+
+        myWorker.onerror = (error) => {
+          console.error(
+            "main: worker encountered an error during initialization:",
+            error
+          );
+          reject(
+            `Error encountered while initialising thread to generate protocol PDF: ${error.message}`
+          );
+        };
+      });
+
+      //prepare the data to send to the worker
       const workerData = JSON.parse(
         JSON.stringify(generate.prepareWorkerData())
       );
-      myWorker.postMessage(workerData);
-      console.log("main: request sent to webWorker.js...");
 
-      myWorker.onmessage = (res) => {
-        if (res.data.stack) {
-          generate.handleWorkerError(res.data);
-          reject(new Error(res.data.toString()));
-        } else {
-          generate.handleWorkerResponse(res);
-          resolve();
-        }
-      };
-    });
+      //send the prepared data to the worker and await a response
+      const response = await new Promise((resolve, reject) => {
+        myWorker.onmessage = (res) => {
+          console.log("main: response received from webWorker.js:", res);
+          if (res.data.stack) {
+            reject(
+              `Error encountered by thread generating protocol PDF: ${res.data.toString()}`
+            );
+          } else {
+            resolve(res);
+          }
+        };
+
+        myWorker.onerror = (error) => {
+          console.error("main: worker encountered an error:", error);
+          reject(
+            `Error encountered by thread generating protocol PDF: ${error.message}`
+          );
+        };
+
+        myWorker.postMessage(workerData);
+        console.log("main: request sent to webWorker.js...");
+      });
+
+      //trigger the download of the pdf
+      generate.handleWorkerResponse(response);
+    } catch (error) {
+      console.error("main: failed to start webWorker.js:", error);
+      throw error;
+    }
   },
 
   /**
@@ -228,16 +272,6 @@ const generate = {
       calculations: data.value.calculations,
       auditID: data.value.auditID,
     };
-  },
-
-  /**
-   * Handles errors from the web worker.
-   * @param {Object} errorData - The error data from the web worker.
-   */
-  handleWorkerError: function (errorData) {
-    generateSteps.value.build.current = false;
-    generateSteps.value.build.fail = [{ msg: errorData.toString() }];
-    console.error(errorData);
   },
 
   /**

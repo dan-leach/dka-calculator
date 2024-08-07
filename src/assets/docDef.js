@@ -1,4 +1,4 @@
-import { config } from "./config.js";
+import { config } from "./fetchConfig.js";
 import { imageStore } from "./imageStore.js";
 
 /**
@@ -12,8 +12,8 @@ const indicatorCoordinates = {
    */
   xAxisShock: (req) =>
     req.shockPresent === "true"
-      ? config.client.indicatorCoordinates.xAxisShock.yes
-      : config.client.indicatorCoordinates.xAxisShock.no,
+      ? config.indicatorCoordinates.xAxisShock.yes
+      : config.indicatorCoordinates.xAxisShock.no,
 
   /**
    * Gets the y-axis coordinates for severity indicator.
@@ -23,9 +23,9 @@ const indicatorCoordinates = {
    */
   yAxisSeverity: (req) => {
     const severityMap = {
-      severe: config.client.indicatorCoordinates.yAxisSeverity.severe,
-      moderate: config.client.indicatorCoordinates.yAxisSeverity.moderate,
-      mild: config.client.indicatorCoordinates.yAxisSeverity.mild,
+      severe: config.indicatorCoordinates.yAxisSeverity.severe,
+      moderate: config.indicatorCoordinates.yAxisSeverity.moderate,
+      mild: config.indicatorCoordinates.yAxisSeverity.mild,
     };
     const coordinate = severityMap[req.calculations.severity.val];
     if (!coordinate) throw new Error("Unable to select yAxisSeverity");
@@ -39,8 +39,8 @@ const indicatorCoordinates = {
    */
   xAxisDiabetic: (req) =>
     req.preExistingDiabetes === "true"
-      ? config.client.indicatorCoordinates.xAxisDiabetic.yes
-      : config.client.indicatorCoordinates.xAxisDiabetic.no,
+      ? config.indicatorCoordinates.xAxisDiabetic.yes
+      : config.indicatorCoordinates.xAxisDiabetic.no,
 };
 
 /**
@@ -70,7 +70,7 @@ const capAlert = {
     message: (req) =>
       generateCapAlert(
         req.calculations.bolusVolume.isCapped,
-        `Bolus capped to ${req.calculations.bolusVolume.mlsPerKg}mL/kg for ${config.client.weightLimits.max}kg.`
+        `Bolus capped to ${req.calculations.bolusVolume.mlsPerKg}mL/kg for ${config.weightLimits.max}kg.`
       ),
   },
   deficit: {
@@ -88,7 +88,7 @@ const capAlert = {
     message: (req) =>
       generateCapAlert(
         req.calculations.deficit.volume.isCapped,
-        `Deficit capped to volume for ${config.client.weightLimits.max}kg with ${req.calculations.deficit.percentage.val}% dehydration.`
+        `Deficit capped to volume for ${config.weightLimits.max}kg with ${req.calculations.deficit.percentage.val}% dehydration.`
       ),
   },
   maintenance: {
@@ -107,7 +107,7 @@ const capAlert = {
     message: (req) =>
       generateCapAlert(
         req.calculations.maintenance.volume.isCapped,
-        `Maintenance capped to volume for ${config.client.weightLimits.max}kg.`
+        `Maintenance capped to volume for ${config.weightLimits.max}kg.`
       ),
   },
   insulin: {
@@ -125,7 +125,7 @@ const capAlert = {
     message: (req) =>
       generateCapAlert(
         req.calculations.insulinRate.isCapped,
-        `Insulin rate capped to ${req.insulinRate} Units/kg/hour for ${config.client.weightLimits.max}kg.`
+        `Insulin rate capped to ${req.insulinRate} Units/kg/hour for ${config.weightLimits.max}kg.`
       ),
   },
   glucoseBolus: {
@@ -144,7 +144,7 @@ const capAlert = {
     message: (req) =>
       generateCapAlert(
         req.calculations.glucoseBolusVolume.isCapped,
-        `Glucose bolus capped to ${req.calculations.glucoseBolusVolume.mlsPerKg}mL/kg for ${config.client.weightLimits.max}kg.`
+        `Glucose bolus capped to ${req.calculations.glucoseBolusVolume.mlsPerKg}mL/kg for ${config.weightLimits.max}kg.`
       ),
   },
   hhsBolus: {
@@ -162,7 +162,7 @@ const capAlert = {
     message: (req) =>
       generateCapAlert(
         req.calculations.hhsBolusVolume.isCapped,
-        `HHS bolus capped to ${req.calculations.hhsBolusVolume.mlsPerKg}mL/kg for ${config.client.weightLimits.max}kg.`
+        `HHS bolus capped to ${req.calculations.hhsBolusVolume.mlsPerKg}mL/kg for ${config.weightLimits.max}kg.`
       ),
   },
 };
@@ -310,6 +310,15 @@ const preventableFactors = {
 };
 
 /**
+ * Function to apply watermark text if developmentMode is active.
+ */
+const watermarkText = () => {
+  return config.underDevelopment
+    ? "DKA Calculator Development Version - Not for clinical use"
+    : "";
+};
+
+/**
  * Function to generate the document definition.
  * @param {Object} req - The request object.
  */
@@ -346,7 +355,7 @@ function getDocDef(req) {
     },
 
     watermark: {
-      text: "DKA Calculator Development Version - Not for clinical use",
+      text: watermarkText(),
       color: "red",
       opacity: 0.3,
       bold: true,
@@ -368,9 +377,11 @@ function getDocDef(req) {
                 style: "header",
               },
               {
-                text: `${config.url.replace("https://", "")} (v${
+                text: `${config.client.url.replace("https://", "")} (v${
                   config.client.version
-                }/${config.api.version}/${config.bsped.icpVersion})`,
+                }/${config.api.version}/${
+                  config.organisations.bsped.icpVersion
+                })`,
                 alignment: "center",
                 style: "header",
               },
@@ -539,17 +550,17 @@ function getDocDef(req) {
       },
       //calculator input check box
       {
-        text: `This protocol was generated at ${config.url.replace(
+        text: `This protocol was generated at ${config.client.url.replace(
           "https://",
           ""
         )} and certain elements of the document, such as fluid`,
-        link: config.url,
+        link: config.client.url,
         fontSize: 10,
         absolutePosition: { x: 65, y: 645 },
       },
       {
         text: `calculations have been pre-filled. The following values were used and should be checked for accuracy before`,
-        link: config.url,
+        link: config.client.url,
         fontSize: 10,
         absolutePosition: { x: 65, y: 661 },
       },
@@ -586,13 +597,13 @@ function getDocDef(req) {
         absolutePosition: { x: 65, y: 741 },
       },
       {
-        text: `Sex: " ${req.patientSex}`,
+        text: `Sex: ${req.patientSex}`,
         fontSize: 10,
         absolutePosition: { x: 325, y: 741 },
       },
       {
-        text: config.bsped.dkaGuidelines,
-        link: config.bsped.dkaGuidelines,
+        text: config.organisations.bsped.dkaGuidelines,
+        link: config.organisations.bsped.dkaGuidelines,
         fontSize: 10,
         absolutePosition: { x: 250, y: 530 },
         pageBreak: "after",
@@ -1095,8 +1106,8 @@ function getDocDef(req) {
         color: "red",
       },
       {
-        text: config.ispad,
-        link: config.ispad,
+        text: config.organisations.ispad,
+        link: config.organisations.ispad,
         fontSize: 8,
         absolutePosition: { x: 220, y: 675 },
         pageBreak: "after",
@@ -1465,11 +1476,11 @@ function getDocDef(req) {
             [
               "",
               {
-                text: `For worked examples, refer to the full guideline (${config.bsped.dkaGuidelines.replace(
+                text: `For worked examples, refer to the full guideline (${config.organisations.bsped.dkaGuidelines.replace(
                   "https://",
                   ""
                 )}).`,
-                link: config.bsped.dkaGuidelines,
+                link: config.organisations.bsped.dkaGuidelines,
               },
               "",
             ],
@@ -1521,11 +1532,11 @@ function getDocDef(req) {
             [
               "",
               {
-                text: `For worked examples, refer to the full guideline (${config.bsped.dkaGuidelines.replace(
+                text: `For worked examples, refer to the full guideline (${config.organisations.bsped.dkaGuidelines.replace(
                   "https://",
                   ""
                 )}).`,
-                link: config.bsped.dkaGuidelines,
+                link: config.organisations.bsped.dkaGuidelines,
               },
               "",
             ],
@@ -1664,7 +1675,7 @@ function getDocDef(req) {
             ],
             [
               "",
-              `Important: Decisions about patient care remains the treating clinician's responsibility. By using this care pathway you confirm that you accept in full the terms of the disclaimer found at ${config.url.replace(
+              `Important: Decisions about patient care remains the treating clinician's responsibility. By using this care pathway you confirm that you accept in full the terms of the disclaimer found at ${config.client.url.replace(
                 "https://",
                 ""
               )}. If you do not agree to the terms, you must not use this care pathway.`,
