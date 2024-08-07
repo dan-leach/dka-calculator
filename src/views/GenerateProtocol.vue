@@ -348,8 +348,9 @@ onMounted(() => {
                 </div>
                 <div class="mb-2">
                   <div class="card p-2">
-                    <span class="text-muted m-0">Limit*</span>
+                    <span class="text-muted m-0">Limit</span>
                     <span v-html="data.calculations.bolusVolume.limit"></span>
+                    <small>Based on weight of 75kg</small>
                   </div>
                 </div>
                 <div class="mb-2">
@@ -432,10 +433,11 @@ onMounted(() => {
                 </div>
                 <div class="mb-2">
                   <div class="card p-2">
-                    <span class="text-muted m-0">Limit*</span>
+                    <span class="text-muted m-0">Limit</span>
                     <span
                       v-html="data.calculations.deficit.volume.limit"
                     ></span>
+                    <small>Based on weight of 75kg</small>
                   </div>
                 </div>
                 <div class="mb-2">
@@ -526,10 +528,11 @@ onMounted(() => {
                 </div>
                 <div class="mb-2">
                   <div class="card p-2">
-                    <span class="text-muted m-0">Limit*</span>
+                    <span class="text-muted m-0">Limit</span>
                     <span
                       v-html="data.calculations.maintenance.volume.limit"
                     ></span>
+                    <small>Based on weight of 75kg</small>
                   </div>
                 </div>
                 <div class="mb-2">
@@ -616,8 +619,9 @@ onMounted(() => {
                 </div>
                 <div class="mb-2">
                   <div class="card p-2">
-                    <span class="text-muted m-0">Limit*</span>
+                    <span class="text-muted m-0">Limit</span>
                     <span v-html="data.calculations.insulinRate.limit"></span>
+                    <small>Based on weight of 75kg</small>
                   </div>
                 </div>
                 <div class="mb-2">
@@ -635,9 +639,15 @@ onMounted(() => {
                 </div>
               </div>
             </div>
-            *limits set based on weight of 75kg<br />
-            Note: Insulin should NOT be started immediately. Refer to the BSPED
-            Paediatric DKA care pathway for how to use these calculated values.
+            <div class="card border-warning mb-3">
+              <div class="card-body">
+                <p class="card-text">
+                  Note: Insulin should NOT be started immediately. Refer to the
+                  BSPED Paediatric DKA care pathway for how to use these
+                  calculated values.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </span>
