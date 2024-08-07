@@ -103,7 +103,6 @@ const generate = {
       generateSteps.value[step].complete = true;
     } catch (error) {
       generateSteps.value[step].fail = [{ msg: error.toString() }];
-      generateSteps.value[step].current = false;
       console.error(error);
       return false;
     } finally {

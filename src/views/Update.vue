@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { data } from "../assets/data.js";
-import { config } from "../assets/config.js";
 import router from "../router";
 
 // Reactive variable to control error display.
