@@ -76,6 +76,7 @@ const generate = {
       data.value.calculations = res.calculations;
     } catch (error) {
       generateSteps.value.calculate.fail = error;
+      generateSteps.value.calculate.current = false;
       return;
     }
     if (!(await generate.executeStep("calculate"))) return;
@@ -102,6 +103,7 @@ const generate = {
       generateSteps.value[step].complete = true;
     } catch (error) {
       generateSteps.value[step].fail = [{ msg: error.toString() }];
+      generateSteps.value[step].current = false;
       console.error(error);
       return false;
     } finally {
@@ -134,6 +136,7 @@ const generate = {
     if (data.value.inputs.patientNHS.val && data.value.inputs.patientDOB.val) {
       payload.patientHash = await generate.patientHash();
     }
+    if (!payload.patientPostcode) delete payload.patientPostcode;
 
     const excludedFields = [
       "patientName",
