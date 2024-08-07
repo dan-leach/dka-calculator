@@ -46,8 +46,8 @@ onMounted(() => {
     <div class="card border-danger my-3">
       <div class="card-body">
         <p class="card-text">
-          You must not to make any changes to data unless it pertains directly
-          to patients under your care.
+          You must not make any changes to data unless it pertains directly to
+          patients under your care.
         </p>
       </div>
     </div>
@@ -247,11 +247,15 @@ onMounted(() => {
             v-model="data.inputs.preventableFactors.options.val"
             @change="data.inputs.preventableFactors.options.change(option)"
             autocomplete="off"
+            v-if="option != 'Not yet known'"
             required
           />
-          <label class="btn btn-outline-secondary me-2" :for="option">{{
-            option
-          }}</label>
+          <label
+            class="btn btn-outline-secondary me-2"
+            :for="option"
+            v-if="option != 'Not yet known'"
+            >{{ option }}</label
+          >
         </div>
         <div
           v-if="data.inputs.preventableFactors.options.val.includes('Yes')"
