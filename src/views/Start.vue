@@ -1,5 +1,6 @@
 <script setup>
-import { config } from "../assets/config.js";
+import { inject } from "vue";
+const config = inject("config");
 </script>
 
 <template>
@@ -21,7 +22,7 @@ import { config } from "../assets/config.js";
       The BSPED Paediatric DKA Calculator allows clinicians to generate an
       individualised care pathway for managing paediatric diabetic ketoacidosis
       based on the
-      <a :href="config.bsped.dkaGuidelines" target="_blank"
+      <a :href="config.organisations.bsped.dkaGuidelines" target="_blank"
         >BSPED 2021 Guidelines</a
       >. Calculations in the care pathway are be pre-filled based on the values
       you provide for your patient.

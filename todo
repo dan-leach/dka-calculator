@@ -1,5 +1,10 @@
 Todo:
-1. Agree update to static version ICP to 1.4 - replace the fallback version hosted on site
+
+1. Use inject config or similar on data.js, docDef.js, webworker if required.
+2. Replace hard coded values in data.js with fetched config values
+3. Replace hard coded values in sanitiseAndValidate with config.json values which match those used by data.js
+
+4. Agree update to static version ICP to 1.4 - replace the fallback version hosted on site
 
 Before launch:
 

@@ -1,7 +1,9 @@
 <script setup>
 import router from "../router";
 import { data } from "../assets/data.js";
-import { config } from "../assets/config.js";
+
+import { inject } from "vue";
+const config = inject("config");
 </script>
 
 <template>

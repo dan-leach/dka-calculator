@@ -1,6 +1,7 @@
 <script setup>
 import { RouterLink, useRoute } from "vue-router";
-import { config } from "../assets/config.js";
+import { inject } from "vue";
+const config = inject("config");
 </script>
 
 <template>

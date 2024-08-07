@@ -1,8 +1,10 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { data } from "../assets/data.js";
-import { config } from "../assets/config.js";
 import router from "../router";
+
+import { inject } from "vue";
+const config = inject("config");
 
 // Reactive variable to control error display.
 let showErrors = ref(false);
@@ -117,7 +119,7 @@ onMounted(() => {
           required
         >
           <option value="" disabled>{{ data.inputs.region.label }}</option>
-          <option v-for="region in config.client.regions" :value="region.name">
+          <option v-for="region in config.regions" :value="region.name">
             {{ region.name }}
           </option>
           <option value="Other">Other</option>
@@ -196,7 +198,7 @@ onMounted(() => {
         >
           <option value="" disabled>{{ data.inputs.ethnicGroup.label }}</option>
           <option
-            v-for="ethnicGroup in config.client.ethnicGroups"
+            v-for="ethnicGroup in config.ethnicGroups"
             :value="ethnicGroup.name"
           >
             {{ ethnicGroup.name }}
@@ -310,7 +312,8 @@ onMounted(() => {
           "
           class="form-text text-center"
         >
-          Instructions on how to submit retrospective preventable factors data will be printed on the generated care pathway document.
+          Instructions on how to submit retrospective preventable factors data
+          will be printed on the generated care pathway document.
         </div>
         <div
           v-if="showErrors"

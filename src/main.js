@@ -3,6 +3,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
 import "./assets/main.css";
 
+import { fetchConfig } from "./assets/fetchConfig";
+
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
@@ -23,6 +25,8 @@ library.add(faQuestionCircle, faInfoCircle, faCheck, faXmark);
 
 /* Create Vue application */
 const app = createApp(App);
+
+app.provide("config", await fetchConfig());
 
 /* Register FontAwesomeIcon component globally */
 app.component("font-awesome-icon", FontAwesomeIcon);

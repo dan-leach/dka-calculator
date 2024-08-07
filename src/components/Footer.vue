@@ -1,5 +1,6 @@
 <script setup>
-import { config } from "../assets/config.js";
+import { inject } from "vue";
+const config = inject("config");
 </script>
 
 <template>
@@ -19,8 +20,8 @@ import { config } from "../assets/config.js";
               >v{{ config.api.version }}</a
             >
             | ICP
-            <a :href="config.bsped.dkaGuidelines" target="_blank"
-              >v{{ config.bsped.icpVersion }}</a
+            <a :href="config.organisations.bsped.dkaGuidelines" target="_blank"
+              >v{{ config.organisations.bsped.icpVersion }}</a
             ></span
           >
         </p>
@@ -29,8 +30,9 @@ import { config } from "../assets/config.js";
           <a :href="config.author.url" target="_blank">{{
             config.author.name
           }}</a>
-          for the <a :href="config.bsped.main" target="_blank">BSPED</a> DKA
-          special interest group.
+          for the
+          <a :href="config.organisations.bsped.main" target="_blank">BSPED</a>
+          DKA special interest group.
           <span class="ms-4"
             >Correspondance:
             <a :href="'mailto:' + config.author.email">{{
@@ -51,7 +53,8 @@ import { config } from "../assets/config.js";
       <div class="mb-1 mx-4 d-flex align-items-center">
         <img class="ukca me-2" src="@/assets/UKCA.png" />
         <p class="footer-text">
-          The <a :href="config.bsped.main" target="_blank">BSPED</a>
+          The
+          <a :href="config.organisations.bsped.main" target="_blank">BSPED</a>
           {{ config.appName }} is registered as a medical device in the UK.<br />{{
             config.disclaimer
           }}
