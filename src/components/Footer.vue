@@ -25,11 +25,11 @@ import { config } from "../assets/config.js";
           >
         </p>
         <p class="footer-text">
-          Created by
+          Created and maintained by
           <a :href="config.author.url" target="_blank">{{
             config.author.name
           }}</a>
-          with the <a :href="config.bsped.main" target="_blank">BSPED</a> DKA
+          for the <a :href="config.bsped.main" target="_blank">BSPED</a> DKA
           special interest group.
           <span class="ms-4"
             >Correspondance:
@@ -38,8 +38,14 @@ import { config } from "../assets/config.js";
             }}</a></span
           >
         </p>
-        <p class="footer-text" v-if="config.author.acknowledgement">
-          {{ config.author.acknowledgement }}
+        <p class="footer-text" v-if="config.author.contributors">
+          Contributors to the current version:
+          <span v-html="config.author.contributors.current"></span>.
+          <span class="ms-4"
+            ><a :href="config.author.contributors.url" target="_blank"
+              >See all contributors</a
+            >.</span
+          >
         </p>
       </div>
       <div class="mb-1 mx-4 d-flex align-items-center">

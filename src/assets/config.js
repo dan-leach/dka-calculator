@@ -8,8 +8,11 @@ export const config = reactive({
     name: "Dan Leach",
     url: "https://danleach.uk",
     email: "admin@dka-calculator.co.uk",
-    acknowledgement:
-      "With thanks to ? for peer-review of the current version. ",
+    contributors: {
+      current:
+        "Rob Spaull, Danny Simpson, Jonathan Fenwick, Elham Atiq, <a href='https://sec.stealthcopter.com/' target='_blank'>Mat Rollings</a>",
+      url: "https://github.com/dan-leach/dka-calculator/blob/main/contributors.md",
+    },
   },
   bsped: {
     main: "https://www.bsped.org.uk",
@@ -25,7 +28,7 @@ export const config = reactive({
     repo: {
       main: "https://github.com/dan-leach/dka-calculator",
       changelog:
-        "https://github.com/dan-leach/dka-calculator/blob/master/changelog.md",
+        "https://github.com/dan-leach/dka-calculator/blob/main/changelog.md",
     },
     regions: [
       //each array is of the hospitals in that region
@@ -1302,7 +1305,7 @@ export const config = reactive({
     repo: {
       main: "https://github.com/dan-leach/dka-calculator-api",
       changelog:
-        "https://github.com/dan-leach/dka-calculator-api/blob/master/changelog.md",
+        "https://github.com/dan-leach/dka-calculator-api/blob/main/changelog.md",
     },
     url: "https://api.dka-calculator.co.uk/",
     //url: "http://localhost:3000/",
