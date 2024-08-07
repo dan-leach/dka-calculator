@@ -1,13 +1,13 @@
 Todo:
+1. Fix top level await error on build
 
-1. Agree update to static version ICP to 1.4 - replace the fallback version hosted on site
 
 Before launch:
-
-1. Test limits
-2. Legacy?
-3. htaccess redirect for app level routes
-4. remove from assets/api.js:
+1. Agree update to static version ICP to 1.4 - replace the fallback version hosted on site
+2. Rerun tests limits
+3. Legacy?
+4. htaccess redirect for app level routes
+5. remove from assets/api.js:
    //temp addition during API testing...
    console.log(JSON.stringify(data));
-5. add date/time to changelog and contributors
+6. add date/time to changelog and contributors
