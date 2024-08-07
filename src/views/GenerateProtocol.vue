@@ -638,14 +638,92 @@ onMounted(() => {
                     Units/hour
                   </div>
                 </div>
+                <div class="mb-2">
+                  <div class="card border-warning p-2">
+                    Note: Insulin should NOT be started immediately.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--glucose bolus volume-->
+            <div class="card mb-4">
+              <div class="card-header">Glucose bolus volume</div>
+              <div class="card-body">
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Formula</span>
+                    <span
+                      v-html="data.calculations.glucoseBolusVolume.formula"
+                    ></span>
+                  </div>
+                </div>
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Limit</span>
+                    <span
+                      v-html="data.calculations.glucoseBolusVolume.limit"
+                    ></span>
+                    <small>Based on weight of 75kg</small>
+                  </div>
+                </div>
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Working</span>
+                    <span
+                      v-html="data.calculations.glucoseBolusVolume.working"
+                    ></span>
+                  </div>
+                </div>
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Output</span>
+                    {{ data.calculations.glucoseBolusVolume.val.toFixed(0) }}mL
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--hhs bolus volume-->
+            <div class="card mb-4">
+              <div class="card-header">HHS bolus volume</div>
+              <div class="card-body">
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Formula</span>
+                    <span
+                      v-html="data.calculations.hhsBolusVolume.formula"
+                    ></span>
+                  </div>
+                </div>
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Limit</span>
+                    <span
+                      v-html="data.calculations.hhsBolusVolume.limit"
+                    ></span>
+                    <small>Based on weight of 75kg</small>
+                  </div>
+                </div>
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Working</span>
+                    <span
+                      v-html="data.calculations.hhsBolusVolume.working"
+                    ></span>
+                  </div>
+                </div>
+                <div class="mb-2">
+                  <div class="card p-2">
+                    <span class="text-muted m-0">Output</span>
+                    {{ data.calculations.hhsBolusVolume.val.toFixed(0) }}mL
+                  </div>
+                </div>
               </div>
             </div>
             <div class="card border-warning mb-3">
               <div class="card-body">
                 <p class="card-text">
-                  Note: Insulin should NOT be started immediately. Refer to the
-                  BSPED Paediatric DKA care pathway for how to use these
-                  calculated values.
+                  Note: Refer to the BSPED Paediatric DKA care pathway for how
+                  to use these calculated values.
                 </p>
               </div>
             </div>
