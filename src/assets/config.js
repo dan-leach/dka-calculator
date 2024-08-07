@@ -2,7 +2,6 @@ import { reactive } from "vue";
 
 export const config = reactive({
   appName: "Paediatric DKA Calculator",
-  version: "2.0 (Under development)",
   underDevelopment: true,
   url: "https://dka-calculator.co.uk",
   author: {
@@ -12,20 +11,22 @@ export const config = reactive({
     acknowledgement:
       "With thanks to ? for peer-review of the current version. ",
   },
-  repo: {
-    main: "https://github.com/dan-leach/dka-calculator",
-    changelog:
-      "https://github.com/dan-leach/dka-calculator/blob/master/changelog.md",
-  },
   bsped: {
     main: "https://www.bsped.org.uk",
     dkaGuidelines:
       "https://www.bsped.org.uk/clinical-resources/bsped-dka-guidelines/",
+    icpVersion: "2024",
   },
   ispad: "https://www.ispad.org",
   disclaimer:
     "Decisions about patient care remain the treating clinician's responsibility.",
   client: {
+    version: "2.0",
+    repo: {
+      main: "https://github.com/dan-leach/dka-calculator",
+      changelog:
+        "https://github.com/dan-leach/dka-calculator/blob/master/changelog.md",
+    },
     regions: [
       //each array is of the hospitals in that region
       {
@@ -1297,6 +1298,12 @@ export const config = reactive({
     },
   },
   api: {
+    version: "1.0",
+    repo: {
+      main: "https://github.com/dan-leach/dka-calculator-api",
+      changelog:
+        "https://github.com/dan-leach/dka-calculator-api/blob/master/changelog.md",
+    },
     url: "https://api.dka-calculator.co.uk/",
     //url: "http://localhost:3000/",
     timeoutDuration: 15000,

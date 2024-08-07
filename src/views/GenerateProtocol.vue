@@ -151,7 +151,11 @@ const generate = {
     payload.patientAge = data.value.inputs.patientDOB.patientAge.val;
     payload.patientAgeMonths = data.value.inputs.patientDOB.ageMonths();
     payload.weightLimitOverride = data.value.inputs.weight.limit.override;
-    payload.appVersion = config.version;
+    payload.appVersion = {
+      client: config.client.version,
+      api: config.api.version,
+      icp: config.bsped.icpVersion,
+    };
     payload.clientDatetime = new Date();
     payload.clientUseragent = navigator.userAgent;
 

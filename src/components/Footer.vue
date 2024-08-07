@@ -10,9 +10,17 @@ import { config } from "../assets/config.js";
       <div class="mb-2 mx-4 d-none d-md-block">
         <p class="footer-text">
           <span
-            ><strong>{{ config.appName }}&nbsp;</strong>
-            <a :href="config.repo.changelog" target="_blank"
-              >Version {{ config.version }}</a
+            ><strong>{{ config.appName }}&nbsp;</strong> Client
+            <a :href="config.client.repo.changelog" target="_blank"
+              >v{{ config.client.version }}</a
+            >
+            | API
+            <a :href="config.api.repo.changelog" target="_blank"
+              >v{{ config.api.version }}</a
+            >
+            | ICP
+            <a :href="config.bsped.dkaGuidelines" target="_blank"
+              >v{{ config.bsped.icpVersion }}</a
             ></span
           >
         </p>
