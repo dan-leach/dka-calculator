@@ -1,6 +1,6 @@
 let config = {};
 
-async function fetchConfig() {
+function fetchConfig() {
   const url = "https://api.dka-calculator.co.uk/config";
   const timeoutDuration = 15000;
 
@@ -8,32 +8,30 @@ async function fetchConfig() {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutDuration);
 
-  try {
-    // Prepare and send the request
-    const response = await fetch(url, {
-      method: "GET",
-      signal: controller.signal,
-    });
+  // Return a promise that resolves with the fetched config or rejects with an error
+  return fetch(url, {
+    method: "GET",
+    signal: controller.signal,
+  })
+    .then(response => {
+      // Clear the timeout
+      clearTimeout(timeoutId);
 
-    // Clear the timeout
-    clearTimeout(timeoutId);
-
-    //parse the JSON response
-    const jsonResponse = await response.json();
-
-    config = jsonResponse;
-
-    // Show the response if required
-    if (response.ok) {
+      // Check if the response is ok, then parse the JSON response
+      if (response.ok) {
+        return response.json();
+      } else {
+        return response.json().then(jsonResponse => Promise.reject(jsonResponse));
+      }
+    })
+    .then(jsonResponse => {
+      // Process the JSON response
+      config = jsonResponse;
       return jsonResponse;
-    } else {
-      throw jsonResponse;
-    }
-  } catch (error) {
-    console.error(error);
-  }
+    })
+    .catch(error => {
+      console.error(error);
+    });
 }
 
-await fetchConfig();
-
-export { config };
+export { config, fetchConfig };

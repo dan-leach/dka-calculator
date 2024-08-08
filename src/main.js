@@ -3,9 +3,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
 import "./assets/main.css";
 
-// Fetching and import config
-import { config } from "./assets/fetchConfig";
-
 // Import the core Vue library
 import { createApp } from "vue";
 import App from "./App.vue";
@@ -27,14 +24,19 @@ library.add(faQuestionCircle, faInfoCircle, faCheck, faXmark);
 // Create Vue application
 const app = createApp(App);
 
-// Inject the config data
-app.provide("config", config);
+// Fetching and import config
+import { config, fetchConfig } from "./assets/fetchConfig";
 
-// Register FontAwesomeIcon component globally
-app.component("font-awesome-icon", FontAwesomeIcon);
+fetchConfig().then(() => {
+  // Inject the config data
+  app.provide("config", config);
 
-// Use Vue Router
-app.use(router);
+  // Register FontAwesomeIcon component globally
+  app.component("font-awesome-icon", FontAwesomeIcon);
 
-// Mount Vue application to the DOM
-app.mount("#app");
+  // Use Vue Router
+  app.use(router);
+
+  // Mount Vue application to the DOM
+  app.mount("#app");
+})

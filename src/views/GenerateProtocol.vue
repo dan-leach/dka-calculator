@@ -1,10 +1,10 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { data } from "../assets/data.js";
-import { config } from "../assets/fetchConfig.js";
 import router from "../router";
 import { api } from "@/assets/api.js";
-
+import { inject } from "vue";
+const config = inject("config");
 /**
  * Steps of the generation process.
  * @type {Object<string, Step>}
@@ -271,6 +271,7 @@ const generate = {
       protocolStartDatetime: inputs.protocolStartDatetime.val,
       calculations: data.value.calculations,
       auditID: data.value.auditID,
+      config: config
     };
   },
 
