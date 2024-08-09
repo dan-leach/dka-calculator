@@ -145,11 +145,11 @@ export const data = ref({
       ageMonths() {
         const today = new Date();
         const dob = new Date(this.val);
-        return (
-          (today.getFullYear() - dob.getFullYear()) * 12 +
-          today.getMonth() -
-          dob.getMonth()
-        );
+        let ageMonths = (today.getFullYear() - birthDate.getFullYear()) * 12 + 
+          today.getMonth() - dob.getMonth();
+        if (today.getDate() => dob.getDate())
+          ageMonths ++;
+        return ageMonths;
       },
       /**
        * Validates the date of birth.
