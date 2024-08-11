@@ -163,12 +163,6 @@ export const data = ref({
           errors.push("A valid date must be entered for date of birth.");
         if (dateVal > new Date())
           errors.push("Date of birth cannot be after today.");
-        if (dateVal < minDate)
-          errors.push(
-            `Date of birth cannot be more than ${
-              config.ageLimit + 1
-            } years ago.`
-          );
 
         this.patientAge.build();
         if (this.patientAge.val > config.validation.patientAge.max) {
