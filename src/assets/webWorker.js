@@ -21,7 +21,7 @@ onmessage = function (req) {
     });
   })
     .then(function (pdfBlob) {
-      postMessage({ pdfBlob }); // Return the PDF blob to the main thread
+      postMessage({ pdfBlob, complete: true }); // Return the PDF blob to the main thread
     })
     .catch(errHandler); // Handle any errors that occur during the promise execution
 };
@@ -44,7 +44,7 @@ function generatePdfBlob(req, callback) {
 
     pdfMake.vfs = pdfFonts; // Set the virtual file system for fonts
     pdfMake.createPdf(docDef).getBlob(callback); // Create the PDF and get the blob
-    console.log("webWorker: document blob returned...");
+    postMessage({ docDef: true });
   } catch (e) {
     errHandler(e); // Handle errors using the proxy errHandler within the web worker
   }

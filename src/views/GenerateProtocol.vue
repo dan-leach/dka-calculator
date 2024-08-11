@@ -18,30 +18,35 @@ const generateSteps = ref({
    * @property {boolean} current - Indicates if the step is currently being executed.
    */
   transmit: {
+    //Generate the payload
     text: "Transmitting data to DKA Calculator",
     complete: false,
     fail: "",
     current: false,
   },
   calculate: {
+    //await the response from the server
     text: "Calculating protocol variables",
     complete: false,
     fail: "",
     current: false,
   },
   audit: {
+    //is completed at the same time as the calculate step
     text: "Logging audit data",
     complete: false,
     fail: "",
     current: false,
   },
   build: {
+    //fetch the docDef definition
     text: "Generating individualised care pathway",
     complete: false,
     fail: "",
     current: false,
   },
   download: {
+    //return the pdfBlob and trigger download
     text: "Starting PDF download",
     complete: false,
     fail: "",
@@ -221,8 +226,18 @@ const generate = {
             reject(
               `Error encountered by thread generating protocol PDF: ${res.data.toString()}`
             );
-          } else {
+          } else if (res.data.complete) {
+            //pdfBlob has been returned so trigger the download
             resolve(res);
+          } else if (res.data.docDef) {
+            //docDef definition has been generated, now pdfBlob being generated
+            generateSteps.value.build.complete = true;
+            generateSteps.value.build.current = false;
+            generateSteps.value.download.current = true;
+          } else {
+            reject(
+              `Unexpected message event from webWorker: ${res.data.toString()}`
+            );
           }
         };
 
@@ -287,16 +302,10 @@ const generate = {
     anchor.download = `DKA Protocol for ${data.value.inputs.patientName.val}.pdf`;
     anchor.click();
     console.log("main: pdf download triggered...");
-    generate.success();
-  },
-
-  /**
-   * Shows the success modal after the PDF is downloaded.
-   */
-  success: function () {
     generateSteps.value.download.complete = true;
     generateSteps.value.download.current = false;
   },
+
 };
 
 // Reactive variable to control button text
