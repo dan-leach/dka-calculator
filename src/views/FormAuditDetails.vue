@@ -291,7 +291,7 @@ onMounted(() => {
             autocomplete="off"
             required
           />
-          <label class="btn btn-outline-secondary me-2" :for="option">{{
+          <label class="btn btn-outline-secondary me-2 mb-2" :for="option">{{
             option
           }}</label>
         </div>
