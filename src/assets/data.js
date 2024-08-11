@@ -144,12 +144,27 @@ export const data = ref({
        */
       ageMonths() {
         const today = new Date();
-        const dob = new Date(this.val);
-        return (
-          (today.getFullYear() - dob.getFullYear()) * 12 +
-          today.getMonth() -
-          dob.getMonth()
-        );
+        const birthDate = new Date(this.val);
+        // Calculate the difference in years and months
+        let years = today.getFullYear() - birthDate.getFullYear();
+        let months = today.getMonth() - birthDate.getMonth();
+        let days = today.getDate() - birthDate.getDate();
+
+        // Adjust months if the current month is before the birth month in the current year
+        if (months < 0) {
+            years--;
+            months += 12;
+        }
+
+        // Adjust the months if the current day is before the birth day in the current month
+        if (days < 0) {
+            months--;
+        }
+
+        // Calculate the total number of months
+        let ageInMonths = years * 12 + months;
+
+        return ageInMonths;
       },
       /**
        * Validates the date of birth.
