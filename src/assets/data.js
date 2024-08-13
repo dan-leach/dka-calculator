@@ -52,22 +52,19 @@ const buildDateString = (date) => {
 };
 
 /**
- * Calculates age in years from the given date of birth.
+ * Calculates age in years (as a decimal) from the given date of birth.
  * @param {string} dob - Date of birth in ISO format.
- * @returns {number} - Age in years.
+ * @returns {number} - Age in years (including decimal).
  */
 const ageInYears = (dob) => {
   const today = new Date();
   const birthDate = new Date(dob);
-  let age = today.getFullYear() - birthDate.getFullYear();
-  if (
-    today.getMonth() < birthDate.getMonth() ||
-    (today.getMonth() === birthDate.getMonth() &&
-      today.getDate() < birthDate.getDate())
-  ) {
-    age--;
-  }
-  return age;
+
+  const millisecondsPerYear = 365.25 * 24 * 60 * 60 * 1000; // average year length accounting for leap years
+  const ageInMilliseconds = today - birthDate;
+
+  const decimalAge = ageInMilliseconds / millisecondsPerYear;
+  return decimalAge;
 };
 
 export const data = ref({
@@ -182,7 +179,9 @@ export const data = ref({
         this.patientAge.build();
         if (this.patientAge.val > config.value.validation.patientAge.max) {
           errors.push(
-            `Patient age cannot be greater than ${config.value.validation.patientAge.max} years.`
+            `Patient age cannot be greater than ${config.value.validation.patientAge.max.toFixed(
+              0
+            )} years.`
           );
         }
 
