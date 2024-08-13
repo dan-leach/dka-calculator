@@ -4,23 +4,34 @@ import { ref, onMounted } from "vue";
 import Header from "./components/Header.vue";
 import Footer from "./components/Footer.vue";
 
-import { config, fetchConfig } from "./assets/fetchConfig";
-
+//manage loading state while config data fetched
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/css/index.css";
 let load = ref({
   pending: true,
   failed: "",
 });
 
+//fetching the config data
+import { fetchConfig } from "./assets/fetchConfig";
 const loadConfigData = () => {
+  //show the loading spinner
+  load.value.pending = true;
+
+  //clear the failed message in case of retry
+  load.value.failed = "";
+
   fetchConfig()
-    .then(() => {
-      if (!config.value.appName)
-        throw new Error("Failed to load configuration data");
+    .then((config) => {
+      if (config.api.showConsole) {
+        console.log("Config fetched successfully:", config);
+      }
       load.value.pending = false;
     })
     .catch((error) => {
-      console.error(error);
-      load.value.failed = error.message || "Failed to load configuration data";
+      console.error("Failed to fetch config:", error);
+      load.value.failed =
+        error.toString() || "Failed to load configuration data";
       load.value.pending = false;
     });
 };
@@ -31,8 +42,20 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="load.failed">{{ load.failed }}</div>
-  <div v-else-if="load.pending">Loading...</div>
+  <div v-if="load.failed" class="container-fluid m-3">
+    <h4>Sorry, something went wrong...</h4>
+    <p>
+      If this keeps happening please contact
+      <a href="mailto:admin@dka-calculator.co.uk">admin@dka-calculator.co.uk</a>
+      including the error message show below:<br />
+      <code>{{ load.failed }}</code>
+    </p>
+    <button type="button" @click="loadConfigData" class="btn btn-primary mb-4">
+      Retry
+    </button>
+  </div>
+
+  <loading v-else-if="load.pending" v-model:active="load.pending" />
   <div v-else class="d-flex flex-column vh-100">
     <Header />
     <div id="app-view" class="m-2">
