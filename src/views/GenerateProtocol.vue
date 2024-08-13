@@ -560,7 +560,7 @@ onMounted(() => {
                 <div class="mb-2">
                   <div class="card p-2">
                     <span class="text-muted m-0">Output</span>
-                    {{ data.calculations.deficit.rate.val.toFixed(1) }}mL
+                    {{ data.calculations.deficit.rate.val.toFixed(1) }}mL/hour
                   </div>
                 </div>
               </div>
@@ -625,7 +625,9 @@ onMounted(() => {
                 <div class="mb-2">
                   <div class="card p-2">
                     <span class="text-muted m-0">Output</span>
-                    {{ data.calculations.maintenance.rate.val.toFixed(1) }}mL
+                    {{
+                      data.calculations.maintenance.rate.val.toFixed(1)
+                    }}mL/hour
                   </div>
                 </div>
               </div>
@@ -653,7 +655,9 @@ onMounted(() => {
                 <div class="mb-2">
                   <div class="card p-2">
                     <span class="text-muted m-0">Output</span>
-                    {{ data.calculations.startingFluidRate.val.toFixed(1) }}mL
+                    {{
+                      data.calculations.startingFluidRate.val.toFixed(1)
+                    }}mL/hour
                   </div>
                 </div>
               </div>
