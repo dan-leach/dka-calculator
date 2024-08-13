@@ -374,7 +374,7 @@ export const data = ref({
             today.getMonth(),
             today.getDate(),
             today.getHours() +
-              config.value.validation.protocolStartDatetime.withinPastHours,
+              config.value.validation.protocolStartDatetime.withinFutureHours,
             today.getMinutes()
           );
         },
@@ -403,8 +403,19 @@ export const data = ref({
           return false;
         }
         const dateVal = new Date(this.val);
-        if (dateVal <= this.minDate.val || dateVal >= this.maxDate.val) {
+        if (dateVal < this.minDate.val) {
           this.errors = `Protocol start must be within the past ${config.value.validation.protocolStartDatetime.withinPastHours} hours of the current date/time. `;
+          return false;
+        }
+        if (dateVal > this.maxDate.val) {
+          this.errors = `Protocol start must be no more than ${
+            config.value.validation.protocolStartDatetime.withinFutureHours
+          } ${
+            config.value.validation.protocolStartDatetime.withinFutureHours ===
+            1
+              ? "hour"
+              : "hours"
+          } ahead of the current date/time. `;
           return false;
         }
         return true;
