@@ -1,4 +1,6 @@
-let config = {};
+import { ref } from "vue";
+
+let config = ref({});
 
 function fetchConfig() {
   const url = "https://api.dka-calculator.co.uk/config";
@@ -13,23 +15,25 @@ function fetchConfig() {
     method: "GET",
     signal: controller.signal,
   })
-    .then(response => {
+    .then((response) => {
       // Clear the timeout
       clearTimeout(timeoutId);
-
+      console.log(response);
       // Check if the response is ok, then parse the JSON response
       if (response.ok) {
         return response.json();
       } else {
-        return response.json().then(jsonResponse => Promise.reject(jsonResponse));
+        return response
+          .json()
+          .then((jsonResponse) => Promise.reject(jsonResponse));
       }
     })
-    .then(jsonResponse => {
+    .then((jsonResponse) => {
       // Process the JSON response
-      config = jsonResponse;
+      config.value = jsonResponse;
       return jsonResponse;
     })
-    .catch(error => {
+    .catch((error) => {
       console.error(error);
     });
 }

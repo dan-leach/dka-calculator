@@ -9,9 +9,9 @@ import { config } from "./fetchConfig.js";
  * @returns {Promise<Object>} - A promise that resolves with the API response as a JSON object.
  */
 async function api(route, data) {
-  const url = config.api.url + route;
-  const timeoutDuration = config.api.timeoutDuration;
-  const showConsole = config.api.showConsole;
+  const url = config.value.api.url + route;
+  const timeoutDuration = config.value.api.timeoutDuration;
+  const showConsole = config.value.api.showConsole;
 
   // Create a controller to handle request timeout
   const controller = new AbortController();

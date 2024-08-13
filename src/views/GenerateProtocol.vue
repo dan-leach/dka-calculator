@@ -80,6 +80,7 @@ const generate = {
       data.value.auditID = res.auditID;
       data.value.calculations = res.calculations;
     } catch (error) {
+      console.log(error);
       generateSteps.value.calculate.fail = error;
       generateSteps.value.calculate.current = false;
       return;
@@ -157,9 +158,9 @@ const generate = {
     payload.patientAgeMonths = data.value.inputs.patientDOB.ageMonths();
     payload.weightLimitOverride = data.value.inputs.weight.limit.override;
     payload.appVersion = {
-      client: config.client.version,
-      api: config.api.version,
-      icp: config.organisations.bsped.icpVersion,
+      client: config.value.client.version,
+      api: config.value.api.version,
+      icp: config.value.organisations.bsped.icpVersion,
     };
     payload.clientDatetime = new Date();
     payload.clientUseragent = navigator.userAgent;
@@ -286,7 +287,7 @@ const generate = {
       protocolStartDatetime: inputs.protocolStartDatetime.val,
       calculations: data.value.calculations,
       auditID: data.value.auditID,
-      config: config
+      config: config.value,
     };
   },
 
@@ -305,7 +306,6 @@ const generate = {
     generateSteps.value.download.complete = true;
     generateSteps.value.download.current = false;
   },
-
 };
 
 // Reactive variable to control button text

@@ -24,19 +24,15 @@ library.add(faQuestionCircle, faInfoCircle, faCheck, faXmark);
 // Create Vue application
 const app = createApp(App);
 
-// Fetching and import config
-import { config, fetchConfig } from "./assets/fetchConfig";
+// Import config and inject
+import { config } from "./assets/fetchConfig";
+app.provide("config", config);
 
-fetchConfig().then(() => {
-  // Inject the config data
-  app.provide("config", config);
+// Register FontAwesomeIcon component globally
+app.component("font-awesome-icon", FontAwesomeIcon);
 
-  // Register FontAwesomeIcon component globally
-  app.component("font-awesome-icon", FontAwesomeIcon);
+// Use Vue Router
+app.use(router);
 
-  // Use Vue Router
-  app.use(router);
-
-  // Mount Vue application to the DOM
-  app.mount("#app");
-})
+// Mount Vue application to the DOM
+app.mount("#app");

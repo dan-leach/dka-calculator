@@ -134,7 +134,7 @@ export const data = ref({
       minDate() {
         const minDate = new Date();
         minDate.setFullYear(
-          minDate.getFullYear() - (config.validation.patientAge.max + 1)
+          minDate.getFullYear() - (config.value.validation.patientAge.max + 1)
         );
         return minDate;
       },
@@ -152,13 +152,13 @@ export const data = ref({
 
         // Adjust months if the current month is before the birth month in the current year
         if (months < 0) {
-            years--;
-            months += 12;
+          years--;
+          months += 12;
         }
 
         // Adjust the months if the current day is before the birth day in the current month
         if (days < 0) {
-            months--;
+          months--;
         }
 
         // Calculate the total number of months
@@ -180,9 +180,9 @@ export const data = ref({
           errors.push("Date of birth cannot be after today.");
 
         this.patientAge.build();
-        if (this.patientAge.val > config.validation.patientAge.max) {
+        if (this.patientAge.val > config.value.validation.patientAge.max) {
           errors.push(
-            `Patient age cannot be greater than ${config.validation.patientAge.max} years.`
+            `Patient age cannot be greater than ${config.value.validation.patientAge.max} years.`
           );
         }
 
@@ -346,7 +346,7 @@ export const data = ref({
             today.getMonth(),
             today.getDate(),
             today.getHours() -
-              config.validation.protocolStartDatetime.withinPastHours,
+              config.value.validation.protocolStartDatetime.withinPastHours,
             today.getMinutes()
           );
         },
@@ -374,7 +374,7 @@ export const data = ref({
             today.getMonth(),
             today.getDate(),
             today.getHours() +
-              config.validation.protocolStartDatetime.withinPastHours,
+              config.value.validation.protocolStartDatetime.withinPastHours,
             today.getMinutes()
           );
         },
@@ -404,7 +404,7 @@ export const data = ref({
         }
         const dateVal = new Date(this.val);
         if (dateVal <= this.minDate.val || dateVal >= this.maxDate.val) {
-          this.errors = `Protocol start must be within the past ${config.validation.protocolStartDatetime.withinPastHours} hours of the current date/time. `;
+          this.errors = `Protocol start must be within the past ${config.value.validation.protocolStartDatetime.withinPastHours} hours of the current date/time. `;
           return false;
         }
         return true;
@@ -416,8 +416,8 @@ export const data = ref({
       label: "pH",
       form: [2],
       info: "pH is added to the relevant field in the care pathway. pH is used to determine DKA severity which is used in fluid deficit calculations. It is stored by the DKA Calculator for audit purposes.",
-      min: config.validation.pH.min,
-      max: config.validation.pH.max,
+      min: config.value.validation.pH.min,
+      max: config.value.validation.pH.max,
       step: 0.01,
       /**
        * Validates the pH value.
@@ -443,8 +443,8 @@ export const data = ref({
       info: "If provided, these values will be added to the relevant fields in the care pathway. Bicarbonate is used to determine DKA severity which is used in fluid deficit calculations. Bicarbonate, glucose and ketones are stored by the DKA Calculator for audit purposes.",
       privacyInfo:
         "If provided, bicarbonate will be added to the relevant field in the care pathway. Bicarbonate is used to determine DKA severity which is used in fluid deficit calculations. It is stored by the DKA Calculator for audit purposes.",
-      min: config.validation.bicarbonate.min,
-      max: config.validation.bicarbonate.max,
+      min: config.value.validation.bicarbonate.min,
+      max: config.value.validation.bicarbonate.max,
       step: 0.1,
       /**
        * Validates the bicarbonate value.
@@ -476,8 +476,8 @@ export const data = ref({
       privacyInfo:
         "If provided, glucose will be added to the relevant field in the care pathway. It is stored by the DKA Calculator for audit purposes.",
       form: [2],
-      min: config.validation.glucose.min,
-      max: config.validation.glucose.max,
+      min: config.value.validation.glucose.min,
+      max: config.value.validation.glucose.max,
       step: 0.1,
       /**
        * Validates the glucose value.
@@ -509,8 +509,8 @@ export const data = ref({
       privacyInfo:
         "If provided, ketone level will be added to the relevant field in the care pathway. Ketone level is used to check the diagnostic threshold for DKA is reached. It is stored by the DKA Calculator for audit purposes.",
       form: [2],
-      min: config.validation.ketones.min,
-      max: config.validation.ketones.max,
+      min: config.value.validation.ketones.min,
+      max: config.value.validation.ketones.max,
       step: 0.1,
       /**
        * Validates the ketone level.
@@ -541,8 +541,8 @@ export const data = ref({
       label: "Weight",
       form: [2],
       info: "Weight is used to calculate fluid volumes for boluses, deficit replacement and maintenance. It is stored by the DKA Calculator for audit purposes. If the weight provided falls outside 2 standard deviations of the mean for age, whether or not you override this limit is also recorded.",
-      min: config.validation.weight.min,
-      max: config.validation.weight.max,
+      min: config.value.validation.weight.min,
+      max: config.value.validation.weight.max,
       step: 0.1,
       limit: {
         /**
@@ -550,9 +550,8 @@ export const data = ref({
          * @returns {number} - The lower weight limit.
          */
         lower() {
-          return config.weightLimits[data.value.inputs.patientSex.val].lower[
-            data.value.inputs.patientDOB.ageMonths()
-          ];
+          return config.value.weightLimits[data.value.inputs.patientSex.val]
+            .lower[data.value.inputs.patientDOB.ageMonths()];
         },
         /**
          * Returns the upper weight limit based on patient sex and age in months, capped by the maximum allowed weight.
@@ -560,10 +559,11 @@ export const data = ref({
          */
         upper() {
           let upper =
-            config.weightLimits[data.value.inputs.patientSex.val].upper[
+            config.value.weightLimits[data.value.inputs.patientSex.val].upper[
               data.value.inputs.patientDOB.ageMonths()
             ];
-          if (upper > config.weightLimits.max) upper = config.weightLimits.max;
+          if (upper > config.value.weightLimits.max)
+            upper = config.value.weightLimits.max;
           return upper;
         },
         exceeded: false,
@@ -591,7 +591,7 @@ export const data = ref({
         if (this.val < this.limit.lower() || this.val > this.limit.upper()) {
           if (!this.limit.override)
             this.errors += `Weight must be within 2 standard deviations of the mean for age (upper limit ${
-              config.weightLimits.max
+              config.value.weightLimits.max
             } kg) (range ${this.limit.lower()} kg to ${this.limit.upper()} kg).`;
           this.limit.exceeded = true;
         } else {
@@ -718,7 +718,7 @@ export const data = ref({
         if (!this.val) {
           this.errors += "Region must be selected. ";
         } else {
-          for (let region of config.regions) {
+          for (let region of config.value.regions) {
             if (region.name == this.val)
               data.value.inputs.centre.options = region.centres;
           }
@@ -760,7 +760,7 @@ export const data = ref({
         if (!this.val) {
           this.errors += "Patient ethnic group must be selected. ";
         } else {
-          for (let ethnicGroup of config.ethnicGroups) {
+          for (let ethnicGroup of config.value.ethnicGroups) {
             if (ethnicGroup.name == this.val)
               data.value.inputs.ethnicSubgroup.options = ethnicGroup.subgroups;
           }
@@ -928,8 +928,8 @@ export const data = ref({
       label: "Audit ID",
       form: [4],
       info: "Audit ID is required when updating the audit data for an episode. It is used to find the correct episode record.",
-      minLength: config.validation.auditID.length,
-      maxLength: config.validation.auditID.length,
+      minLength: config.value.validation.auditID.length,
+      maxLength: config.value.validation.auditID.length,
       /**
        * Validates the auditID.
        * @returns {boolean} - True if the name is valid, false otherwise.

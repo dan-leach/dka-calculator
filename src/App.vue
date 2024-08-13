@@ -1,11 +1,39 @@
 <script setup>
 import { RouterView } from "vue-router";
+import { ref, onMounted } from "vue";
 import Header from "./components/Header.vue";
 import Footer from "./components/Footer.vue";
+
+import { config, fetchConfig } from "./assets/fetchConfig";
+
+let load = ref({
+  pending: true,
+  failed: "",
+});
+
+const loadConfigData = () => {
+  fetchConfig()
+    .then(() => {
+      if (!config.value.appName)
+        throw new Error("Failed to load configuration data");
+      load.value.pending = false;
+    })
+    .catch((error) => {
+      console.error(error);
+      load.value.failed = error.message || "Failed to load configuration data";
+      load.value.pending = false;
+    });
+};
+
+onMounted(() => {
+  loadConfigData();
+});
 </script>
 
 <template>
-  <div class="d-flex flex-column vh-100">
+  <div v-if="load.failed">{{ load.failed }}</div>
+  <div v-else-if="load.pending">Loading...</div>
+  <div v-else class="d-flex flex-column vh-100">
     <Header />
     <div id="app-view" class="m-2">
       <router-view v-slot="{ Component }">
