@@ -3,7 +3,7 @@ import { ref } from "vue";
 let config = ref({});
 
 async function fetchConfig() {
-  const url = "http://localhost:3000/config";
+  const url = "https://api.dka-calculator.co.uk/config";
   const timeoutDuration = 15000;
 
   const controller = new AbortController();
