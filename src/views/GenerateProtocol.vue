@@ -693,7 +693,8 @@ onMounted(() => {
                 </div>
                 <div class="mb-2">
                   <div class="card border-warning p-2">
-                    Note: Insulin should NOT be started immediately.
+                    Note: Insulin should NOT be started immediately. Wait 1-2
+                    hours after starting IV fluid therapy.
                   </div>
                 </div>
               </div>
