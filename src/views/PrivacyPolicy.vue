@@ -21,9 +21,7 @@ const config = inject("config");
     </p>
     <p>
       If you have any questions please contact
-      <a :href="'mailto:' + config.value.author.email">{{
-        config.value.author.email
-      }}</a
+      <a :href="'mailto:' + config.author.email">{{ config.author.email }}</a
       >.
     </p>
     <div v-for="input of data.inputs">

@@ -113,7 +113,7 @@ export const data = ref({
       val: "",
       label: "Date of birth",
       form: [1, 4],
-      info: "Patient date of birth is printed onto the generated care pathway document in the patient demographics area. It is not stored directly by the DKA Calculator, but is used to calculate a patient age (in years) which is stored for audit purposes. To allow linkage of audit data between episodes the patient date of birth is used to generate a unique patient ID which is stored. The patient date of birth cannot be found from the calculated unique patient ID (<a href='https://www.codecademy.com/resources/blog/what-is-hashing/' target='_blank'>read more about secure cryptographic hashing</a>).",
+      info: "Patient date of birth is printed onto the generated care pathway document in the patient demographics area. It is not stored directly by the DKA Calculator, but is used to calculate a patient age (in decimal years) which is used to check the patient weight is within the expected range. The decimal age is stored for audit purposes. To allow linkage of audit data between episodes the patient date of birth is also used (together with the NHS number) to generate a unique patient ID which is stored. The patient date of birth cannot be found from the calculated unique patient ID (<a href='https://www.codecademy.com/resources/blog/what-is-hashing/' target='_blank'>read more about secure cryptographic hashing</a>).",
       updateInfo:
         "Patient date of birth is not stored directly by the DKA Calculator. It is used to generate a unique patient ID which is compared with the unique ID generated when the episode was created to ensure the correct record is being updated. The patient date of birth cannot be found from the calculated unique patient ID (<a href='https://www.codecademy.com/resources/blog/what-is-hashing/' target='_blank'>read more about secure cryptographic hashing</a>).",
       /**
@@ -302,7 +302,7 @@ export const data = ref({
       val: "",
       label: "Protocol start date/time",
       form: [2],
-      info: "The protocol start date/time is used to calculated recommended review date/times on the serial data sheet on the care pathway. It is stored by the DKA Calculator for audit purposes.",
+      info: "The protocol start date/time is used to calculate recommended review date/times on the serial data sheet on the care pathway. It is stored by the DKA Calculator for audit purposes.",
       todayString: {
         /**
          * Generates a string for today's date and assigns it to this.val.
@@ -643,9 +643,9 @@ export const data = ref({
         "Was the patient known to have diabetes prior to the current episode of DKA?",
       privacyLabel: "Pre-existing diabetes status",
       form: [2, 4],
-      info: "If the patient has pre-existing diabetes, it is used to indicate the approach to managing existing insulin therapy on the care pathway. It is stored by the DKA Calculator for audit purposes.",
+      info: "If the patient has pre-existing diabetes, it is used to indicate the approach to managing existing insulin therapy on the care pathway. Pre-existing diabetes status also determines the preventable factors options that can be selected. It is stored by the DKA Calculator for audit purposes.",
       updateInfo:
-        "Pre-existing diabetes status is stored by the DKA Calculator for audit purposes.",
+        "Pre-existing diabetes status determines the preventable factors options that can be selected and is stored by the DKA Calculator for audit purposes.",
       /**
        * Validates the pre-existing diabetes status.
        * @returns {boolean} - True if the status is selected, false otherwise.
