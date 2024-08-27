@@ -3,6 +3,8 @@ import { ref, onMounted } from "vue";
 import { data } from "../assets/data.js";
 import router from "../router";
 import { api } from "@/assets/api.js";
+import { inject } from "vue";
+const config = inject("config");
 
 /**
  * Steps of the update process.
@@ -57,7 +59,7 @@ const update = {
       return;
     }
     //wait 2 seconds from completion before marking complete so it is clear that a process has happened
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     if (!(await update.executeStep("update"))) return;
 
     return true;
@@ -94,8 +96,15 @@ const update = {
   buildPayload: async function (payload) {
     payload.auditID = data.value.inputs.auditID.val;
     payload.patientHash = await update.patientHash();
-    payload.preExistingDiabetes = data.value.inputs.preExistingDiabetes.val == "true";
+    payload.preExistingDiabetes =
+      data.value.inputs.preExistingDiabetes.val == "true";
     payload.preventableFactors = data.value.inputs.preventableFactors.val;
+    payload.clientUseragent = navigator.userAgent;
+    payload.appVersion = {
+      client: config.value.client.version,
+      api: config.value.api.version,
+      icp: config.value.organisations.bsped.icpVersion,
+    };
 
     return payload;
   },
