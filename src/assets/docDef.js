@@ -273,39 +273,22 @@ const tickCanvasArrays = {
 };
 
 /**
- * Functions to generate messages for the preventable factors page.
+ * Generates the guidance message for preventable factors.
+ * @param {Object} req - The request object.
+ * @returns {string} - The preventable factors message.
  */
-const preventableFactors = {
-  /**
-   * Generates the main message for preventable factors.
-   * @param {Object} req - The request object.
-   * @returns {string} - The preventable factors message.
-   */
-  main: (req) => {
-    const factors = req.preventableFactors;
-    if (factors[0] === "No") {
-      return "When this protocol was generated the user indicated that there were no preventable/modifiable factors which may have led to this episode of DKA. If you now have information to suggest there were preventable/modifiable factors please update the audit data using the instructions below.";
-    }
-    if (factors[0] === "Not yet known") {
-      return "When this protocol was generated the user indicated that it was not yet known if there were preventable/modifiable factors which may have led to this episode of DKA. Please update the audit data using the instructions below.";
-    }
-    const factorsString = factors
-      .map((factor) => factor.toLowerCase())
-      .join(", ");
-    return `When this protocol was generated the user indicated the following preventable/modifiable factors may have led to this episode of DKA: ${factorsString}. If you now know that other preventable/modifiable factors apply, or no longer feel the selected factors are representative, please update the audit data using the instructions below.`;
-  },
-  /**
-   * Generates instructions for updating preventable factors data.
-   * @param {Object} req - The request object.
-   * @returns {string} - The instructions for updating preventable factors data.
-   */
-  instructions: (req) => {
-    if (req.patientNHS) {
-      return `To update the preventable/modifiable factors data for this episode go to dka-calculator.co.uk and click 'Update audit data'. You will be asked to enter the audit ID: ${req.auditID}`;
-    } else {
-      return `As an NHS number was not provided for this episode, retrospective audit data cannot be submitted.`;
-    }
-  },
+const preventableFactorsGuidance = (req) => {
+  const factors = req.preventableFactors;
+  if (factors[0] === "No") {
+    return "When this protocol was generated the user indicated that there were no preventable/modifiable factors which may have led to this episode of DKA. If you now have information to suggest there were preventable/modifiable factors please update the audit data using the instructions below.";
+  }
+  if (factors[0] === "Not yet known") {
+    return "When this protocol was generated the user indicated that it was not yet known if there were preventable/modifiable factors which may have led to this episode of DKA. Please update the audit data using the instructions below.";
+  }
+  const factorsString = factors
+    .map((factor) => "- " + factor.toLowerCase())
+    .join("\n");
+  return `When this protocol was generated the user indicated the following preventable/modifiable factors may have led to this episode of DKA:\n\n ${factorsString}.\n\n If you now know that other preventable/modifiable factors apply, or no longer feel the selected factors are representative, please update the audit data using the instructions below.`;
 };
 
 /**
@@ -905,7 +888,7 @@ function getDocDef(req) {
         fontSize: 10,
         table: {
           headerRows: 0,
-          widths: [30, "*", 20],
+          widths: [30, "*", 300],
           body: [
             ["", " ", ""],
             ["", " ", ""],
@@ -920,11 +903,15 @@ function getDocDef(req) {
             ["", " ", ""],
             ["", " ", ""],
             ["", " ", ""],
-            ["", preventableFactors.main(req), ""],
             ["", " ", ""],
-            ["", preventableFactors.instructions(req), ""],
+            ["", preventableFactorsGuidance(req), ""],
           ],
         },
+      },
+      {
+        text: req.auditID,
+        fontSize: 32,
+        absolutePosition: { x: 400, y: 580 },
       },
       {
         text: "",
