@@ -531,7 +531,7 @@ export const data = ref({
       info: "Weight is used to calculate fluid volumes for boluses, deficit replacement and maintenance. It is stored by the DKA Calculator for audit purposes. If the weight provided falls outside 2 standard deviations of the mean for age, whether or not you override this limit is also recorded.",
       min: config.value.validation.weight.min,
       max: config.value.validation.weight.max,
-      step: 0.1,
+      step: 0.01,
       limit: {
         /**
          * Returns the lower weight limit based on patient sex and age in months.
@@ -557,6 +557,7 @@ export const data = ref({
         exceeded: false,
         override: false,
         overrideConfirm: false,
+        use2SD: false,
         overrideLabel: "Override weight limit",
       },
       /**
@@ -569,18 +570,27 @@ export const data = ref({
           return false;
         }
 
-        this.val = Number.parseFloat(this.val).toFixed(1);
+        //if was set to +2SD from override page and then subsequently changed, remove use2SD flag
+        if (this.val != this.limit.upper().toFixed(2))
+          this.limit.use2SD = false;
+
+        this.val = Number.parseFloat(this.val).toFixed(2);
 
         const errors = [];
         checkNumberRange(this.val, "", this.min, this.max, errors, "Weight");
         this.errors = errors.join(" ");
         if (errors.length) return false;
 
-        if (this.val < this.limit.lower() || this.val > this.limit.upper()) {
+        if (
+          this.val < this.limit.lower().toFixed(2) ||
+          this.val > this.limit.upper().toFixed(2)
+        ) {
           if (!this.limit.override)
             this.errors += `Weight must be within 2 standard deviations of the mean for age (upper limit ${
               config.value.weightLimits.max
-            } kg) (range ${this.limit.lower()} kg to ${this.limit.upper()} kg).`;
+            } kg) (range ${this.limit.lower().toFixed(2)} kg to ${this.limit
+              .upper()
+              .toFixed(2)} kg).`;
           this.limit.exceeded = true;
         } else {
           this.limit.exceeded = false;

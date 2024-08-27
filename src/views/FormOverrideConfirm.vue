@@ -2,6 +2,9 @@
 import { onMounted } from "vue";
 import { data } from "../assets/data.js";
 import router from "../router";
+import Swal from "sweetalert2";
+import { inject } from "vue";
+const config = inject("config");
 
 /**
  * Function to handle the 'Continue' button click event
@@ -10,6 +13,27 @@ import router from "../router";
 const continueClick = () => {
   data.value.inputs.weight.limit.overrideConfirm = true;
   router.push("/form-audit-details");
+};
+
+/**
+ * Function to handle the 'use +2SD' button click event
+ * Sets the patient weight to 2SD above mean for age and returns the user to the clinical details page to highlight the change
+ */
+const use2SD = async () => {
+  router.push("/form-clinical-details");
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  data.value.inputs.weight.val = data.value.inputs.weight.limit.upper();
+  data.value.inputs.weight.limit.overrideConfirm = false;
+  data.value.inputs.weight.limit.override = false;
+  data.value.inputs.weight.isValid();
+  data.value.inputs.weight.limit.use2SD = true;
+  Swal.fire({
+    text: "Weight updated to use +2SD above the mean for age",
+    icon: "success",
+    toast: true,
+    timer: 2000,
+    showConfirmButton: false,
+  });
 };
 
 /**
@@ -35,7 +59,7 @@ onMounted(() => {
     <h2 class="display-3 text-danger">
       You are overriding the weight safety range
     </h2>
-    <div>
+    <div v-if="data.inputs.weight.val > data.inputs.weight.limit.lower()">
       <p>
         You should only continue if you are sure {{ data.inputs.weight.val }}kg
         is the correct weight and you have considered using a maximum weight of
@@ -81,10 +105,15 @@ onMounted(() => {
         values especially if your patient is much smaller than 75kg.
       </p>
     </div>
+    <p v-else mx-4>
+      The weight you have entered is less than 2 standard deviations below the
+      mean for age.
+    </p>
+    <p>Proceed if you are sure {{ data.inputs.weight.val }}kg is correct.</p>
 
-    <div class="d-flex flex-row justify-content-evenly">
+    <div class="d-flex flex-row justify-content-evenly flex-wrap">
       <!--back-->
-      <div class="text-center">
+      <div class="text-center mb-2">
         <button
           type="button"
           @click="router.push('/form-clinical-details')"
@@ -93,15 +122,34 @@ onMounted(() => {
           Go back and review
         </button>
       </div>
-      <!--next-->
-      <div class="text-center">
+      <!--use +2SD-->
+      <div
+        class="text-center mx-2 mb-2"
+        v-if="
+          data.inputs.weight.limit.upper() != config.weightLimits.max &&
+          data.inputs.weight.val > data.inputs.weight.limit.lower()
+        "
+      >
+        <button type="button" @click="use2SD" class="btn btn-lg btn-primary">
+          Use weight of {{ data.inputs.weight.limit.upper().toFixed(2) }}kg<sup
+            >*</sup
+          >
+          instead
+        </button>
+        <br /><small>* plus 2 standard deviations above mean for age</small>
+      </div>
+      <!--proceed-->
+      <div class="text-center mb-2">
         <button
           type="button"
           @click="continueClick"
           class="btn btn-lg btn-danger"
-        >
-          Proceed with weight of {{ data.inputs.weight.val }}kg
-        </button>
+          v-html="
+            data.inputs.weight.val >= config.weightLimits.max
+              ? `Proceed with current weight<br /><small>(Calculations will be capped as above)</small>`
+              : `Proceed with weight of ${data.inputs.weight.val}kg`
+          "
+        ></button>
       </div>
     </div>
   </form>

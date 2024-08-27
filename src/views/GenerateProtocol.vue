@@ -156,6 +156,7 @@ const generate = {
 
     payload.patientAge = data.value.inputs.patientDOB.patientAge.val;
     payload.weightLimitOverride = data.value.inputs.weight.limit.override;
+    payload.use2SD = data.value.inputs.weight.limit.use2SD;
     payload.appVersion = {
       client: config.value.client.version,
       api: config.value.api.version,
