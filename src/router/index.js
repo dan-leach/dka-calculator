@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Start from "../views/Start.vue";
+import { fetchConfig } from "../assets/fetchConfig";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -48,6 +49,9 @@ const router = createRouter({
       path: "/privacy-policy",
       name: "privacy-policy",
       component: () => import("../views/PrivacyPolicy.vue"),
+      beforeEnter: async (to, from) => {
+        await fetchConfig();
+      },
     },
     {
       path: "/update",
