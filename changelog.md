@@ -26,6 +26,8 @@ See also:
 - The insulin delivery method the patient uses (if they have pre-existing diabetes) is now collected for audit purposes.
 - Factors that may have contributed to the episode of DKA occuring (preventable factors) are now collected for audit purposes.
 - When the patient has pre-existing diabetes ticks are automatically added to the not applicable boxes for ongoing insulin therapy for the mode the patient does not use on flow chart 5.
+- Weight limit override confirmation page now includes an option to automatically adjust the weight down to +2SD above mean for age and sex where the provided weight exceeds this value. The page has been simplified where the weight is below the target range to remove warnings about overweight calculations.
+- A privacy policy page has been created.
 
 ## [v1.3.6] - 2024-03-12 16:00
 

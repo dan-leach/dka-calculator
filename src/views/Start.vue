@@ -39,7 +39,7 @@ const config = inject("config");
           The DKA Calculator has had a number of changes to improve the user
           experience and audit data collection.
           <a href="#" data-bs-toggle="collapse" data-bs-target="#changes"
-            >Read more about these changes...</a
+            >Read more about clinically relevant changes...</a
           >
         </p>
         <div class="collapse my-2" id="changes">
@@ -49,15 +49,6 @@ const config = inject("config");
               submission. This is currently limited to preventable factors and
               pre-existing diabetes status, but may be expanded in the future to
               allow retrospective audit data collection.
-            </li>
-            <li>
-              General user interface and user experience improvements by moving
-              to single page application structure using Vue 3.
-            </li>
-            <li>
-              The code to perform calculation of variables for the care pathway
-              is now run on the server. Once the calculations are returned to
-              your device the care pathway document is generated locally.
             </li>
             <li>
               DKA severity grade selection has changed to include consideration
@@ -86,20 +77,13 @@ const config = inject("config");
               Previously a care pathway could be generated even if the
               diagnostic thresholds for DKA were not met. A check to prevent
               this has been added. Ketones, if provided, must be above 3 mmol/L.
-              pH must be <= 7.3 or bicarbonate must be < 15 mmol/L. If these
-              thresholds are not met the an error will be shown which must be
-              corrected before a care pathway can be generated.
+              pH must be <= 7.3 or bicarbonate must be < 15mmol/L.
             </li>
             <li>
-              The patient ethnic group is now collected for audit purposes.
-            </li>
-            <li>
-              The insulin delivery method the patient uses (if they have
-              pre-existing diabetes) is now collected for audit purposes.
-            </li>
-            <li>
-              Factors that may have contributed to the episode of DKA occuring
-              (preventable factors) are now collected for audit purposes.
+              The patient ethnic group, the insulin delivery method the patient
+              uses (if they have pre-existing diabetes), and any factors that
+              may have contributed to the episode of DKA occuring (preventable
+              factors) are now collected for audit purposes.
             </li>
             <li>
               When the patient has pre-existing diabetes ticks are automatically
@@ -107,6 +91,10 @@ const config = inject("config");
               the mode the patient does not use on flow chart 5.
             </li>
           </ul>
+          You can
+          <a :href="config.client.repo.changelog" target="_blank"
+            >read the full changelog here</a
+          >.
         </div>
       </div>
     </div>

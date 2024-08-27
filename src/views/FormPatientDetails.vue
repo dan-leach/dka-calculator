@@ -81,7 +81,9 @@ onMounted(() => {
       below. For more information about how this data is used click the
       <font-awesome-icon :icon="['fas', 'circle-info']" /> icon by each field or
       refer to the
-      <RouterLink to="/privacy-policy" class="">privacy policy</RouterLink>.
+      <RouterLink to="/privacy-policy" target="_blank" class=""
+        >privacy policy</RouterLink
+      >.
     </p>
     <!--patientName-->
     <div class="mb-4">

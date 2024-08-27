@@ -30,12 +30,5 @@ const config = inject("config");
       <p v-html="input.privacyInfo" v-if="input.privacyInfo"></p>
       <p v-html="input.info" v-else></p>
     </div>
-    <button
-      type="button"
-      @click="router.push('/form-patient-details')"
-      class="btn btn-secondary"
-    >
-      Back to form
-    </button>
   </div>
 </template>

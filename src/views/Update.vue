@@ -40,7 +40,9 @@ onMounted(() => {
       click the
       <font-awesome-icon :icon="['fas', 'circle-info']" /> icon by each field or
       refer to the
-      <RouterLink to="/privacy-policy" class="">privacy policy</RouterLink>.
+      <RouterLink to="/privacy-policy" target="_blank"
+        >privacy policy</RouterLink
+      >.
     </p>
     <div class="card border-danger my-3">
       <div class="card-body">
