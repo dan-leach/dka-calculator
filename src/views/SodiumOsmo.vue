@@ -78,7 +78,11 @@ onMounted(() => {
       </h2>
       <p>
         This will calculate the corrected sodium and effective osmolarity using
-        the values for serum sodium and serum glucose input below.
+        the values for serum sodium and serum glucose input below. For more
+        information about how this data is used refer to the
+        <RouterLink to="/privacy-policy" target="_blank"
+          >privacy policy</RouterLink
+        >.
       </p>
       <div class="d-flex flex-wrap">
         <!--sodium input-->

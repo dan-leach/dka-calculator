@@ -28,6 +28,10 @@ A separate progression occurs for retrospective updates to the audit data:
 2. Enter data for the update `Update.vue`
 3. Submit data `SubmitUpdate.vue`
 
+A separate page exists for calculation of corrected sodium and effective osmolality:
+
+1. Corrected sodium and effective osmolality calculator `SodiumOsmo.vue`
+
 A privacy policy page `PrivacyPolicy.vue` can be accessed outside the usual linear flow.
 
 ### Data handling
