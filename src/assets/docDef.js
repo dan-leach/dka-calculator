@@ -273,25 +273,6 @@ const tickCanvasArrays = {
 };
 
 /**
- * Generates the guidance message for preventable factors.
- * @param {Object} req - The request object.
- * @returns {string} - The preventable factors message.
- */
-const preventableFactorsGuidance = (req) => {
-  const factors = req.preventableFactors;
-  if (factors[0] === "No") {
-    return "When this protocol was generated the user indicated that there were no preventable/modifiable factors which may have led to this episode of DKA. If you now have information to suggest there were preventable/modifiable factors please update the audit data using the instructions below.";
-  }
-  if (factors[0] === "Not yet known") {
-    return "When this protocol was generated the user indicated that it was not yet known if there were preventable/modifiable factors which may have led to this episode of DKA. Please update the audit data using the instructions below.";
-  }
-  const factorsString = factors
-    .map((factor) => "- " + factor.toLowerCase())
-    .join("\n");
-  return `When this protocol was generated the user indicated the following preventable/modifiable factors may have led to this episode of DKA:\n\n ${factorsString}.\n\n If you now know that other preventable/modifiable factors apply, or no longer feel the selected factors are representative, please update the audit data using the instructions below.`;
-};
-
-/**
  * Function to apply watermark text if developmentMode is active.
  */
 const watermarkText = (req) => {
@@ -904,7 +885,11 @@ function getDocDef(req) {
             ["", " ", ""],
             ["", " ", ""],
             ["", " ", ""],
-            ["", preventableFactorsGuidance(req), ""],
+            [
+              "",
+              "Please follow the instructions below to provide retrospective audit data.",
+              "",
+            ],
           ],
         },
       },
