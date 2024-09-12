@@ -4,12 +4,12 @@ I am grateful for the contributions of my colleagues who have helped improve the
 
 Authored corrected sodium and effective osmolality calculator feature
 
-- Dr Jonathan Fenwick: Paediatric doctor in the North West of England
+- Dr Jonathan Fenwick ([GitHub profile](https://github.com/DrJonathanFenwick)): Paediatric doctor in the North West of England
 
 Testing and peer-review of the codebase
 
-- Dr Jonathan Fenwick: Paediatric doctor in the North West of England
-- Dr Rob Spaull: Paediatric doctor at Bristol Royal Hospital for Children
+- Dr Jonathan Fenwick ([GitHub profile](https://github.com/DrJonathanFenwick)): Paediatric doctor in the North West of England
+- Dr Rob Spaull ([GitHub profile](https://github.com/rspaull)): Paediatric doctor at Bristol Royal Hospital for Children
 - Dr Danny Simpson: Paediatric doctor at Royal United Hospitals Bath
 
 Performed security review
