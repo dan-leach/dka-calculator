@@ -17,7 +17,7 @@ See also:
 
 ### Added
 
-- There is now a facility to update limited episode data after submission. This is currently limited to preventable factors and pre-existing diabetes status, but may be expanded in the future to allow retrospective audit data collection.
+- There is now a facility to update limited episode data after submission. This is currently limited to preventable factors, pre-existing diabetes status, end date/time of the DKA protocol, and cerebral oedema questions. This may be expanded in the future to allow retrospective audit data collection.
 - A unique patient hash is generated and stored using SHA-256 (x1 client-side, x1 server-side with salt) using patient NHS number and date of birth as input string. This allows episodes relating to the same patient to be linked for audit purposes.
 - The patient postcode is collected and sent with other data to the API where an index of multiple deprivation (IMD) decile is derived and stored. The postcode is not stored.
 - Bicarbonate, glucose and ketones may now optionally be entered and will be printed on the care pathway if provided. Bicarbonate is used for severity scoring as above.
@@ -27,6 +27,7 @@ See also:
 - Factors that may have contributed to the episode of DKA occuring (preventable factors) are now collected for audit purposes.
 - When the patient has pre-existing diabetes ticks are automatically added to the not applicable boxes for ongoing insulin therapy for the mode the patient does not use on flow chart 5.
 - Weight limit override confirmation page now includes an option to automatically adjust the weight down to +2SD above mean for age and sex where the provided weight exceeds this value. The page has been simplified where the weight is below the target range to remove warnings about overweight calculations.
+- A calculator for corrected sodium and effective osmolality has been added.
 - A privacy policy page has been created.
 
 ## [v1.3.6] - 2024-03-12 16:00
