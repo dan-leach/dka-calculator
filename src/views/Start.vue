@@ -47,9 +47,16 @@ const config = inject("config");
           <ul>
             <li>
               There is now a facility to update limited episode data after
-              submission. This is currently limited to preventable factors and
-              pre-existing diabetes status, but may be expanded in the future to
-              allow retrospective audit data collection.
+              submission. This is currently limited to preventable factors,
+              pre-existing diabetes status, end date/time of the DKA protocol,
+              and cerebral oedema questions. This may be expanded in the future.
+            </li>
+            <li>
+              You can
+              <a href="/sodium-osmo"
+                >corrected sodium and effective osmolality</a
+              >
+              using a tool (not part of the main DKA Calcuator process)
             </li>
             <li>
               DKA severity grade selection has changed to include consideration
