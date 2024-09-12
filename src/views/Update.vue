@@ -198,6 +198,9 @@ onMounted(() => {
           ><font-awesome-icon :icon="['fas', 'circle-info']"
         /></span>
       </div>
+      <div class="form-text mx-1" id="protocolEndDatetimeHelp">
+        {{ data.inputs.protocolEndDatetime.help }}
+      </div>
       <div
         v-if="showErrors"
         class="form-text text-danger mx-1"

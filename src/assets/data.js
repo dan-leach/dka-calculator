@@ -966,6 +966,7 @@ export const data = ref({
     protocolEndDatetime: {
       val: "",
       label: "Protocol end date/time",
+      help: "Use the date/time of the first subcutaneous insulin dose as the end of the DKA protocol",
       form: [4],
       info: "The protocol end date/time is used is stored by the DKA Calculator for audit purposes.",
       minDate: {
