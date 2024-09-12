@@ -26,6 +26,12 @@ const submitClick = () => {
  * Scrolls to the top of the page.
  */
 onMounted(() => {
+  // Build date-related values and set input min/max attributes
+  const { protocolEndDatetime } = data.value.inputs;
+  protocolEndDatetime.minDate.build();
+  protocolEndDatetime.minDateString.build();
+  protocolEndDatetime.maxDate.build();
+  protocolEndDatetime.maxDateString.build();
   // Scroll to top
   window.scrollTo(0, 0);
 });
@@ -165,6 +171,44 @@ onMounted(() => {
         v-html="data.inputs.patientNHS.updateInfo"
       ></div>
     </div>
+    <!--protocolEndDatetime-->
+    <div class="mb-4">
+      <div class="input-group">
+        <div class="form-floating">
+          <input
+            type="datetime-local"
+            class="form-control"
+            id="protocolEndDatetime"
+            v-model="data.inputs.protocolEndDatetime.val"
+            @change="data.inputs.protocolEndDatetime.isValid()"
+            placeholder="x"
+            min=""
+            max=""
+            required
+            autocomplete="off"
+          />
+          <label for="protocolEndDatetime">{{
+            data.inputs.protocolEndDatetime.label
+          }}</label>
+        </div>
+        <span
+          class="input-group-text"
+          data-bs-toggle="collapse"
+          data-bs-target="#protocolEndDatetimeInfo"
+          ><font-awesome-icon :icon="['fas', 'circle-info']"
+        /></span>
+      </div>
+      <div
+        v-if="showErrors"
+        class="form-text text-danger mx-1"
+        id="protocolEndDatetimeErrors"
+      >
+        {{ data.inputs.protocolEndDatetime.errors }}
+      </div>
+      <div class="collapse form-text mx-1" id="protocolEndDatetimeInfo">
+        {{ data.inputs.protocolEndDatetime.info }}
+      </div>
+    </div>
     <!--preExistingDiabetes-->
     <div class="mb-4">
       <p class="text-center m-2">
@@ -238,7 +282,7 @@ onMounted(() => {
         />
       </p>
       <!--options-->
-      <div class="d-flex flex-row flex-wrap justify-content-center mb-4">
+      <div class="d-flex flex-row flex-wrap justify-content-center">
         <div v-for="option in data.inputs.preventableFactors.options.list">
           <input
             type="checkbox"
@@ -250,6 +294,7 @@ onMounted(() => {
             autocomplete="off"
             v-if="option != 'Not yet known'"
             required
+            :disabled="!data.inputs.preExistingDiabetes.val"
           />
           <label
             class="btn btn-outline-secondary me-2"
@@ -258,39 +303,39 @@ onMounted(() => {
             >{{ option }}</label
           >
         </div>
-        <div
-          v-if="data.inputs.preventableFactors.options.val.includes('Yes')"
-          class="form-text text-center"
-        >
-          Please select <strong>all</strong> preventable factors which apply,
-          using the categories below.<br />
-          You do not need to be certain that a particular factor caused the
-          episode of DKA.<br />If addressing a factor
-          <strong>might possibly</strong> have allowed the episode of DKA to be
-          avoided, please select it.
-        </div>
-        <div
-          v-else-if="
-            data.inputs.preventableFactors.options.val.includes('Not yet known')
-          "
-          class="form-text text-center"
-        >
-          A feature to allow you to submit preventable factors data at a later
-          point is under development.
-        </div>
-        <div
-          v-if="showErrors"
-          class="form-text text-danger text-center mx-1"
-          id="preventableFactorsErrors"
-        >
-          {{ data.inputs.preventableFactors.errors }}
-        </div>
-        <div
-          class="collapse form-text text-center mx-1"
-          id="preventableFactorsInfo"
-        >
-          {{ data.inputs.preventableFactors.info }}
-        </div>
+      </div>
+      <div
+        v-if="data.inputs.preventableFactors.options.val.includes('Yes')"
+        class="form-text text-center"
+      >
+        Please select <strong>all</strong> preventable factors which apply,
+        using the categories below.<br />
+        You do not need to be certain that a particular factor caused the
+        episode of DKA.<br />If addressing a factor
+        <strong>might possibly</strong> have allowed the episode of DKA to be
+        avoided, please select it.
+      </div>
+      <div
+        v-else-if="
+          data.inputs.preventableFactors.options.val.includes('Not yet known')
+        "
+        class="form-text text-center"
+      >
+        A feature to allow you to submit preventable factors data at a later
+        point is under development.
+      </div>
+      <div
+        v-if="showErrors"
+        class="form-text text-danger text-center mx-1"
+        id="preventableFactorsErrors"
+      >
+        {{ data.inputs.preventableFactors.errors }}
+      </div>
+      <div
+        class="collapse form-text text-center mx-1"
+        id="preventableFactorsInfo"
+      >
+        {{ data.inputs.preventableFactors.info }}
       </div>
       <!--categories-->
       <transition>
@@ -358,6 +403,242 @@ onMounted(() => {
           </div>
         </div>
       </transition>
+    </div>
+    <!--cerebralOedemaConcern-->
+    <div class="mb-4">
+      <p class="text-center m-2">
+        {{ data.inputs.cerebralOedemaConcern.label }}
+        <font-awesome-icon
+          :icon="['fas', 'circle-info']"
+          data-bs-toggle="collapse"
+          data-bs-target="#cerebralOedemaConcernInfo"
+          class="ms-2"
+        />
+      </p>
+      <div class="d-flex justify-content-center">
+        <div>
+          <input
+            type="radio"
+            class="btn-check"
+            name="cerebralOedemaConcern"
+            id="cerebralOedemaConcernTrue"
+            value="true"
+            v-model="data.inputs.cerebralOedemaConcern.val"
+            @change="data.inputs.cerebralOedemaConcern.isValid()"
+            autocomplete="off"
+            required
+          />
+          <label
+            class="btn btn-outline-secondary me-2"
+            for="cerebralOedemaConcernTrue"
+            >Yes</label
+          >
+
+          <input
+            type="radio"
+            class="btn-check"
+            name="cerebralOedemaConcern"
+            id="cerebralOedemaConcernFalse"
+            value="false"
+            v-model="data.inputs.cerebralOedemaConcern.val"
+            @change="data.inputs.cerebralOedemaConcern.isValid()"
+            autocomplete="off"
+          />
+          <label
+            class="btn btn-outline-secondary"
+            for="cerebralOedemaConcernFalse"
+            >No</label
+          >
+        </div>
+      </div>
+      <div
+        v-if="showErrors"
+        class="form-text text-danger text-center mx-1"
+        id="cerebralOedemaConcernErrors"
+      >
+        {{ data.inputs.cerebralOedemaConcern.errors }}
+      </div>
+      <div
+        class="collapse form-text text-center mx-1"
+        id="cerebralOedemaConcernInfo"
+      >
+        {{ data.inputs.cerebralOedemaConcern.info }}
+      </div>
+    </div>
+    <!--cerebralOedemaImaging-->
+    <div class="mb-4" v-if="data.inputs.cerebralOedemaConcern.val === 'true'">
+      <p class="text-center m-2">
+        {{ data.inputs.cerebralOedemaImaging.label }}
+        <font-awesome-icon
+          :icon="['fas', 'circle-info']"
+          data-bs-toggle="collapse"
+          data-bs-target="#cerebralOedemaImagingInfo"
+          class="ms-2"
+        />
+      </p>
+      <div class="d-flex justify-content-center">
+        <div>
+          <input
+            type="radio"
+            class="btn-check"
+            name="cerebralOedemaImaging"
+            id="cerebralOedemaImagingTrue"
+            value="true"
+            v-model="data.inputs.cerebralOedemaImaging.val"
+            @change="data.inputs.cerebralOedemaImaging.isValid()"
+            autocomplete="off"
+            required
+          />
+          <label
+            class="btn btn-outline-secondary me-2"
+            for="cerebralOedemaImagingTrue"
+            >Yes</label
+          >
+
+          <input
+            type="radio"
+            class="btn-check"
+            name="cerebralOedemaImaging"
+            id="cerebralOedemaImagingFalse"
+            value="false"
+            v-model="data.inputs.cerebralOedemaImaging.val"
+            @change="data.inputs.cerebralOedemaImaging.isValid()"
+            autocomplete="off"
+          />
+          <label
+            class="btn btn-outline-secondary me-2"
+            for="cerebralOedemaImagingFalse"
+            >No</label
+          >
+
+          <input
+            type="radio"
+            class="btn-check"
+            name="cerebralOedemaImaging"
+            id="cerebralOedemaImagingNa"
+            value="n/a"
+            v-model="data.inputs.cerebralOedemaImaging.val"
+            @change="data.inputs.cerebralOedemaImaging.isValid()"
+            autocomplete="off"
+          />
+          <label class="btn btn-outline-secondary" for="cerebralOedemaImagingNa"
+            >Not applicable</label
+          >
+        </div>
+      </div>
+      <div
+        v-if="showErrors"
+        class="form-text text-danger text-center mx-1"
+        id="cerebralOedemaImagingErrors"
+      >
+        {{ data.inputs.cerebralOedemaImaging.errors }}
+      </div>
+      <div
+        class="collapse form-text text-center mx-1"
+        id="cerebralOedemaImagingInfo"
+      >
+        {{ data.inputs.cerebralOedemaImaging.info }}
+      </div>
+    </div>
+    <!--cerebralOedemaTreatment-->
+    <div class="mb-4" v-if="data.inputs.cerebralOedemaConcern.val === 'true'">
+      <p class="text-center m-2">
+        {{ data.inputs.cerebralOedemaTreatment.label }}
+        <font-awesome-icon
+          :icon="['fas', 'circle-info']"
+          data-bs-toggle="collapse"
+          data-bs-target="#cerebralOedemaTreatmentInfo"
+          class="ms-2"
+        />
+      </p>
+      <div class="d-flex justify-content-center">
+        <div>
+          <input
+            type="checkbox"
+            class="btn-check"
+            name="cerebralOedemaTreatment"
+            id="cerebralOedemaTreatmentHypertonic"
+            value="hypertonic"
+            v-model="data.inputs.cerebralOedemaTreatment.val"
+            @change="data.inputs.cerebralOedemaTreatment.isValid()"
+            autocomplete="off"
+            required
+          />
+          <label
+            v-if="!data.inputs.cerebralOedemaTreatment.val.includes('no')"
+            class="btn btn-outline-secondary me-2"
+            for="cerebralOedemaTreatmentHypertonic"
+            >Hypertonic saline</label
+          >
+
+          <input
+            type="checkbox"
+            class="btn-check"
+            name="cerebralOedemaTreatment"
+            id="cerebralOedemaTreatmentMannitol"
+            value="mannitol"
+            v-model="data.inputs.cerebralOedemaTreatment.val"
+            @change="data.inputs.cerebralOedemaTreatment.isValid()"
+            autocomplete="off"
+          />
+          <label
+            v-if="!data.inputs.cerebralOedemaTreatment.val.includes('no')"
+            class="btn btn-outline-secondary me-2"
+            for="cerebralOedemaTreatmentMannitol"
+            >Mannitol</label
+          >
+
+          <input
+            type="checkbox"
+            class="btn-check"
+            name="cerebralOedemaTreatment"
+            id="cerebralOedemaTreatmentOther"
+            value="other"
+            v-model="data.inputs.cerebralOedemaTreatment.val"
+            @change="data.inputs.cerebralOedemaTreatment.isValid()"
+            autocomplete="off"
+          />
+          <label
+            v-if="!data.inputs.cerebralOedemaTreatment.val.includes('no')"
+            class="btn btn-outline-secondary me-2"
+            for="cerebralOedemaTreatmentOther"
+            >Other treatment</label
+          >
+
+          <input
+            type="checkbox"
+            class="btn-check"
+            name="cerebralOedemaTreatment"
+            id="cerebralOedemaTreatmentNo"
+            value="no"
+            v-model="data.inputs.cerebralOedemaTreatment.val"
+            @change="data.inputs.cerebralOedemaTreatment.isValid()"
+            autocomplete="off"
+          />
+          <label
+            v-if="
+              data.inputs.cerebralOedemaTreatment.val.length === 0 ||
+              data.inputs.cerebralOedemaTreatment.val.includes('no')
+            "
+            class="btn btn-outline-secondary"
+            for="cerebralOedemaTreatmentNo"
+            >No treatment</label
+          >
+        </div>
+      </div>
+      <div
+        v-if="showErrors"
+        class="form-text text-danger text-center mx-1"
+        id="cerebralOedemaTreatmentErrors"
+      >
+        {{ data.inputs.cerebralOedemaTreatment.errors }}
+      </div>
+      <div
+        class="collapse form-text text-center mx-1"
+        id="cerebralOedemaTreatmentInfo"
+      >
+        {{ data.inputs.cerebralOedemaTreatment.info }}
+      </div>
     </div>
     <div class="d-flex flex-row justify-content-evenly">
       <!--submit-->

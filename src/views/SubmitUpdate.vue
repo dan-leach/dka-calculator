@@ -96,14 +96,24 @@ const update = {
   buildPayload: async function (payload) {
     payload.auditID = data.value.inputs.auditID.val;
     payload.patientHash = await update.patientHash();
+    payload.protocolEndDatetime = new Date(
+      data.value.inputs.protocolEndDatetime.val
+    );
     payload.preExistingDiabetes =
       data.value.inputs.preExistingDiabetes.val == "true";
     payload.preventableFactors = data.value.inputs.preventableFactors.val;
+    payload.cerebralOedemaConcern =
+      data.value.inputs.cerebralOedemaConcern.val == "true";
+    if (payload.cerebralOedemaConcern) {
+      payload.cerebralOedemaImaging =
+        data.value.inputs.cerebralOedemaImaging.val;
+      payload.cerebralOedemaTreatment =
+        data.value.inputs.cerebralOedemaTreatment.val;
+    }
     payload.clientUseragent = navigator.userAgent;
     payload.appVersion = {
       client: config.value.client.version,
       api: config.value.api.version,
-      icp: config.value.organisations.bsped.icpVersion,
     };
 
     return payload;
