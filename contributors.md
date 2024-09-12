@@ -10,7 +10,7 @@ Testing and peer-review of the codebase
 
 - Dr Jonathan Fenwick ([GitHub profile](https://github.com/DrJonathanFenwick)): Paediatric doctor in the North West of England
 - Dr Rob Spaull ([GitHub profile](https://github.com/rspaull)): Paediatric doctor at Bristol Royal Hospital for Children
-- Dr Danny Simpson: Paediatric doctor at Royal United Hospitals Bath
+- Dr Danny Simpson ([GitHub profile](https://github.com/dannysimpson0912/)): Paediatric doctor at Royal United Hospitals Bath
 
 Performed security review
 
