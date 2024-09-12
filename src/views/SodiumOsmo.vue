@@ -3,6 +3,9 @@ import { ref, onMounted } from "vue";
 import { data } from "../assets/data.js";
 import { api } from "../assets/api.js";
 
+import { inject } from "vue";
+const config = inject("config");
+
 let showErrors = ref(false);
 let errors = ref([]);
 let locked = ref(false);
@@ -22,6 +25,11 @@ const submitClick = async () => {
     const response = await api("sodium-osmo", {
       sodium: parseFloat(data.value.inputs.sodium.val),
       glucose: parseFloat(data.value.inputs.glucose.val),
+      clientUseragent: navigator.userAgent,
+      appVersion: {
+        client: config.value.client.version,
+        api: config.value.api.version,
+      },
     });
     pending.value = false;
     correctedSodium.value = response.correctedSodium;
