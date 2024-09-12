@@ -2,11 +2,15 @@ I am grateful for the contributions of my colleagues who have helped improve the
 
 ## [client v2.0 | api v1.0] - TBC 2024
 
+Authored corrected sodium and effective osmolality calculator feature
+
+- Dr Jonathan Fenwick: Paediatric doctor in the North West of England
+
 Testing and peer-review of the codebase
 
+- Dr Jonathan Fenwick: Paediatric doctor in the North West of England
 - Dr Rob Spaull: Paediatric doctor at Bristol Royal Hospital for Children
 - Dr Danny Simpson: Paediatric doctor at Royal United Hospitals Bath
-- Dr Jonathan Fenwick: Paediatric doctor at Wrightigton, Wigan and Leigh
 
 Performed security review
 

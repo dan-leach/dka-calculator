@@ -20,11 +20,6 @@ const config = inject("config");
       <h2 class="text-danger">
         {{ config.underDevelopment ? "Development version" : "" }}
       </h2>
-      <RouterLink to="/update" v-if="useRoute().name == 'start'">
-        <button type="button" class="btn btn-secondary my-2">
-          Update audit data
-        </button>
-      </RouterLink>
     </div>
   </nav>
 </template>

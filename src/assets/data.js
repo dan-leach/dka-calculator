@@ -75,9 +75,18 @@ export const data = ref({
      * @returns {boolean} - True if the form is valid, false otherwise.
      */
     isValid(formIndex) {
-      return Object.values(data.value.inputs).every((input) => {
-        return !input.form.includes(formIndex) || input.isValid();
-      });
+      let isValid = true;
+      for (let i in data.value.inputs) {
+        let input = data.value.inputs[i];
+        let isOptional = false;
+        if (input.optionalForForms) {
+          if (input.optionalForForms.includes(formIndex)) isOptional = true;
+        }
+        if (input.form.includes(formIndex)) {
+          if (!input.isValid(isOptional)) isValid = false;
+        }
+      }
+      return isValid;
     },
   },
   inputs: {
@@ -413,7 +422,7 @@ export const data = ref({
        */
       isValid() {
         const errors = [];
-        if (this.val === null) {
+        if (this.val === null || isNaN(this.val) || this.val == "") {
           errors.push("pH must be provided. ");
         } else {
           this.val = Number.parseFloat(this.val).toFixed(2);
@@ -439,7 +448,7 @@ export const data = ref({
        * @returns {boolean} - True if the bicarbonate value is valid, false otherwise.
        */
       isValid() {
-        if (this.val === null) {
+        if (this.val === null || isNaN(this.val) || this.val == "") {
           this.errors = "";
           return true;
         }
@@ -463,7 +472,8 @@ export const data = ref({
       label: "Glucose",
       privacyInfo:
         "If provided, glucose will be added to the relevant field in the care pathway. It is stored by the DKA Calculator for audit purposes.",
-      form: [2],
+      form: [2, 5],
+      optionalForForms: [2],
       min: config.value.validation.glucose.min,
       max: config.value.validation.glucose.max,
       step: 0.1,
@@ -471,21 +481,28 @@ export const data = ref({
        * Validates the glucose value.
        * @returns {boolean} - True if the glucose value is valid, false otherwise.
        */
-      isValid() {
-        if (this.val === null) {
+      isValid(optional) {
+        if (
+          optional &&
+          (this.val === null || isNaN(this.val) || this.val == "")
+        ) {
           this.errors = "";
           return true;
         }
         const errors = [];
-        this.val = Number.parseFloat(this.val).toFixed(1);
-        checkNumberRange(
-          this.val,
-          "mmol/L",
-          this.min,
-          this.max,
-          errors,
-          "Glucose"
-        );
+        if (this.val === null || isNaN(this.val) || this.val == "") {
+          errors.push("Glucose must be provided. ");
+        } else {
+          this.val = Number.parseFloat(this.val).toFixed(1);
+          checkNumberRange(
+            this.val,
+            "mmol/L",
+            this.min,
+            this.max,
+            errors,
+            "Glucose"
+          );
+        }
         this.errors = errors.join(" ");
         return !this.errors;
       },
@@ -505,7 +522,7 @@ export const data = ref({
        * @returns {boolean} - True if the ketone level is valid, false otherwise.
        */
       isValid() {
-        if (this.val === null) {
+        if (this.val === null || isNaN(this.val) || this.val == "") {
           this.errors = "";
           return true;
         }
@@ -943,6 +960,39 @@ export const data = ref({
         );
         this.errors = errors.join(" ");
         return !errors.length;
+      },
+      errors: "",
+    },
+    sodium: {
+      val: null,
+      label: "Sodium",
+      privacyInfo:
+        "Sodium is used to calculate corrected sodium and effective osmolality using the relevant standalone calculator <a href='/sodium-osmo'>found here</a>. This data is not stored.",
+      form: [5],
+      min: config.value.validation.sodium.min,
+      max: config.value.validation.sodium.max,
+      step: 0.1,
+      /**
+       * Validates the sodium value.
+       * @returns {boolean} - True if the sodium value is valid, false otherwise.
+       */
+      isValid() {
+        const errors = [];
+        if (this.val === null || isNaN(this.val) || this.val == "") {
+          errors.push("Sodium must be provided. ");
+        } else {
+          this.val = Number.parseFloat(this.val).toFixed(1);
+          checkNumberRange(
+            this.val,
+            "mmol/L",
+            this.min,
+            this.max,
+            errors,
+            "Sodium"
+          );
+        }
+        this.errors = errors.join(" ");
+        return !this.errors;
       },
       errors: "",
     },

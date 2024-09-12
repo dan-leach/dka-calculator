@@ -17,6 +17,7 @@ const config = inject("config");
         </p>
       </div>
     </div>
+
     <h2 class="display-3">Welcome</h2>
     <p class="mx-1">
       The BSPED Paediatric DKA Calculator allows clinicians to generate an
@@ -104,14 +105,48 @@ const config = inject("config");
       <a :href="'mailto:' + config.author.email">{{ config.author.email }}</a
       >.
     </p>
-    <div class="text-center my-5">
+    <div class="d-grid gap-2 mb-4">
       <button
         type="button"
         @click="$router.push('/form-disclaimer')"
-        class="btn btn-lg btn-primary"
+        class="btn btn-lg btn-primary btn-block"
       >
         Start
       </button>
+    </div>
+
+    <div class="card border-info mb-3">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <p class="flex-grow-1 m-0">
+            Update audit data for a patient with an existing audit ID
+          </p>
+          <button
+            type="button"
+            class="btn btn-secondary my-2"
+            @click="$router.push('/update')"
+          >
+            Update
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card border-info mb-3">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <p class="flex-grow-1 m-0">
+            Calculate the corrected sodium and effective osmolality using a
+            measured sodium and glucose for your patient
+          </p>
+          <button
+            type="button"
+            class="btn btn-secondary my-2"
+            @click="$router.push('/sodium-osmo')"
+          >
+            Calcuate
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -119,5 +154,12 @@ const config = inject("config");
 <style scoped>
 .container {
   max-width: 750px;
+}
+.btn-secondary {
+  min-width: 100px;
+  height: 40px;
+}
+.btn-lg {
+  font-size: 30px;
 }
 </style>
