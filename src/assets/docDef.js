@@ -864,39 +864,9 @@ function getDocDef(req) {
       },
       //page 10
       {
-        //outer table adds 20px border for whole page
-        layout: "noBorders",
-        fontSize: 10,
-        table: {
-          headerRows: 0,
-          widths: [30, "*", 300],
-          body: [
-            ["", " ", ""],
-            ["", " ", ""],
-            ["", " ", ""],
-            ["", " ", ""],
-            ["", " ", ""],
-            ["", " ", ""],
-            ["", " ", ""],
-            ["", " ", ""],
-            ["", " ", ""],
-            ["", " ", ""],
-            ["", " ", ""],
-            ["", " ", ""],
-            ["", " ", ""],
-            ["", " ", ""],
-            [
-              "",
-              "Please follow the instructions below to provide retrospective audit data.",
-              "",
-            ],
-          ],
-        },
-      },
-      {
         text: req.auditID,
         fontSize: 32,
-        absolutePosition: { x: 400, y: 580 },
+        absolutePosition: { x: 90, y: 340 },
       },
       {
         text: "",
