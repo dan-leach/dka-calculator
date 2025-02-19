@@ -615,7 +615,7 @@ export const data = ref({
 
         const errors = [];
         checkNumberRange(
-          this.val,
+          Number.parseFloat(this.val),
           "",
           this.min(),
           this.max(),
@@ -626,16 +626,17 @@ export const data = ref({
         if (errors.length) return false;
 
         if (
-          this.val < this.limit.lower().toFixed(2) ||
-          this.val > this.limit.upper().toFixed(2)
+          Number.parseFloat(this.val) < this.limit.lower().toFixed(2) ||
+          Number.parseFloat(this.val) > this.limit.upper().toFixed(2)
         ) {
-          if (!this.limit.override)
+          this.limit.exceeded = true;
+          if (!this.limit.override) {
             this.errors += `Weight must be within 2 standard deviations of the mean for age (upper limit ${
               config.value.weightLimits.max
             } kg) (range ${this.limit.lower().toFixed(2)} kg to ${this.limit
               .upper()
               .toFixed(2)} kg).`;
-          this.limit.exceeded = true;
+          }
         } else {
           this.limit.exceeded = false;
           this.limit.override = false;

@@ -1396,12 +1396,7 @@ function getDocDef(req) {
             ],
             [
               "",
-              "Corrected sodium levels should typically rise as blood glucose levels fall during treatment. It has been suggested that corrected sodium levels give an indication of the risk of cerebral oedema with a falling corrected sodium indicating an excess of free water and an increased risk of cerebral oedema.",
-              "",
-            ],
-            [
-              "",
-              "If corrected sodium levels fall during treatment, discuss with the consultant on call.",
+              "Corrected sodium levels should typically rise as blood glucose levels fall during treatment. It has been suggested that corrected sodium levels give an indication of the risk of cerebral oedema with a falling corrected sodium indicating an excess of free water and an increased risk of cerebral oedema. If corrected sodium levels fall during treatment, discuss with the consultant on call.",
               "",
             ],
             ["", "The formula for corrected sodium is:", ""],
@@ -1411,6 +1406,17 @@ function getDocDef(req) {
                 image: "equation1",
                 width: 250,
                 alignment: "center",
+              },
+              "",
+            ],
+            [
+              "",
+              {
+                text: `You can also use the corrected sodium / effective osmolality calculator available at ${req.config.client.sodiumOsmoUrl.replace(
+                  "https://",
+                  ""
+                )}.`,
+                link: req.config.client.sodiumOsmoUrl,
               },
               "",
             ],

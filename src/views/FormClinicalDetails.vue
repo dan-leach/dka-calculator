@@ -273,7 +273,10 @@ onMounted(() => {
       </div>
       <div
         class="form-check form-switch ms-1 my-1"
-        v-if="data.inputs.weight.limit.exceeded"
+        v-if="
+          data.inputs.weight.limit.exceeded &&
+          data.inputs.weight.val < data.inputs.weight.max()
+        "
       >
         <input
           class="form-check-input"
