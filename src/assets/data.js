@@ -1147,7 +1147,7 @@ export const data = ref({
       val: null,
       label: "Sodium",
       privacyInfo:
-        "Sodium is used to calculate corrected sodium and effective osmolality using the relevant standalone calculator <a href='/sodium-osmo'>found here</a>. This data is not stored.",
+        "Sodium is used to calculate corrected sodium and effective osmolality using the relevant standalone calculator <a href='/sodium-osmo'>found here</a>. It is stored for audit purposes.",
       form: [5],
       min() {
         return config.value.validation.sodium.min;
