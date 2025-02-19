@@ -413,8 +413,12 @@ export const data = ref({
       label: "pH",
       form: [2],
       info: "pH is added to the relevant field in the care pathway. pH is used to determine DKA severity which is used in fluid deficit calculations. It is stored by the DKA Calculator for audit purposes.",
-      min: config.value.validation.pH.min,
-      max: config.value.validation.pH.max,
+      min() {
+        return config.value.validation.pH.min;
+      },
+      max() {
+        return config.value.validation.pH.max;
+      },
       step: 0.01,
       /**
        * Validates the pH value.
@@ -426,7 +430,7 @@ export const data = ref({
           errors.push("pH must be provided. ");
         } else {
           this.val = Number.parseFloat(this.val).toFixed(2);
-          checkNumberRange(this.val, "", this.min, this.max, errors, "pH");
+          checkNumberRange(this.val, "", this.min(), this.max(), errors, "pH");
         }
         this.errors = errors.join(" ");
         return !this.errors;
@@ -440,8 +444,12 @@ export const data = ref({
       info: "If provided, these values will be added to the relevant fields in the care pathway. Bicarbonate is used to determine DKA severity which is used in fluid deficit calculations. Bicarbonate, glucose and ketones are stored by the DKA Calculator for audit purposes.",
       privacyInfo:
         "If provided, bicarbonate will be added to the relevant field in the care pathway. Bicarbonate is used to determine DKA severity which is used in fluid deficit calculations. It is stored by the DKA Calculator for audit purposes.",
-      min: config.value.validation.bicarbonate.min,
-      max: config.value.validation.bicarbonate.max,
+      min() {
+        return config.value.validation.bicarbonate.min;
+      },
+      max() {
+        return config.value.validation.bicarbonate.max;
+      },
       step: 0.1,
       /**
        * Validates the bicarbonate value.
@@ -457,8 +465,8 @@ export const data = ref({
         checkNumberRange(
           this.val,
           "mmol/L",
-          this.min,
-          this.max,
+          this.min(),
+          this.max(),
           errors,
           "Bicarbonate"
         );
@@ -474,8 +482,12 @@ export const data = ref({
         "If provided, glucose will be added to the relevant field in the care pathway. It is stored by the DKA Calculator for audit purposes.",
       form: [2, 5],
       optionalForForms: [2],
-      min: config.value.validation.glucose.min,
-      max: config.value.validation.glucose.max,
+      min() {
+        return config.value.validation.glucose.min;
+      },
+      max() {
+        return config.value.validation.glucose.max;
+      },
       step: 0.1,
       /**
        * Validates the glucose value.
@@ -497,8 +509,8 @@ export const data = ref({
           checkNumberRange(
             this.val,
             "mmol/L",
-            this.min,
-            this.max,
+            this.min(),
+            this.max(),
             errors,
             "Glucose"
           );
@@ -514,8 +526,12 @@ export const data = ref({
       privacyInfo:
         "If provided, ketone level will be added to the relevant field in the care pathway. Ketone level is used to check the diagnostic threshold for DKA is reached. It is stored by the DKA Calculator for audit purposes.",
       form: [2],
-      min: config.value.validation.ketones.min,
-      max: config.value.validation.ketones.max,
+      min() {
+        return config.value.validation.ketones.min;
+      },
+      max() {
+        return config.value.validation.ketones.max;
+      },
       step: 0.1,
       /**
        * Validates the ketone level.
@@ -531,8 +547,8 @@ export const data = ref({
         checkNumberRange(
           this.val,
           "mmol/L",
-          this.min,
-          this.max,
+          this.min(),
+          this.max(),
           errors,
           "Ketones"
         );
@@ -546,8 +562,12 @@ export const data = ref({
       label: "Weight",
       form: [2],
       info: "Weight is used to calculate fluid volumes for boluses, deficit replacement and maintenance. It is stored by the DKA Calculator for audit purposes. If the weight provided falls outside 2 standard deviations of the mean for age, whether or not you override this limit is also recorded.",
-      min: config.value.validation.weight.min,
-      max: config.value.validation.weight.max,
+      min() {
+        return config.value.validation.weight.min;
+      },
+      max() {
+        return config.value.validation.weight.max;
+      },
       step: 0.01,
       limit: {
         /**
@@ -594,7 +614,14 @@ export const data = ref({
         this.val = Number.parseFloat(this.val).toFixed(2);
 
         const errors = [];
-        checkNumberRange(this.val, "", this.min, this.max, errors, "Weight");
+        checkNumberRange(
+          this.val,
+          "",
+          this.min(),
+          this.max(),
+          errors,
+          "Weight"
+        );
         this.errors = errors.join(" ");
         if (errors.length) return false;
 
@@ -943,8 +970,12 @@ export const data = ref({
       label: "Audit ID",
       form: [4],
       info: "Audit ID is required when updating the audit data for an episode. It is used to find the correct episode record.",
-      minLength: config.value.validation.auditID.length,
-      maxLength: config.value.validation.auditID.length,
+      minLength() {
+        return config.value.validation.auditID.length;
+      },
+      maxLength() {
+        return config.value.validation.auditID.length;
+      },
       /**
        * Validates the auditID.
        * @returns {boolean} - True if the name is valid, false otherwise.
@@ -953,8 +984,8 @@ export const data = ref({
         const errors = [];
         checkLength(
           this.val,
-          this.minLength,
-          this.maxLength,
+          this.minLength(),
+          this.maxLength(),
           errors,
           "Audit ID"
         );
@@ -1002,7 +1033,12 @@ export const data = ref({
          * Generates a datetime object of the latest allowable time the protocolEndDatetime can be set to and assigns it to this.val.
          */
         build() {
-          this.val = new Date();
+          this.val = new Date(
+            Date.now() +
+              config.value.validation.protocolEndDatetime.withinFutureMinutes *
+                60 *
+                1000
+          );
         },
         val: null,
       },
@@ -1112,8 +1148,12 @@ export const data = ref({
       privacyInfo:
         "Sodium is used to calculate corrected sodium and effective osmolality using the relevant standalone calculator <a href='/sodium-osmo'>found here</a>. This data is not stored.",
       form: [5],
-      min: config.value.validation.sodium.min,
-      max: config.value.validation.sodium.max,
+      min() {
+        return config.value.validation.sodium.min;
+      },
+      max() {
+        return config.value.validation.sodium.max;
+      },
       step: 0.1,
       /**
        * Validates the sodium value.
@@ -1128,8 +1168,8 @@ export const data = ref({
           checkNumberRange(
             this.val,
             "mmol/L",
-            this.min,
-            this.max,
+            this.min(),
+            this.max(),
             errors,
             "Sodium"
           );

@@ -17,8 +17,8 @@ const config = inject("config");
           {{ config.appName }}
         </h1>
       </RouterLink>
-      <h2 class="text-danger">
-        {{ config.underDevelopment ? "Development version" : "" }}
+      <h2 class="text-danger" v-if="config.underDevelopment">
+        Development version
       </h2>
     </div>
   </nav>

@@ -7,7 +7,7 @@ See also:
 - [API changelog](https://github.com/dan-leach/dka-calculator-api/blob/main/changelog.md)
 - [Contributors](https://github.com/dan-leach/dka-calculator/blob/main/contributors.md) to the project.
 
-## [v2.0] - TBC 2024
+## [v2.0] - 2025-02-19 11:30
 
 ### Changed
 

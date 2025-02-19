@@ -30,9 +30,8 @@ const config = inject("config");
           <a :href="config.author.url" target="_blank">{{
             config.author.name
           }}</a>
-          for the
-          <a :href="config.organisations.bsped.main" target="_blank">BSPED</a>
-          DKA special interest group.
+          on behalf of
+          <a :href="config.organisations.bsped.main" target="_blank">BSPED</a>.
           <span class="ms-4"
             >Correspondance:
             <a :href="'mailto:' + config.author.email">{{

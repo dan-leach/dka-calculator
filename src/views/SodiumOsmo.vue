@@ -1,10 +1,9 @@
 <script setup>
+import { inject } from "vue";
+const config = inject("config");
 import { ref, onMounted } from "vue";
 import { data } from "../assets/data.js";
 import { api } from "../assets/api.js";
-
-import { inject } from "vue";
-const config = inject("config");
 
 let showErrors = ref(false);
 let errors = ref([]);
@@ -96,8 +95,8 @@ onMounted(() => {
                 v-model="data.inputs.sodium.val"
                 @change="data.inputs.sodium.isValid()"
                 placeholder="x"
-                :min="data.inputs.sodium.min"
-                :max="data.inputs.sodium.max"
+                :min="data.inputs.sodium.min()"
+                :max="data.inputs.sodium.max()"
                 autocomplete="off"
                 required
                 :disabled="locked"
@@ -125,8 +124,8 @@ onMounted(() => {
                 v-model="data.inputs.glucose.val"
                 @change="data.inputs.glucose.isValid()"
                 placeholder="x"
-                :min="data.inputs.glucose.min"
-                :max="data.inputs.glucose.max"
+                :min="data.inputs.glucose.min()"
+                :max="data.inputs.glucose.max()"
                 autocomplete="off"
                 required
                 :disabled="locked"

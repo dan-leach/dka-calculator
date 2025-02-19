@@ -1,6 +1,6 @@
 I am grateful for the contributions of my colleagues who have helped improve the DKA Calculator. Their input ensures the project is safe and continues to evolve.
 
-## [client v2.0 | api v1.0] - TBC 2024
+## [client v2.0 | api v1.0] - 2025-02-19 11:30
 
 Authored corrected sodium and effective osmolality calculator feature
 

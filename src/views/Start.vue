@@ -5,7 +5,7 @@ const config = inject("config");
 
 <template>
   <div class="container my-4 needs-validation">
-    <div class="card border-danger mb-3">
+    <div class="card border-danger mb-3" v-if="config.underDevelopment">
       <div class="card-body">
         <h5 class="card-title">Development version</h5>
         <p class="card-text">
@@ -31,11 +31,11 @@ const config = inject("config");
     <p class="mx-1">
       If you encounter problems using this tool, a backup version of the care
       pathway (without pre-filled calculations) can be downloaded
-      <a href="/DKA-ICP-v1.4.pdf" target="_blank">here</a>.
+      <a href="/BSPED-DKA-ICP-v1.4.pdf" target="_blank">here</a>.
     </p>
     <div class="card border-warning mb-3">
       <div class="card-body">
-        <h5 class="card-title">What's new in the 2024 update?</h5>
+        <h5 class="card-title">What's new in the February 2025 update?</h5>
         <p class="card-text">
           The DKA Calculator has had a number of changes to improve the user
           experience and audit data collection.

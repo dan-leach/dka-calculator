@@ -69,8 +69,8 @@ onMounted(() => {
             v-model="data.inputs.auditID.val"
             @change="data.inputs.auditID.isValid()"
             placeholder="x"
-            :minlength="data.inputs.auditID.minLength"
-            :maxlength="data.inputs.auditID.maxLength"
+            :minlength="data.inputs.auditID.minLength()"
+            :maxlength="data.inputs.auditID.maxLength()"
             required
             autocomplete="off"
           />

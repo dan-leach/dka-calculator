@@ -11,11 +11,6 @@ const router = createRouter({
       component: Start,
     },
     {
-      path: "/form-test",
-      name: "form-test",
-      component: () => import("../views/FormTest.vue"),
-    },
-    {
       path: "/form-disclaimer",
       name: "form-disclaimer",
       component: () => import("../views/FormDisclaimer.vue"),
