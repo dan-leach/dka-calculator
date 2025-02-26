@@ -3,7 +3,8 @@ import { ref } from "vue";
 let config = ref({});
 
 async function fetchConfig() {
-  const url = "https://api.dka-calculator.co.uk/config";
+  console.log("***DEV-API***");
+  const url = "https://dev-api.dka-calculator.co.uk/config";
   const timeoutDuration = 15000;
 
   const controller = new AbortController();
@@ -26,8 +27,20 @@ async function fetchConfig() {
     config.value = jsonResponse;
     return jsonResponse;
   } catch (error) {
-    console.error(error);
-    throw error;
+    // Handle errors (including timeout and network issues)
+    if (error.name === "AbortError") {
+      const errorStr = "API error: The request timed out.";
+      console.error(errorStr);
+      throw [{ msg: errorStr }];
+    } else if (error.errors) {
+      //is a jsonResponse with errors array
+      console.error("API errors: ", error.errors);
+      throw error.errors;
+    } else {
+      //another unexpected error
+      console.log("API error: ", error);
+      throw [{ msg: "API error: " + error.toString() }];
+    }
   }
 }
 

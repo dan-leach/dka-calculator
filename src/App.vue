@@ -29,6 +29,7 @@ const loadConfigData = () => {
       load.value.pending = false;
     })
     .catch((error) => {
+      if (Array.isArray(error)) error = error.map((e) => e.msg).join(" ");
       console.error("Failed to fetch config:", error);
       load.value.failed =
         error.toString() || "Failed to load configuration data";
