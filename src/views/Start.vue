@@ -9,8 +9,8 @@ const config = inject("config");
       <div class="card-body">
         <h5 class="card-title">Development version</h5>
         <p class="card-text">
-          This development version is for demonstration/testing of the
-          forthcoming 2024 update.
+          This development version is for demonstration/testing forthcoming
+          updates.
           <br />Do NOT use for real clinical cases. Use
           <a href="https://dka-calculator.co.uk">dka-calculator.co.uk</a> for
           real patients.

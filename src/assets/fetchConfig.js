@@ -1,10 +1,12 @@
 import { ref } from "vue";
-
 let config = ref({});
+const underDevelopment = false;
 
 async function fetchConfig() {
-  console.log("***DEV-API***");
-  const url = "https://dev-api.dka-calculator.co.uk/config";
+  if (underDevelopment) console.log("***DEV MODE ACTIVE***");
+  const url = underDevelopment
+    ? "https://dev-api.dka-calculator.co.uk/config"
+    : "https://api.dka-calculator.co.uk/config";
   const timeoutDuration = 15000;
 
   const controller = new AbortController();
