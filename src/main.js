@@ -17,9 +17,18 @@ import {
   faInfoCircle,
   faCheck,
   faXmark,
+  faIndustry,
+  faTriangleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 // Add icons to the FontAwesome library
-library.add(faQuestionCircle, faInfoCircle, faCheck, faXmark);
+library.add(
+  faQuestionCircle,
+  faInfoCircle,
+  faCheck,
+  faXmark,
+  faIndustry,
+  faTriangleExclamation
+);
 
 // Create Vue application
 const app = createApp(App);
