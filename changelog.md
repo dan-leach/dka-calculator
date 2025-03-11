@@ -7,6 +7,12 @@ See also:
 - [API changelog](https://github.com/dan-leach/dka-calculator-api/blob/main/changelog.md)
 - [Contributors](https://github.com/dan-leach/dka-calculator/blob/main/contributors.md) to the project.
 
+## [v2.2] - 2025-03-11 16:15
+
+### Change
+
+- Added a modal popup for UKCA labelling
+
 ## [v2.1] - 2025-02-27 13:45
 
 ### Changed
