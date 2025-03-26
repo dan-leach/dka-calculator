@@ -7,6 +7,12 @@ See also:
 - [API changelog](https://github.com/dan-leach/dka-calculator-api/blob/main/changelog.md)
 - [Contributors](https://github.com/dan-leach/dka-calculator/blob/main/contributors.md) to the project.
 
+## [v2.3] - TBC
+
+### Added
+
+- Added clientside validation for DKA diagnostic criteria
+
 ## [v2.2] - 2025-03-11 16:15
 
 ### Change
