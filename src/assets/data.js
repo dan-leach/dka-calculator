@@ -428,6 +428,19 @@ export const data = ref({
         const errors = [];
         if (this.val === null || isNaN(this.val) || this.val == "") {
           errors.push("pH must be provided. ");
+        } else if (this.val >= config.value.severity.mild.pHRange.upper) {
+          // Diagnostic criteria not met based on pH alone. Now check if bicarbonate is provided and is below threshold
+          if (
+            isNaN(data.value.inputs.bicarbonate.val) ||
+            data.value.inputs.bicarbonate.val == null ||
+            data.value.inputs.bicarbonate.val == "" ||
+            data.value.inputs.bicarbonate.val >=
+              config.value.severity.mild.bicarbonateBelow
+          ) {
+            errors.push(
+              `To meet the diagnostic criteria for DKA, pH must be below ${config.value.severity.mild.pHRange.upper}, or bicarbonate must be below ${config.value.severity.mild.bicarbonateBelow}mmol/L. `
+            );
+          }
         } else {
           this.val = Number.parseFloat(this.val).toFixed(2);
           checkNumberRange(this.val, "", this.min(), this.max(), errors, "pH");
@@ -471,6 +484,7 @@ export const data = ref({
           "Bicarbonate"
         );
         this.errors = errors.join(" ");
+        data.value.inputs.pH.isValid(); // Update pH validation (for diagnostic criteria message) when bicarbonate changes
         return !this.errors;
       },
       errors: "",
