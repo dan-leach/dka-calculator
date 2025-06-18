@@ -104,7 +104,7 @@ const config = inject("config");
                 >
                 | ICP
                 <a
-                  :href="config.organisations.bsped.dkaGuidelines"
+                  :href="config.client.repo.icpChangelog"
                   target="_blank"
                   class="p-0"
                   >v{{ config.organisations.bsped.icpVersion }}</a
