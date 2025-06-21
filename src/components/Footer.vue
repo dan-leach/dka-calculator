@@ -20,7 +20,7 @@ const config = inject("config");
               >v{{ config.api.version }}</a
             >
             | ICP
-            <a :href="config.organisations.bsped.dkaGuidelines" target="_blank"
+            <a :href="config.client.repo.icpChangelog" target="_blank"
               >v{{ config.organisations.bsped.icpVersion }}</a
             ></span
           >
