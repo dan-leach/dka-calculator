@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { data } from "../assets/data.js";
-import router from "../router";
+import router from "../router/index.js";
 
 // Reactive variable to control error display.
 let showErrors = ref(false);
@@ -17,7 +17,7 @@ const submitClick = () => {
 
   // Check if the form is valid and navigate to the next route
   if (data.value.form.isValid(4)) {
-    router.push("/submit-update");
+    router.push("/form-retrospective-complete");
   }
 };
 

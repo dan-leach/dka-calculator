@@ -125,19 +125,18 @@ const config = inject("config");
     <div class="card border-info mb-3">
       <div class="card-body">
         <div class="d-flex align-items-center">
-          <p class="flex-grow-1 m-0">
-            Update audit data for a patient with an existing audit ID
-          </p>
+          <p class="flex-grow-1 m-0">Provide audit data for a DKA episode</p>
           <button
             type="button"
             class="btn btn-secondary my-2"
-            @click="$router.push('/update')"
+            @click="$router.push('/form-retrospective-start')"
           >
             Update
           </button>
         </div>
       </div>
     </div>
+
     <div class="card border-info mb-3">
       <div class="card-body">
         <div class="d-flex align-items-center">

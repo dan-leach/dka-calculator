@@ -76,9 +76,17 @@ onMounted(() => {
 <template>
   <form id="form-patient-details" class="container my-4 needs-validation">
     <h2 class="display-3">Patient details</h2>
+    <h3
+      class="retrospective-indicator text-danger mx-1"
+      v-if="data.retrospectiveEpisode"
+    >
+      Adding retrospective episode
+    </h3>
     <p class="mx-1">
-      To generate a care pathway for your patient please complete the form
-      below. For more information about how this data is used click the
+      <span v-if="!data.retrospectiveEpisode"
+        >To generate a care pathway for your patient please complete the form
+        below. </span
+      >For more information about how this data is used click the
       <font-awesome-icon :icon="['fas', 'circle-info']" /> icon by each field or
       refer to the
       <RouterLink to="/privacy-policy" target="_blank" class=""
@@ -242,7 +250,10 @@ onMounted(() => {
       >
         {{ data.inputs.patientNHS.errors }}
       </div>
-      <div class="form-check form-switch ms-1 my-1">
+      <div
+        class="form-check form-switch ms-1 my-1"
+        v-if="!data.retrospectiveEpisode"
+      >
         <input
           class="form-check-input"
           type="checkbox"
@@ -401,5 +412,9 @@ onMounted(() => {
 }
 .v-enter-from {
   opacity: 0;
+}
+.retrospective-indicator {
+  font-size: 1.5rem;
+  font-weight: lighter;
 }
 </style>

@@ -11,19 +11,14 @@ const config = inject("config");
       <div class="mb-2 mx-4 d-none d-md-block">
         <p class="footer-text">
           <span
-            ><strong>{{ config.appName }}&nbsp;</strong> Client
-            <a :href="config.client.repo.changelog" target="_blank"
-              >v{{ config.client.version }}</a
-            >
-            | API
-            <a :href="config.api.repo.changelog" target="_blank"
-              >v{{ config.api.version }}</a
-            >
-            | ICP
-            <a :href="config.client.repo.icpChangelog" target="_blank"
-              >v{{ config.organisations.bsped.icpVersion }}</a
-            ></span
-          >
+            ><strong>{{ config.appName }}&nbsp;</strong>
+            <a 
+              data-bs-toggle="modal"
+              data-bs-target="#ukcaModal"
+              style="cursor: pointer"
+              class="ms-2"
+            >View device label <font-awesome-icon :icon="['fas', 'book-open']" class="ms-1" /></a>
+          </span>
         </p>
         <p class="footer-text">
           Created and maintained by
@@ -91,30 +86,34 @@ const config = inject("config");
             <tr>
               <td class="left-col">Version</td>
               <td>
+                
                 Client
                 <a
                   :href="config.client.repo.changelog"
                   target="_blank"
                   class="p-0"
                   >v{{ config.client.version }}</a
-                >
-                | API
+                > ({{ config.client.underDevelopment ? "development" : "production" }})<br></br>
+                Last updated:
+                {{ config.client.lastUpdated }}<br></br><br></br>
+                
+                API
                 <a :href="config.api.repo.changelog" target="_blank" class="p-0"
                   >v{{ config.api.version }}</a
-                >
-                | ICP
+                > ({{ config.api.underDevelopment ? "development" : "production" }})<br></br>
+                Last updated:
+                {{ config.api.lastUpdated }}<br></br><br></br>
+                
+                ICP
                 <a
                   :href="config.client.repo.icpChangelog"
                   target="_blank"
                   class="p-0"
-                  >v{{ config.organisations.bsped.icpVersion }}</a
-                >
+                  >v{{ config.icp.version }}</a
+                > ({{ config.icp.isDraft ? "draft" : "live" }})<br></br>
+                Last updated:
+                {{ config.icp.lastUpdated }}<br></br>
               </td>
-            </tr>
-            <br />
-            <tr>
-              <td class="left-col">Last updated</td>
-              <td>{{ config.lastUpdated }}</td>
             </tr>
             <br />
             <tr>
@@ -122,6 +121,7 @@ const config = inject("config");
                 <font-awesome-icon :icon="['fas', 'industry']" size="2xl" />
               </td>
               <td>
+                Created and maintained by <a :href='config.author.url' class="p-0" target="_blank">{{ config.author.name }}</a> and <a :href='config.author.contributors.url' class="p-0" target="_blank">contributors</a> for the<br></br>
                 <a
                   :href="config.organisations.bsped.main"
                   target="_blank"

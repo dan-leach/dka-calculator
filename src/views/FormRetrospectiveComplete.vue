@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { data } from "../assets/data.js";
-import router from "../router";
+import router from "../router/index.js";
 import { api } from "@/assets/api.js";
 import { inject } from "vue";
 const config = inject("config");
@@ -138,7 +138,7 @@ const update = {
 onMounted(() => {
   // Validate previous form step and redirect if necessary
   if (!data.value.form.isValid(4)) {
-    router.push("/update");
+    router.push("/form-retrospective-audit");
   } else {
     // Scroll to top
     window.scrollTo(0, 0);
@@ -185,7 +185,7 @@ onMounted(() => {
     <!--back-->
     <button
       type="button"
-      @click="router.push('/update')"
+      @click="router.push('/form-retrospective-audit')"
       class="btn btn-secondary"
     >
       Back to form
