@@ -775,7 +775,7 @@ export const data = ref({
       val: "",
       label: "Please select your region",
       privacyLabel: "Region",
-      form: [3],
+      form: [3, 7],
       info: "Region is stored by the DKA Calculator for audit purposes.",
       /**
        * Validates the region selection and updates the centre options based on the selected region.
@@ -800,7 +800,7 @@ export const data = ref({
       label: "Please select the treating centre",
       privacyLabel: "Treating centre",
       options: [],
-      form: [3],
+      form: [3, 7],
       info: "Treating centre is stored by the DKA Calculator for audit purposes.",
       /**
        * Validates the treating centre selection.
@@ -1202,6 +1202,26 @@ export const data = ref({
         }
         this.errors = errors.join(" ");
         return !this.errors;
+      },
+      errors: "",
+    },
+    protocolStartDate: {
+      val: "",
+      label: "Protocol start date",
+      form: [7],
+      info: "The protocol start date is used to check that the patient hash is being added to the correct episode.",
+      /**
+       * Validates the protocol start date.
+       * @returns {boolean} - True if the date is valid, false otherwise.
+       */
+      isValid() {
+        this.errors = "";
+        if (isNaN(Date.parse(this.val))) {
+          this.errors =
+            "A valid date must be entered for protocol start date. ";
+          return false;
+        }
+        return true;
       },
       errors: "",
     },
