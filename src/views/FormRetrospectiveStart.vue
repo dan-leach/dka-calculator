@@ -106,6 +106,28 @@ const checkRetrospectiveStatus = async () => {
       //show step 3
       show.value.step2 = false;
       show.value.step3 = true;
+    } else if (!response.hashesMatch) {
+      Swal.fire({
+        title: "Patient details do not match",
+        text: `Incorrect date of birth or NHS number for episode with audit ID ${data.value.inputs.auditID.val}. Please check the details and try again.`,
+        confirmButtonColor: "#0d6efd",
+      });
+    } else if (response.auditData) {
+      Swal.fire({
+        title: "Audit data already submitted",
+        text: "Audit data has already been submitted for this episode. You can resubmit audit data to overwrite the existing entry if needed.",
+        confirmButtonColor: "#0d6efd",
+        confirmButtonText: "Proceed to audit form",
+        showCancelButton: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          //navigate to audit form
+          router.push("/form-retrospective-audit");
+        }
+      });
+    } else {
+      //all good, navigate to audit form
+      router.push("/form-retrospective-audit");
     }
   } catch (error) {
     const errorMessages = error.map((err) => err.msg).join(". ");

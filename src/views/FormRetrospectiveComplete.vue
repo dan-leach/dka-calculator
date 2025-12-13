@@ -182,11 +182,15 @@ onMounted(() => {
         </button>
       </div>
     </div>
+    <h3 class="text-success mb-4" v-if="updateSteps.update.complete">
+      Retrospective audit data submission complete
+    </h3>
     <!--back-->
     <button
       type="button"
       @click="router.push('/form-retrospective-audit')"
       class="btn btn-secondary"
+      v-else
     >
       Back to form
     </button>

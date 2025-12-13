@@ -54,6 +54,10 @@ const router = createRouter({
       component: () => import("../views/FormRetrospectiveStart.vue"),
     },
     {
+      path: "/audit",
+      redirect: "/form-retrospective-start",
+    },
+    {
       path: "/form-retrospective-audit",
       name: "form-retrospective-audit",
       component: () => import("../views/FormRetrospectiveAudit.vue"),

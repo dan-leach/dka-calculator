@@ -34,16 +34,19 @@ onMounted(() => {
   protocolEndDatetime.maxDateString.build();
   // Scroll to top
   window.scrollTo(0, 0);
+
+  if (!data.value.inputs.auditID.val) {
+    router.push("/form-retrospective-start");
+  }
 });
 </script>
 
 <template>
   <form id="form-update" class="container my-4 needs-validation">
-    <h2 class="display-3">Update audit data</h2>
+    <h2 class="display-3">Retrospective audit</h2>
     <p class="mx-1">
-      To update the data the DKA Calculator holds for your patient please
-      complete the form below. For more information about how this data is used
-      click the
+      To provide retrospective audit data for your patient please complete the
+      form below. For more information about how this data is used click the
       <font-awesome-icon :icon="['fas', 'circle-info']" /> icon by each field or
       refer to the
       <RouterLink to="/privacy-policy" target="_blank"
@@ -72,6 +75,7 @@ onMounted(() => {
             :minlength="data.inputs.auditID.minLength()"
             :maxlength="data.inputs.auditID.maxLength()"
             required
+            disabled
             autocomplete="off"
           />
           <label for="auditID">{{ data.inputs.auditID.label }}</label>
@@ -93,83 +97,6 @@ onMounted(() => {
       <div class="collapse form-text mx-1" id="auditIDInfo">
         {{ data.inputs.auditID.info }}
       </div>
-    </div>
-    <!--patientDOB-->
-    <div class="mb-4">
-      <div class="input-group">
-        <div class="form-floating">
-          <input
-            type="date"
-            class="form-control"
-            id="patientDOB"
-            v-model="data.inputs.patientDOB.val"
-            @change="data.inputs.patientDOB.isValid()"
-            placeholder="x"
-            max=""
-            min=""
-            required
-            autocomplete="off"
-          />
-          <label for="patientDOB">{{ data.inputs.patientDOB.label }}</label>
-        </div>
-        <span
-          class="input-group-text"
-          data-bs-toggle="collapse"
-          data-bs-target="#patientDOBInfo"
-          ><font-awesome-icon :icon="['fas', 'circle-info']"
-        /></span>
-      </div>
-      <div
-        v-if="showErrors"
-        class="form-text text-danger mx-1"
-        id="patientDOBErrors"
-      >
-        {{ data.inputs.patientDOB.errors }}
-      </div>
-      <div
-        class="collapse form-text mx-1"
-        id="patientDOBInfo"
-        v-html="data.inputs.patientDOB.updateInfo"
-      ></div>
-    </div>
-    <!--patientNHS-->
-    <div class="mb-4">
-      <div class="input-group">
-        <div class="form-floating">
-          <input
-            type="number"
-            class="form-control"
-            id="patientNHS"
-            v-model="data.inputs.patientNHS.val"
-            @change="data.inputs.patientNHS.isValid()"
-            placeholder="x"
-            :min="data.inputs.patientNHS.min"
-            :max="data.inputs.patientNHS.max"
-            :disabled="data.inputs.patientNHS.optOut.val"
-            autocomplete="off"
-            required
-          />
-          <label for="patientNHS">{{ data.inputs.patientNHS.label }}</label>
-        </div>
-        <span
-          class="input-group-text"
-          data-bs-toggle="collapse"
-          data-bs-target="#patientNHSInfo"
-          ><font-awesome-icon :icon="['fas', 'circle-info']"
-        /></span>
-      </div>
-      <div
-        v-if="showErrors && !data.inputs.patientNHS.optOut.val"
-        class="form-text text-danger mx-1"
-        id="patientNHSErrors"
-      >
-        {{ data.inputs.patientNHS.errors }}
-      </div>
-      <div
-        class="collapse form-text mx-1"
-        id="patientNHSInfo"
-        v-html="data.inputs.patientNHS.updateInfo"
-      ></div>
     </div>
     <!--protocolEndDatetime-->
     <div class="mb-4">

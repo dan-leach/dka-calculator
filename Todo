@@ -1,11 +1,27 @@
 Done:
+
 - retrospective start --> no audit ID --> retrospective episode workflow --> step 2
 - retrospective start --> has audit ID --> step 2 (provide audit ID, DOB and NHS) --> API returns
 
 To do:
+
 - handle step 2 API response:
   if no audit ID --> Swal error with retrospective episode option
   if no patient hash --> Swal error with step 3 confirmation (protocol start date/time, region, centre)
   if has audit ID and patientHash:
-    if has auditData --> Swal error to warn resubmitting with overwrite, can still proceed to step 4
-    if no auditData --> proceed to step 4
+  if has auditData --> Swal error to warn resubmitting with overwrite, can still proceed to step 4
+  if no auditData --> proceed to step 4
+
+01/01/20
+1234567890
+Gloucester
+13/12/2025
+
+Routes:
+No NHS #: 5Y2Q83 - works
+With NHS #: NUV6ED - works
+Retrospective - works
+Already submitted audit data - works
+Wrong NHS - works
+Wrong DOB - works
+Wrong audit ID - works
