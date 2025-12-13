@@ -1,23 +1,40 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, inject } from "vue";
 import { data } from "../assets/data.js";
 import { createPatientHash } from "../assets/createPatientHash.js";
 import { api } from "../assets/api.js";
 import router from "../router/index.js";
 import Swal from "sweetalert2";
 
-import { inject } from "vue";
 const config = inject("config");
 
-// Reactive variable to control error display.
+/**
+ * Controls whether validation and API errors are displayed.
+ * Set to true after the first submit attempt for each step.
+ */
 let showErrors = ref(false);
 
+/**
+ * Controls visibility of each step in the retrospective audit workflow.
+ *
+ * - step1: Ask whether the user has an audit ID
+ * - step2: Validate audit ID and patient identifiers
+ * - step3: Collect additional identifiers if patient hash is missing
+ */
 const show = ref({
   step1: true,
   step2: false,
   step3: false,
 });
 
+/**
+ * Submission state for step 2 (audit ID and patient identifier check).
+ *
+ * - text: Button label
+ * - pending: API request in progress
+ * - locked: Prevents duplicate submissions
+ * - errors: Error message(s) returned from the API
+ */
 const step2Submit = ref({
   text: "Submit",
   pending: false,
@@ -25,6 +42,9 @@ const step2Submit = ref({
   errors: null,
 });
 
+/**
+ * Submission state for step 3 (adding a patient hash to an existing episode).
+ */
 const step3Submit = ref({
   text: "Submit",
   pending: false,
@@ -32,6 +52,10 @@ const step3Submit = ref({
   errors: null,
 });
 
+/**
+ * Prompts the user to create a new retrospective DKA episode
+ * when no audit ID exists.
+ */
 const createRetrospectiveEpisode = () => {
   Swal.fire({
     title: "Create retrospective episode?",
@@ -49,18 +73,37 @@ const createRetrospectiveEpisode = () => {
   });
 };
 
+/**
+ * Advances the workflow from step 1 to step 2
+ * when the user confirms they have an audit ID.
+ */
 const hasAuditIDClick = () => {
   show.value.step1 = false;
   show.value.step2 = true;
 };
 
+/**
+ * Validates an existing episode using audit ID and patient identifiers.
+ *
+ * Workflow:
+ * 1. Validates local form inputs
+ * 2. Generates a patient hash
+ * 3. Calls the `checkRetrospectiveStatus` API
+ *
+ * Routing outcomes:
+ * - Episode not found → offer retrospective creation
+ * - Episode missing patient hash → proceed to step 3
+ * - Hash mismatch → show validation error
+ * - Audit data exists → allow overwrite
+ * - All valid → proceed to audit form
+ */
 const checkRetrospectiveStatus = async () => {
   showErrors.value = true;
   document
     .getElementById("form-retrospective-start-step-2")
     .classList.add("was-validated");
 
-  // Check if the form is valid and navigate to the next route
+  // Abort if local validation fails
   if (!data.value.form.isValid(6)) return false;
 
   step2Submit.value = {
@@ -80,6 +123,7 @@ const checkRetrospectiveStatus = async () => {
       auditID: data.value.inputs.auditID.val,
       patientHash,
     });
+
     step2Submit.value = {
       text: "Submit",
       pending: false,
@@ -103,7 +147,7 @@ const checkRetrospectiveStatus = async () => {
         }
       });
     } else if (!response.patientHash) {
-      //show step 3
+      // Proceed to step 3 to collect additional identifiers
       show.value.step2 = false;
       show.value.step3 = true;
     } else if (!response.hashesMatch) {
@@ -121,12 +165,10 @@ const checkRetrospectiveStatus = async () => {
         showCancelButton: true,
       }).then((result) => {
         if (result.isConfirmed) {
-          //navigate to audit form
           router.push("/form-retrospective-audit");
         }
       });
     } else {
-      //all good, navigate to audit form
       router.push("/form-retrospective-audit");
     }
   } catch (error) {
@@ -140,13 +182,19 @@ const checkRetrospectiveStatus = async () => {
   }
 };
 
+/**
+ * Adds a patient hash and episode identifiers to an existing
+ * retrospective episode that was created without them.
+ *
+ * Called only after step 3 validation passes.
+ */
 const addRetrospectivePatientHash = async () => {
   showErrors.value = true;
   document
     .getElementById("form-retrospective-start-step-3")
     .classList.add("was-validated");
 
-  // Check if the form is valid and navigate to the next route
+  // Abort if local validation fails
   if (!data.value.form.isValid(7)) return false;
 
   step3Submit.value = {
@@ -171,13 +219,14 @@ const addRetrospectivePatientHash = async () => {
       region: data.value.inputs.region.val,
       centre: data.value.inputs.centre.val,
     });
+
     step3Submit.value = {
       text: "Submit",
       pending: false,
       locked: false,
       errors: null,
     };
-    console.log(response);
+
     if (response.patientHashAdded) {
       router.push("/form-retrospective-audit");
     } else {
@@ -195,11 +244,13 @@ const addRetrospectivePatientHash = async () => {
 };
 
 /**
- * Lifecycle hook that runs when the component is mounted.
- * Scrolls to the top of the page.
+ * Lifecycle hook executed when the component is mounted.
+ *
+ * - Scrolls the page to the top
+ * - If an audit ID found from retrospective episode creation
+ *   pre-fills it and skips step 1
  */
 onMounted(() => {
-  // Scroll to top
   window.scrollTo(0, 0);
   if (data.value.auditID) {
     data.value.inputs.auditID.val = data.value.auditID;
