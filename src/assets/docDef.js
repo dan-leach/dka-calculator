@@ -286,6 +286,9 @@ const watermarkText = (req) => {
  * @param {Object} req - The request object.
  */
 function getDocDef(req) {
+  // Construct the QR code URL
+  const qrUrl = `${req.config.client.url}/audit/?id=${req.auditID}&nhs=${req.patientNHS}&dob=${req.patientDOB}`;
+
   const docDef = {
     pageSize: "A4",
     pageOrientation: "portrait",
@@ -864,7 +867,12 @@ function getDocDef(req) {
       {
         text: req.auditID,
         fontSize: 32,
-        absolutePosition: { x: 90, y: 340 },
+        absolutePosition: { x: 113, y: 267 },
+      },
+      {
+        qr: qrUrl,
+        fit: 150,
+        absolutePosition: { x: 352, y: 240 },
       },
       {
         text: "",

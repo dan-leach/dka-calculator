@@ -31,7 +31,7 @@ const config = inject("config");
     <p class="mx-1">
       If you encounter problems using this tool, a backup version of the care
       pathway (without pre-filled calculations) can be downloaded
-      <a href="/DKA-ICP-v1.6.pdf" target="_blank">here</a>.
+      <a href="/DKA-ICP-v1.7.pdf" target="_blank">here</a>.
     </p>
     <div class="card border-warning mb-3">
       <div class="card-body">
