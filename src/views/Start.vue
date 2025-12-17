@@ -35,68 +35,28 @@ const config = inject("config");
     </p>
     <div class="card border-warning mb-3">
       <div class="card-body">
-        <h5 class="card-title">What's new in the February 2025 update?</h5>
+        <h5 class="card-title">What's new in the December 2025 update?</h5>
         <p class="card-text">
-          The DKA Calculator has had a number of changes to improve the user
-          experience and audit data collection.
+          The retrospective audit process has been improved.
           <a href="#" data-bs-toggle="collapse" data-bs-target="#changes"
-            >Read more about clinically relevant changes...</a
+            >Read more about these changes...</a
           >
         </p>
         <div class="collapse my-2" id="changes">
           <ul>
             <li>
-              There is now a facility to update limited episode data after
-              submission. This is currently limited to preventable factors,
-              pre-existing diabetes status, end date/time of the DKA protocol,
-              and cerebral oedema questions. This may be expanded in the future.
+              If an NHS number was not provided at the time of generating the
+              care pathway, it is now possible to enter one retrospectively to
+              allow audit data to be collected.
             </li>
             <li>
-              You can
-              <a href="/sodium-osmo"
-                >corrected sodium and effective osmolality</a
-              >
-              using a tool (not part of the main DKA Calcuator process)
+              If the calculator was not used for a DKA episode it is now
+              possible to add the episode retrospectively for audit purposes
+              (without generating a care pathway).
             </li>
             <li>
-              DKA severity grade selection has changed to include consideration
-              of bicarbonate level. If provided, a severity level will be
-              selected based on both pH and bicarbonate with the more severe
-              option used if these differ.
-            </li>
-            <li>
-              A unique patient hash is generated from the patient NHS number and
-              date of birth using a cryptographic algorithm. This allows
-              episodes relating to the same patient to be linked for audit
-              purposes. It does not allow the NHS number or date of birth for
-              your patient to be identified from the hash.
-            </li>
-            <li>
-              The patient postcode is used to derive an index of multiple
-              deprivation (IMD) decile which is stored for audit purposes. The
-              postcode is not stored.
-            </li>
-            <li>
-              Bicarbonate, glucose and ketones may now optionally be entered and
-              will be printed on the care pathway if provided. Bicarbonate is
-              used for severity scoring as above.
-            </li>
-            <li>
-              Previously a care pathway could be generated even if the
-              diagnostic thresholds for DKA were not met. A check to prevent
-              this has been added. Ketones, if provided, must be above 3 mmol/L.
-              pH must be <= 7.3 or bicarbonate must be < 15mmol/L.
-            </li>
-            <li>
-              The patient ethnic group, the insulin delivery method the patient
-              uses (if they have pre-existing diabetes), and any factors that
-              may have contributed to the episode of DKA occuring (preventable
-              factors) are now collected for audit purposes.
-            </li>
-            <li>
-              When the patient has pre-existing diabetes ticks are automatically
-              added to the not applicable boxes for ongoing insulin therapy for
-              the mode the patient does not use on flow chart 5.
+              The retrospective audit process is easier due to the addition of
+              QR codes to the care pathway.
             </li>
           </ul>
           You can
