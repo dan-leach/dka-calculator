@@ -4,7 +4,7 @@ let config = ref({});
 // Set client version here.
 const clientVersion = "2.6";
 const clientLastUpdated = "2025-11-20";
-const clientUnderDevelopment = true;
+const clientUnderDevelopment = false;
 
 // Set ICP version here.
 const icpVersion = "1.6";
