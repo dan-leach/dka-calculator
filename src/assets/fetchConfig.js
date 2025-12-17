@@ -8,7 +8,7 @@ const clientUnderDevelopment = false;
 
 // Set ICP version here.
 const icpVersion = "1.6";
-const icpLastUpdated = "2024-11-15";
+const icpLastUpdated = "2025-10-29";
 const icpIsDraft = false;
 
 // Set API development mode with node environment variables
