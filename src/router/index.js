@@ -52,6 +52,7 @@ const router = createRouter({
       path: "/form-retrospective-start",
       name: "form-retrospective-start",
       component: () => import("../views/FormRetrospectiveStart.vue"),
+      alias: "/create-retrospective-episode",
     },
     {
       path: "/audit",

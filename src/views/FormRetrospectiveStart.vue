@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, inject } from "vue";
+import { useRouter } from "vue-router";
 import { data } from "../assets/data.js";
 import { createPatientHash } from "../assets/createPatientHash.js";
 import { api } from "../assets/api.js";
@@ -255,6 +256,31 @@ onMounted(() => {
   if (data.value.auditID) {
     data.value.inputs.auditID.val = data.value.auditID;
     hasAuditIDClick();
+  }
+
+  const route = useRouter().currentRoute.value;
+  const routePath = route.path;
+  if (routePath === "/create-retrospective-episode")
+    createRetrospectiveEpisode();
+
+  console.log("params:", route.query);
+  if (route.query.id) {
+    data.value.inputs.auditID.val = route.query.id;
+    if (route.query.nhs) data.value.inputs.patientNHS.val = route.query.nhs;
+    if (route.query.dob) {
+      // Attempt to parse and format the DOB
+      const parsedDate = new Date(route.query.dob);
+      if (!isNaN(parsedDate.getTime())) {
+        // Convert to YYYY-MM-DD
+        const formattedDob = parsedDate.toISOString().split("T")[0];
+        data.value.inputs.patientDOB.val = formattedDob;
+      } else {
+        console.warn("Invalid DOB format:", route.query.dob);
+      }
+    }
+    hasAuditIDClick();
+    // Remove query params from URL
+    router.replace({ path: route.path, query: {} });
   }
 });
 </script>

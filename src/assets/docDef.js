@@ -342,9 +342,7 @@ function getDocDef(req) {
               {
                 text: `${req.config.client.url.replace("https://", "")} (v${
                   req.config.client.version
-                }/${req.config.api.version}/${
-                  req.config.organisations.bsped.icpVersion
-                })`,
+                }/${req.config.api.version}/${req.config.icp.version})`,
                 alignment: "center",
                 style: "header",
               },
