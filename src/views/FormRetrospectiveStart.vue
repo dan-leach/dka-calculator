@@ -314,7 +314,9 @@ onMounted(() => {
           Do you have an audit ID?<br />
           <small>(Found at the top of each page of the care pathway)</small>
         </p>
-        <div class="d-flex flex-row justify-content-evenly mb-4">
+        <div
+          class="d-flex flex-row flex-wrap gap-2 justify-content-evenly mb-4"
+        >
           <!--submit-->
           <div>
             <button
