@@ -38,7 +38,8 @@ onMounted(() => {
     router.push("/form-clinical-details");
   } else if (
     data.value.inputs.weight.limit.override &&
-    !data.value.inputs.weight.limit.overrideConfirm
+    !data.value.inputs.weight.limit.overrideConfirm &&
+    data.value.retrospectiveEpisode === false
   ) {
     router.push("/form-override-confirm");
   } else {
@@ -51,6 +52,12 @@ onMounted(() => {
 <template>
   <form id="form-audit-details" class="container my-4 needs-validation">
     <h2 class="display-3">Audit details</h2>
+    <h3
+      class="retrospective-indicator text-danger mx-1"
+      v-if="data.retrospectiveEpisode"
+    >
+      Adding retrospective episode
+    </h3>
     <!--episodeType-->
     <div class="mb-4">
       <p class="text-center m-2">
@@ -445,5 +452,9 @@ onMounted(() => {
 }
 .v-enter-from {
   opacity: 0;
+}
+.retrospective-indicator {
+  font-size: 1.5rem;
+  font-weight: lighter;
 }
 </style>

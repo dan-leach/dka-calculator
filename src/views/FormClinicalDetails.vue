@@ -17,9 +17,11 @@ const continueClick = () => {
     .classList.add("was-validated");
 
   if (data.value.form.isValid(2)) {
-    const nextRoute = data.value.inputs.weight.limit.override
-      ? "/form-override-confirm"
-      : "/form-audit-details";
+    const nextRoute =
+      data.value.inputs.weight.limit.override &&
+      !data.value.retrospectiveEpisode
+        ? "/form-override-confirm"
+        : "/form-audit-details";
     router.push(nextRoute);
   }
 };
@@ -58,6 +60,12 @@ onMounted(() => {
 <template>
   <form id="form-clinical-details" class="container my-4 needs-validation">
     <h2 class="display-3">Clinical details</h2>
+    <h3
+      class="retrospective-indicator text-danger mx-1"
+      v-if="data.retrospectiveEpisode"
+    >
+      Adding retrospective episode
+    </h3>
     <!--protocolStartDatetime-->
     <div class="mb-4">
       <div class="input-group">
@@ -575,5 +583,9 @@ onMounted(() => {
 }
 .v-enter-from {
   opacity: 0;
+}
+.retrospective-indicator {
+  font-size: 1.5rem;
+  font-weight: lighter;
 }
 </style>

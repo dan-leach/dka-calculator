@@ -1,0 +1,4 @@
+On deploy:
+  - Update environment variables for production
+  - Live database structure updates
+  - Run tests

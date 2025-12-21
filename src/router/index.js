@@ -49,14 +49,24 @@ const router = createRouter({
       },
     },
     {
-      path: "/update",
-      name: "update",
-      component: () => import("../views/Update.vue"),
+      path: "/form-retrospective-start",
+      name: "form-retrospective-start",
+      component: () => import("../views/FormRetrospectiveStart.vue"),
+      alias: "/create-retrospective-episode",
     },
     {
-      path: "/submit-update",
-      name: "submit-update",
-      component: () => import("../views/SubmitUpdate.vue"),
+      path: "/audit",
+      redirect: "/form-retrospective-start",
+    },
+    {
+      path: "/form-retrospective-audit",
+      name: "form-retrospective-audit",
+      component: () => import("../views/FormRetrospectiveAudit.vue"),
+    },
+    {
+      path: "/form-retrospective-complete",
+      name: "form-retrospective-complete",
+      component: () => import("../views/FormRetrospectiveComplete.vue"),
     },
     {
       path: "/sodium-osmo",

@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { data } from "../assets/data.js";
+import { createPatientHash } from "../assets/createPatientHash.js";
 import router from "../router";
 import { api } from "@/assets/api.js";
 import { inject } from "vue";
@@ -30,6 +31,7 @@ const generateSteps = ref({
     complete: false,
     fail: "",
     current: false,
+    skip: false,
   },
   audit: {
     //is completed at the same time as the calculate step
@@ -44,6 +46,7 @@ const generateSteps = ref({
     complete: false,
     fail: "",
     current: false,
+    skip: false,
   },
   download: {
     //return the pdfBlob and trigger download
@@ -51,6 +54,7 @@ const generateSteps = ref({
     complete: false,
     fail: "",
     current: false,
+    skip: false,
   },
 });
 
@@ -87,6 +91,14 @@ const generate = {
     }
     if (!(await generate.executeStep("calculate"))) return;
     generateSteps.value.audit.complete = true;
+
+    if (data.value.retrospectiveEpisode) {
+      generateSteps.value.build.skip = true;
+      generateSteps.value.download.skip = true;
+      generateSteps.value.calculate.complete = false;
+      generateSteps.value.calculate.skip = true;
+      return true;
+    }
 
     // Build and download care pathway
     if (!(await generate.executeStep("build", generate.startWebWorker))) return;
@@ -126,6 +138,8 @@ const generate = {
       payload[input] = data.value.inputs[input].val;
     }
 
+    payload.retrospectiveEpisode = data.value.retrospectiveEpisode;
+
     payload.protocolStartDatetime = new Date(payload.protocolStartDatetime);
     payload.pH = parseFloat(payload.pH);
     payload.glucose = payload.glucose ? parseFloat(payload.glucose) : undefined;
@@ -139,7 +153,10 @@ const generate = {
     payload.preExistingDiabetes = payload.preExistingDiabetes == "true";
 
     if (data.value.inputs.patientNHS.val && data.value.inputs.patientDOB.val) {
-      payload.patientHash = await generate.patientHash();
+      payload.patientHash = await createPatientHash(
+        data.value.inputs.patientNHS.val,
+        data.value.inputs.patientDOB.val
+      );
     }
     if (!payload.patientPostcode) delete payload.patientPostcode;
 
@@ -159,23 +176,12 @@ const generate = {
     payload.use2SD = data.value.inputs.weight.limit.use2SD;
     payload.appVersion = {
       client: config.value.client.version,
-      api: config.value.api.version,
-      icp: config.value.organisations.bsped.icpVersion,
+      icp: config.value.icp.version,
     };
     payload.clientDatetime = new Date();
     payload.clientUseragent = navigator.userAgent;
 
     return payload;
-  },
-
-  patientHash: async function () {
-    const dataToHash = new TextEncoder().encode(
-      data.value.inputs.patientNHS.val + data.value.inputs.patientDOB.val
-    );
-    const hashBuffer = await crypto.subtle.digest("SHA-256", dataToHash);
-    return Array.from(new Uint8Array(hashBuffer), (byte) =>
-      byte.toString(16).padStart(2, "0")
-    ).join("");
   },
 
   /**
@@ -339,15 +345,17 @@ onMounted(() => {
     generate.start();
 
     // Handle show/hide working button text
-    let showWorkingCollapse = document.getElementById("showWorking");
-    showWorkingCollapse.addEventListener(
-      "hidden.bs.collapse",
-      () => (showWorkingBtnText.value = "Show working")
-    );
-    showWorkingCollapse.addEventListener(
-      "shown.bs.collapse",
-      () => (showWorkingBtnText.value = "Hide working")
-    );
+    if (!data.value.retrospectiveEpisode) {
+      let showWorkingCollapse = document.getElementById("showWorking");
+      showWorkingCollapse.addEventListener(
+        "hidden.bs.collapse",
+        () => (showWorkingBtnText.value = "Show working")
+      );
+      showWorkingCollapse.addEventListener(
+        "shown.bs.collapse",
+        () => (showWorkingBtnText.value = "Hide working")
+      );
+    }
   }
 });
 </script>
@@ -355,12 +363,19 @@ onMounted(() => {
 <template>
   <div class="container my-4 needs-validation">
     <h2 class="display-3">Generating care pathway</h2>
+    <h3
+      class="retrospective-indicator text-danger mx-1"
+      v-if="data.retrospectiveEpisode"
+    >
+      Adding retrospective episode
+    </h3>
     <div v-for="(step, index) in generateSteps" class="mb-3">
       <span
         class="step-text"
-        :class="
-          step.complete || step.fail || step.current ? '' : 'text-black-50'
-        "
+        :class="[
+          step.complete || step.fail || step.current ? '' : 'text-black-50',
+          step.skip ? 'strikethrough' : '',
+        ]"
         >{{ step.text }}&nbsp;&nbsp;</span
       >
       <span
@@ -373,7 +388,7 @@ onMounted(() => {
       <span v-if="step.fail"
         ><font-awesome-icon :icon="['fas', 'xmark']" style="color: red"
       /></span>
-      <span v-if="index == 'calculate'">
+      <span v-if="index == 'calculate' && !data.retrospectiveEpisode">
         <!--show working-->
         <button
           type="button"
@@ -809,6 +824,22 @@ onMounted(() => {
         Regenerate care pathway
       </button>
     </div>
+    <div v-if="data.retrospectiveEpisode">
+      <!--retrospective audit-->
+      <p>
+        Now the DKA episode has been created you can move on to providing
+        retrospective audit data. Please make a note of the audit ID for this
+        episode.
+      </p>
+      <p class="display-6">Audit ID: {{ data.auditID }}</p>
+      <button
+        type="button"
+        @click="router.push('/form-retrospective-start')"
+        class="btn btn-primary mb-2"
+      >
+        Provide retrospective audit data
+      </button>
+    </div>
     <!--back-->
     <button
       type="button"
@@ -829,5 +860,12 @@ onMounted(() => {
 }
 .step-text {
   font-size: larger;
+}
+.retrospective-indicator {
+  font-size: 1.5rem;
+  font-weight: lighter;
+}
+.strikethrough {
+  text-decoration: line-through;
 }
 </style>

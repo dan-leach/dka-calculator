@@ -73,6 +73,14 @@ export const data = ref({
      * Checks if the form with the given index is valid.
      * @param {number} formIndex - The index of the form to validate.
      * @returns {boolean} - True if the form is valid, false otherwise.
+     * Form 0: Disclaimer
+     * Form 1: Patient details
+     * Form 2: Clinical details
+     * Form 3: Audit details
+     * Form 4: Retrospective update
+     * Form 5: Sodium-osmo
+     * Form 6: Check retrospective status
+     * Form 7: Add retrospective hash
      */
     isValid(formIndex) {
       let isValid = true;
@@ -121,7 +129,7 @@ export const data = ref({
     patientDOB: {
       val: "",
       label: "Date of birth",
-      form: [1, 4],
+      form: [1, 6],
       info: "Patient date of birth is printed onto the generated care pathway document in the patient demographics area. It is not stored directly by the DKA Calculator, but is used to calculate a patient age (in decimal years) which is used to check the patient weight is within the expected range. The decimal age is stored for audit purposes. To allow linkage of audit data between episodes the patient date of birth is also used (together with the NHS number) to generate a unique patient ID which is stored. The patient date of birth cannot be found from the calculated unique patient ID (<a href='https://www.codecademy.com/resources/blog/what-is-hashing/' target='_blank'>read more about secure cryptographic hashing</a>).",
       updateInfo:
         "Patient date of birth is not stored directly by the DKA Calculator. It is used to generate a unique patient ID which is compared with the unique ID generated when the episode was created to ensure the correct record is being updated. The patient date of birth cannot be found from the calculated unique patient ID (<a href='https://www.codecademy.com/resources/blog/what-is-hashing/' target='_blank'>read more about secure cryptographic hashing</a>).",
@@ -195,7 +203,7 @@ export const data = ref({
     patientNHS: {
       val: "",
       label: "NHS number",
-      form: [1, 4],
+      form: [1, 6],
       info: "If provided, patient NHS number is printed onto the generated care pathway document in the patient demographics area. It is not stored directly by the DKA Calculator. To allow linkage of audit data between episodes the NHS number is used to generate a unique patient ID which is stored. The patient NHS number cannot be found from the calculated unique patient ID (<a href='https://www.codecademy.com/resources/blog/what-is-hashing/' target='_blank'>read more about secure cryptographic hashing</a>).",
       updateInfo:
         "Patient NHS number is not stored directly by the DKA Calculator. It is used to generate a unique patient ID which is compared with the unique ID generated when the episode was created to ensure the correct record is being updated. The patient NHS number cannot be found from the calculated unique patient ID (<a href='https://www.codecademy.com/resources/blog/what-is-hashing/' target='_blank'>read more about secure cryptographic hashing</a>).",
@@ -389,7 +397,10 @@ export const data = ref({
           return false;
         }
         const dateVal = new Date(this.val);
-        if (dateVal < this.minDate.val) {
+        if (
+          dateVal < this.minDate.val &&
+          data.value.retrospectiveEpisode === false
+        ) {
           this.errors = `Protocol start must be within the past ${config.value.validation.protocolStartDatetime.withinPastHours} hours of the current date/time. `;
           return false;
         }
@@ -764,7 +775,7 @@ export const data = ref({
       val: "",
       label: "Please select your region",
       privacyLabel: "Region",
-      form: [3],
+      form: [3, 7],
       info: "Region is stored by the DKA Calculator for audit purposes.",
       /**
        * Validates the region selection and updates the centre options based on the selected region.
@@ -789,7 +800,7 @@ export const data = ref({
       label: "Please select the treating centre",
       privacyLabel: "Treating centre",
       options: [],
-      form: [3],
+      form: [3, 7],
       info: "Treating centre is stored by the DKA Calculator for audit purposes.",
       /**
        * Validates the treating centre selection.
@@ -983,7 +994,7 @@ export const data = ref({
     auditID: {
       val: "",
       label: "Audit ID",
-      form: [4],
+      form: [4, 6],
       info: "Audit ID is required when updating the audit data for an episode. It is used to find the correct episode record.",
       minLength() {
         return config.value.validation.auditID.length;
@@ -1194,6 +1205,26 @@ export const data = ref({
       },
       errors: "",
     },
+    protocolStartDate: {
+      val: "",
+      label: "Protocol start date",
+      form: [7],
+      info: "The protocol start date is used to check that the patient hash is being added to the correct episode.",
+      /**
+       * Validates the protocol start date.
+       * @returns {boolean} - True if the date is valid, false otherwise.
+       */
+      isValid() {
+        this.errors = "";
+        if (isNaN(Date.parse(this.val))) {
+          this.errors =
+            "A valid date must be entered for protocol start date. ";
+          return false;
+        }
+        return true;
+      },
+      errors: "",
+    },
     other: {
       privacyLabel: "Other data recorded",
       form: [],
@@ -1203,4 +1234,5 @@ export const data = ref({
   },
   calculations: {},
   auditID: "",
+  retrospectiveEpisode: false,
 });

@@ -25,6 +25,12 @@ onMounted(() => {
 <template>
   <form id="form-disclaimer" class="container my-4 needs-validation">
     <h2 class="display-3">Legal disclaimer</h2>
+    <h3
+      class="retrospective-indicator text-danger mx-1"
+      v-if="data.retrospectiveEpisode"
+    >
+      Adding retrospective episode
+    </h3>
     <div>
       <p>
         By using this website and by using the template protocol, and the
@@ -106,5 +112,9 @@ onMounted(() => {
 }
 .btn-outline-secondary {
   width: 150px;
+}
+.retrospective-indicator {
+  font-size: 1.5rem;
+  font-weight: lighter;
 }
 </style>
