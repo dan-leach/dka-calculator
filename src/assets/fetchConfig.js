@@ -3,12 +3,12 @@ let config = ref({});
 
 // Set client version here.
 const clientVersion = "2.6";
-const clientLastUpdated = "2025-12-17";
-const clientUnderDevelopment = true;
+const clientLastUpdated = "2025-12-21";
+const clientUnderDevelopment = false;
 
 // Set ICP version here.
 const icpVersion = "1.7";
-const icpLastUpdated = "2025-12-17";
+const icpLastUpdated = "2025-12-21";
 const icpIsDraft = false;
 
 // Set API development mode with node environment variables
