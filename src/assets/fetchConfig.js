@@ -2,7 +2,7 @@ import { ref } from "vue";
 let config = ref({});
 
 // Set client version here.
-const clientVersion = "2.6";
+const clientVersion = "2.7";
 const clientLastUpdated = "2025-12-21";
 const clientUnderDevelopment = false;
 
