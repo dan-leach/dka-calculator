@@ -268,7 +268,6 @@ onMounted(() => {
   if (routePath === "/create-retrospective-episode")
     createRetrospectiveEpisode();
 
-  console.log("params:", route.query);
   if (route.query.id) {
     data.value.inputs.auditID.val = route.query.id;
     if (route.query.nhs) data.value.inputs.patientNHS.val = route.query.nhs;
@@ -285,6 +284,38 @@ onMounted(() => {
     }
     hasAuditIDClick();
     // Remove query params from URL
+    router.replace({ path: route.path, query: {} });
+  }
+  if (route.query.q) {
+    const decodedB64QueryObj = JSON.parse(
+      new TextDecoder().decode(
+        Uint8Array.fromBase64(route.query.q, {
+          alphabet: "base64url",
+        })
+      )
+    );
+
+    data.value.inputs.auditID.val = decodedB64QueryObj.id || "";
+    data.value.inputs.patientNHS.val = decodedB64QueryObj.nhs || "";
+    data.value.inputs.patientDOB.val = new Date(decodedB64QueryObj.dob) || "";
+    const parsedDate = new Date(decodedB64QueryObj.dob);
+    if (!isNaN(parsedDate.getTime())) {
+      // Convert to YYYY-MM-DD
+      const formattedDob = parsedDate.toISOString().split("T")[0];
+      data.value.inputs.patientDOB.val = formattedDob;
+    } else {
+      console.warn("Invalid DOB format:", decodedB64QueryObj.dob);
+    }
+    data.value.inputs.region.val = decodedB64QueryObj.region || "";
+    data.value.inputs.centre.val = decodedB64QueryObj.centre || "";
+    data.value.inputs.patientPostcode.val = decodedB64QueryObj.pcode || "";
+    data.value.inputs.preExistingDiabetes.val = decodedB64QueryObj.pre || "";
+    data.value.inputs.preventableFactors.val = decodedB64QueryObj.factors || [];
+    console.log(data.value.inputs.preventableFactors.val);
+    data.value.inputs.ethnicGroup.val = decodedB64QueryObj.eth || "";
+    data.value.inputs.ethnicSubgroup.val = decodedB64QueryObj.ethSub || "";
+
+    hasAuditIDClick();
     router.replace({ path: route.path, query: {} });
   }
 });

@@ -287,7 +287,27 @@ const watermarkText = (req) => {
  */
 function getDocDef(req) {
   // Construct the QR code URL
-  const qrUrl = `${req.config.client.url}/audit/?id=${req.auditID}&nhs=${req.patientNHS}&dob=${req.patientDOB}`;
+  let qrQueryObj = {
+    id: req.auditID,
+    dob: req.patientDOB,
+    nhs: req.patientNHS,
+    region: req.region,
+    centre: req.centre,
+    pcode: req.patientPostcode,
+    pre: req.preExistingDiabetes,
+    factors: req.preventableFactors,
+    eth: req.ethnicGroup,
+    ethSub: req.ethnicSubgroup,
+  };
+
+  console.log(qrQueryObj.factors);
+
+  const b64QueryObj = btoa(JSON.stringify(qrQueryObj))
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=/g, "");
+
+  const qrUrl = `${req.config.client.url}/audit/?q=${b64QueryObj}`;
 
   const docDef = {
     pageSize: "A4",

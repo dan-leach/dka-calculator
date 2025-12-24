@@ -96,6 +96,9 @@ const update = {
   buildPayload: async function (payload) {
     payload.auditID = data.value.inputs.auditID.val;
     payload.patientHash = await update.patientHash();
+    payload.patientPostcode = data.value.inputs.patientPostcode.val;
+    payload.ethnicGroup = data.value.inputs.ethnicGroup.val;
+    payload.ethnicSubgroup = data.value.inputs.ethnicSubgroup.val;
     payload.protocolEndDatetime = new Date(
       data.value.inputs.protocolEndDatetime.val
     );
