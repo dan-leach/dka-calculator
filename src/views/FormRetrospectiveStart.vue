@@ -229,6 +229,11 @@ const addRetrospectivePatientHash = async () => {
     };
 
     if (response.patientHashAdded) {
+      Swal.fire({
+        title: "Patient hash added",
+        text: `You should now continue to submit data for this patient unless this has been done already using a duplicate episode. If you are unsure, please submit data again as duplicate episodes will be combined.`,
+        confirmButtonColor: "#0d6efd",
+      });
       router.push("/form-retrospective-audit");
     } else {
       throw [{ msg: "Unknown error: failed to add patient hash to episode" }];

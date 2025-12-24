@@ -2,8 +2,8 @@ import { ref } from "vue";
 let config = ref({});
 
 // Set client version here.
-const clientVersion = "2.7";
-const clientLastUpdated = "2025-12-21";
+const clientVersion = "2.8";
+const clientLastUpdated = "2025-12-24";
 const clientUnderDevelopment = false;
 
 // Set ICP version here.
