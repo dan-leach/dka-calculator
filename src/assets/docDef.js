@@ -276,7 +276,7 @@ const tickCanvasArrays = {
  * Function to apply watermark text if developmentMode is active.
  */
 const watermarkText = (req) => {
-  return req.config.underDevelopment
+  return req.config.client.underDevelopment || req.config.api.underDevelopment
     ? "DKA Calculator Development Version - Not for clinical use"
     : "";
 };

@@ -401,15 +401,6 @@ onMounted(async () => {
         avoided, please select it.
       </div>
       <div
-        v-else-if="
-          data.inputs.preventableFactors.options.val.includes('Not yet known')
-        "
-        class="form-text text-center"
-      >
-        A feature to allow you to submit preventable factors data at a later
-        point is under development.
-      </div>
-      <div
         v-if="showErrors"
         class="form-text text-danger text-center mx-1"
         id="preventableFactorsErrors"

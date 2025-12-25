@@ -5,7 +5,10 @@ const config = inject("config");
 
 <template>
   <div class="container my-4 needs-validation">
-    <div class="card border-danger mb-3" v-if="config.underDevelopment">
+    <div
+      class="card border-danger mb-3"
+      v-if="config.client.underDevelopment || config.api.underDevelopment"
+    >
       <div class="card-body">
         <h5 class="card-title">Development version</h5>
         <p class="card-text">
