@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, inject } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { data } from "../assets/data.js";
 import { createPatientHash } from "../assets/createPatientHash.js";
 import { api } from "../assets/api.js";
@@ -151,6 +151,14 @@ const checkRetrospectiveStatus = async () => {
       // Proceed to step 3 to collect additional identifiers
       show.value.step2 = false;
       show.value.step3 = true;
+
+      // Ensure centre options are populated if region is set
+      if (data.value.inputs.region.val) {
+        data.value.inputs.centre.options =
+          config.value.regions.find(
+            (region) => region.name === data.value.inputs.region.val
+          )?.centres || [];
+      }
     } else if (!response.hashesMatch) {
       Swal.fire({
         title: "Patient details do not match",
@@ -285,8 +293,9 @@ onMounted(() => {
     hasAuditIDClick();
     // Remove query params from URL
     router.replace({ path: route.path, query: {} });
-  }
-  if (route.query.q) {
+
+    data.value.auditRoute = "queryString";
+  } else if (route.query.q) {
     const decodedB64QueryObj = JSON.parse(
       new TextDecoder().decode(
         Uint8Array.fromBase64(route.query.q, {
@@ -306,6 +315,19 @@ onMounted(() => {
     } else {
       console.warn("Invalid DOB format:", decodedB64QueryObj.dob);
     }
+    data.value.inputs.protocolStartDate.val =
+      new Date(decodedB64QueryObj.start) || "";
+    const parsedDate2 = new Date(decodedB64QueryObj.start);
+    if (!isNaN(parsedDate2.getTime())) {
+      // Convert to YYYY-MM-DD
+      const formattedStart = parsedDate2.toISOString().split("T")[0];
+      data.value.inputs.protocolStartDate.val = formattedStart;
+    } else {
+      console.warn(
+        "Invalid protocolStartDate format:",
+        decodedB64QueryObj.start
+      );
+    }
     data.value.inputs.region.val = decodedB64QueryObj.region || "";
     data.value.inputs.centre.val = decodedB64QueryObj.centre || "";
     data.value.inputs.patientPostcode.val = decodedB64QueryObj.pcode || "";
@@ -315,8 +337,14 @@ onMounted(() => {
     data.value.inputs.ethnicGroup.val = decodedB64QueryObj.eth || "";
     data.value.inputs.ethnicSubgroup.val = decodedB64QueryObj.ethSub || "";
 
+    data.value.auditRoute = "qrCode";
+
     hasAuditIDClick();
     router.replace({ path: route.path, query: {} });
+  } else if (useRoute().redirectedFrom?.path === "/audit") {
+    data.value.auditRoute = "auditRedirect";
+  } else {
+    data.value.auditRoute = "manual";
   }
 });
 </script>

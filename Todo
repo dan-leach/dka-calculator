@@ -1,4 +1,26 @@
 On deploy:
-  - Update environment variables for production
-  - Live database structure updates
-  - Run tests
+
+- Update environment variables for production
+- Live database structure updates
+- Run tests
+
+/\*
+
+1. Add note about pre-filling to QR code page
+2. Test
+3. Deploy
+4. Inform Renuka and Jon
+   \*/
+
+Test all routes and check go correctly to dev tables
+Need to check again once deployed go correctly to live tables
+
+Prospective, audit via /audit - P67GCS
+Prospective, audit via QR - VXZ2K2
+Prospective without NHS or postcode - RTPUZK
+Prospective with factors - VXZ2K2
+Retrospective ?
+Sodium osmo ?
+Decrypt ?
+
+Tests

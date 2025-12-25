@@ -278,6 +278,7 @@ const generate = {
       patientDOB: inputs.patientDOB.val,
       patientNHS: inputs.patientNHS.val,
       patientPostcode: inputs.patientPostcode.val,
+      patientStart: inputs.protocolStartDatetime.val,
       region: inputs.region.val,
       centre: inputs.centre.val,
       ethnicGroup: inputs.ethnicGroup.val,

@@ -118,6 +118,7 @@ const update = {
       client: config.value.client.version,
       api: config.value.api.version,
     };
+    payload.auditRoute = data.value.auditRoute;
 
     return payload;
   },

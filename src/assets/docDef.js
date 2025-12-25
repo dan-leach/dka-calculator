@@ -291,6 +291,7 @@ function getDocDef(req) {
     id: req.auditID,
     dob: req.patientDOB,
     nhs: req.patientNHS,
+    start: req.protocolStartDatetime.substring(0, 10),
     region: req.region,
     centre: req.centre,
     pcode: req.patientPostcode,

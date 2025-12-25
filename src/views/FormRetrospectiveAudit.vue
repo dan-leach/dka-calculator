@@ -65,12 +65,6 @@ onMounted(async () => {
       "Social factors",
     ];
   }
-  /*
-  1. Add note about pre-filling to QR code page
-  2. Test
-  3. Deploy
-  4. Inform Renuka and Jon
-  */
 });
 </script>
 
