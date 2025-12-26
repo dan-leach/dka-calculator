@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, inject } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { data } from "../assets/data.js";
 import { createPatientHash } from "../assets/createPatientHash.js";
 import { api } from "../assets/api.js";
@@ -151,6 +151,14 @@ const checkRetrospectiveStatus = async () => {
       // Proceed to step 3 to collect additional identifiers
       show.value.step2 = false;
       show.value.step3 = true;
+
+      // Ensure centre options are populated if region is set
+      if (data.value.inputs.region.val) {
+        data.value.inputs.centre.options =
+          config.value.regions.find(
+            (region) => region.name === data.value.inputs.region.val
+          )?.centres || [];
+      }
     } else if (!response.hashesMatch) {
       Swal.fire({
         title: "Patient details do not match",
@@ -229,6 +237,11 @@ const addRetrospectivePatientHash = async () => {
     };
 
     if (response.patientHashAdded) {
+      Swal.fire({
+        title: "Patient hash added",
+        text: `You should now continue to submit data for this patient unless this has been done already using a duplicate episode. If you are unsure, please submit data again as duplicate episodes will be combined.`,
+        confirmButtonColor: "#0d6efd",
+      });
       router.push("/form-retrospective-audit");
     } else {
       throw [{ msg: "Unknown error: failed to add patient hash to episode" }];
@@ -263,7 +276,6 @@ onMounted(() => {
   if (routePath === "/create-retrospective-episode")
     createRetrospectiveEpisode();
 
-  console.log("params:", route.query);
   if (route.query.id) {
     data.value.inputs.auditID.val = route.query.id;
     if (route.query.nhs) data.value.inputs.patientNHS.val = route.query.nhs;
@@ -281,6 +293,58 @@ onMounted(() => {
     hasAuditIDClick();
     // Remove query params from URL
     router.replace({ path: route.path, query: {} });
+
+    data.value.auditRoute = "queryString";
+  } else if (route.query.q) {
+    const decodedB64QueryObj = JSON.parse(
+      new TextDecoder().decode(
+        Uint8Array.fromBase64(route.query.q, {
+          alphabet: "base64url",
+        })
+      )
+    );
+
+    data.value.inputs.auditID.val = decodedB64QueryObj.id || "";
+    data.value.inputs.patientNHS.val = decodedB64QueryObj.nhs || "";
+    data.value.inputs.patientDOB.val = new Date(decodedB64QueryObj.dob) || "";
+    const parsedDate = new Date(decodedB64QueryObj.dob);
+    if (!isNaN(parsedDate.getTime())) {
+      // Convert to YYYY-MM-DD
+      const formattedDob = parsedDate.toISOString().split("T")[0];
+      data.value.inputs.patientDOB.val = formattedDob;
+    } else {
+      console.warn("Invalid DOB format:", decodedB64QueryObj.dob);
+    }
+    data.value.inputs.protocolStartDate.val =
+      new Date(decodedB64QueryObj.start) || "";
+    const parsedDate2 = new Date(decodedB64QueryObj.start);
+    if (!isNaN(parsedDate2.getTime())) {
+      // Convert to YYYY-MM-DD
+      const formattedStart = parsedDate2.toISOString().split("T")[0];
+      data.value.inputs.protocolStartDate.val = formattedStart;
+    } else {
+      console.warn(
+        "Invalid protocolStartDate format:",
+        decodedB64QueryObj.start
+      );
+    }
+    data.value.inputs.region.val = decodedB64QueryObj.region || "";
+    data.value.inputs.centre.val = decodedB64QueryObj.centre || "";
+    data.value.inputs.patientPostcode.val = decodedB64QueryObj.pcode || "";
+    data.value.inputs.preExistingDiabetes.val = decodedB64QueryObj.pre || "";
+    data.value.inputs.preventableFactors.val = decodedB64QueryObj.factors || [];
+    console.log(data.value.inputs.preventableFactors.val);
+    data.value.inputs.ethnicGroup.val = decodedB64QueryObj.eth || "";
+    data.value.inputs.ethnicSubgroup.val = decodedB64QueryObj.ethSub || "";
+
+    data.value.auditRoute = "qrCode";
+
+    hasAuditIDClick();
+    router.replace({ path: route.path, query: {} });
+  } else if (useRoute().redirectedFrom?.path === "/audit") {
+    data.value.auditRoute = "auditRedirect";
+  } else {
+    data.value.auditRoute = "manual";
   }
 });
 </script>

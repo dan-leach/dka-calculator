@@ -268,8 +268,8 @@ export const data = ref({
     patientPostcode: {
       val: "",
       label: "Postcode",
-      form: [1],
-      info: "The patient postcode is not stored by the DKA Calculator. If provided, it is used to find an Index of Multiple Deprivation (IMD) decile which is stored for audit purposes.",
+      form: [1, 4],
+      info: "The patient postcode is not stored by the DKA Calculator. It is used to find an Index of Multiple Deprivation (IMD) decile which is stored for audit purposes.",
       minLength: 5, //valid postcodes will never be shorter than this
       maxLength: 8, //valid postcodes will never be longer than this
       pattern:
@@ -293,15 +293,8 @@ export const data = ref({
           return true;
         }
         this.formatVal();
-        checkLength(
-          this.val,
-          this.minLength,
-          this.maxLength,
-          errors,
-          "Postcode"
-        );
         if (!new RegExp(this.pattern).test(this.val))
-          errors.push("Postcode must match the pattern.");
+          errors.push("Must be a valid UK postcode.");
         this.errors = errors.join(" ");
         return !errors.length;
       },
@@ -817,7 +810,7 @@ export const data = ref({
       val: "",
       label: "Please select patient ethnic group",
       privacyLabel: "Patient ethnic group",
-      form: [3],
+      form: [3, 4],
       info: "Patient ethnic group is stored by the DKA Calculator for audit purposes. The list of ethnic groups is taken from the Office for National Statistics.",
       /**
        * Validates the patient ethnic group selection and updates the ethnic subgroup options based on the selected group.
@@ -842,7 +835,7 @@ export const data = ref({
       label: "Please select patient ethnic subgroup",
       privacyLabel: "Patient ethnic subgroup",
       options: [],
-      form: [3],
+      form: [3, 4],
       info: "Patient ethnic subgroup is stored by the DKA Calculator for audit purposes. The list of ethnic groups is taken from the Office for National Statistics.",
       /**
        * Validates the patient ethnic subgroup selection.

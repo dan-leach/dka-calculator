@@ -1,7 +1,10 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, nextTick } from "vue";
 import { data } from "../assets/data.js";
 import router from "../router/index.js";
+
+import { inject } from "vue";
+const config = inject("config");
 
 // Reactive variable to control error display.
 let showErrors = ref(false);
@@ -25,7 +28,7 @@ const submitClick = () => {
  * Lifecycle hook that runs when the component is mounted.
  * Scrolls to the top of the page.
  */
-onMounted(() => {
+onMounted(async () => {
   // Build date-related values and set input min/max attributes
   const { protocolEndDatetime } = data.value.inputs;
   protocolEndDatetime.minDate.build();
@@ -37,6 +40,30 @@ onMounted(() => {
 
   if (!data.value.inputs.auditID.val) {
     router.push("/form-retrospective-start");
+  }
+
+  // Ensure ethnic subgroup options are populated if ethnic group is set
+  await nextTick();
+  if (data.value.inputs.ethnicGroup.val) {
+    data.value.inputs.ethnicSubgroup.options =
+      config.value.ethnicGroups.find(
+        (group) => group.name === data.value.inputs.ethnicGroup.val
+      )?.subgroups || [];
+  }
+  if (data.value.inputs.preventableFactors.val[0] === "Not yet known") {
+    //do nothing
+  } else if (data.value.inputs.preventableFactors.val[0] === "No") {
+    //set no
+    data.value.inputs.preventableFactors.options.val = ["No"];
+  } else if (data.value.inputs.preventableFactors.val.length > 0) {
+    //set yes and highlight factors
+    data.value.inputs.preventableFactors.options.val = ["Yes"];
+    data.value.inputs.preventableFactors.categories.val = [
+      "Missed/delayed diagnosis",
+      "Diabetes technology issue",
+      "Lack of adherence",
+      "Social factors",
+    ];
   }
 });
 </script>
@@ -98,6 +125,128 @@ onMounted(() => {
         {{ data.inputs.auditID.info }}
       </div>
     </div>
+    <!--patientPostcode-->
+    <div class="mb-4">
+      <div class="input-group">
+        <div class="form-floating">
+          <input
+            type="text"
+            class="form-control"
+            id="patientName"
+            v-model="data.inputs.patientPostcode.val"
+            @change="data.inputs.patientPostcode.isValid()"
+            placeholder="x"
+            :minlength="data.inputs.patientPostcode.minLength"
+            :maxlength="data.inputs.patientPostcode.maxLength"
+            :pattern="data.inputs.patientPostcode.pattern"
+            required
+            :disabled="data.inputs.patientPostcode.optOut.val"
+            autocomplete="off"
+          />
+          <label for="patientPostcode">{{
+            data.inputs.patientPostcode.label
+          }}</label>
+        </div>
+        <span
+          class="input-group-text"
+          data-bs-toggle="collapse"
+          data-bs-target="#patientPostcodeInfo"
+          ><font-awesome-icon :icon="['fas', 'circle-info']"
+        /></span>
+      </div>
+      <div
+        v-if="showErrors"
+        class="form-text text-danger mx-1"
+        id="patientPostcodeErrors"
+      >
+        {{ data.inputs.patientPostcode.errors }}
+      </div>
+      <div class="collapse form-text mx-1" id="patientPostcodeInfo">
+        {{ data.inputs.patientPostcode.info }}
+      </div>
+    </div>
+    <!--ethnicGroup-->
+    <div class="mb-4">
+      <div class="input-group">
+        <select
+          name="ethnicGroup"
+          class="form-select"
+          v-model="data.inputs.ethnicGroup.val"
+          @change="data.inputs.ethnicGroup.isValid()"
+          autocomplete="off"
+          required
+        >
+          <option value="" disabled>{{ data.inputs.ethnicGroup.label }}</option>
+          <option
+            v-for="ethnicGroup in config.ethnicGroups"
+            :value="ethnicGroup.name"
+          >
+            {{ ethnicGroup.name }}
+          </option>
+        </select>
+
+        <span
+          class="input-group-text"
+          data-bs-toggle="collapse"
+          data-bs-target="#ethnicGroupInfo"
+          ><font-awesome-icon :icon="['fas', 'circle-info']"
+        /></span>
+      </div>
+      <div
+        v-if="showErrors"
+        class="form-text text-danger mx-1"
+        id="ethnicGroupErrors"
+      >
+        {{ data.inputs.ethnicGroup.errors }}
+      </div>
+      <div class="collapse form-text mx-1" id="ethnicGroupInfo">
+        {{ data.inputs.ethnicGroup.info }}
+      </div>
+    </div>
+    <!--ethnicSubgroup-->
+    <transition>
+      <div class="mb-4" v-if="data.inputs.ethnicGroup.val">
+        <div class="input-group">
+          <select
+            name="ethnicSubgroup"
+            class="form-select"
+            v-model="data.inputs.ethnicSubgroup.val"
+            @change="data.inputs.ethnicSubgroup.isValid()"
+            autocomplete="off"
+            required
+            :disabled="!data.inputs.ethnicGroup.val"
+          >
+            <option value="" disabled>
+              {{ data.inputs.ethnicSubgroup.label }}
+            </option>
+            <option
+              v-for="ethnicSubgroupOption in data.inputs.ethnicSubgroup.options"
+              :value="ethnicSubgroupOption"
+            >
+              {{ ethnicSubgroupOption }}
+            </option>
+            <option value="Unknown">Unknown</option>
+          </select>
+
+          <span
+            class="input-group-text"
+            data-bs-toggle="collapse"
+            data-bs-target="#ethnicSubgroupInfo"
+            ><font-awesome-icon :icon="['fas', 'circle-info']"
+          /></span>
+        </div>
+        <div
+          v-if="showErrors"
+          class="form-text text-danger mx-1"
+          id="ethnicSubgroupErrors"
+        >
+          {{ data.inputs.ethnicSubgroup.errors }}
+        </div>
+        <div class="collapse form-text mx-1" id="ethnicSubgroupInfo">
+          {{ data.inputs.ethnicSubgroup.info }}
+        </div>
+      </div>
+    </transition>
     <!--protocolEndDatetime-->
     <div class="mb-4">
       <div class="input-group">
@@ -244,15 +393,6 @@ onMounted(() => {
         episode of DKA.<br />If addressing a factor
         <strong>might possibly</strong> have allowed the episode of DKA to be
         avoided, please select it.
-      </div>
-      <div
-        v-else-if="
-          data.inputs.preventableFactors.options.val.includes('Not yet known')
-        "
-        class="form-text text-center"
-      >
-        A feature to allow you to submit preventable factors data at a later
-        point is under development.
       </div>
       <div
         v-if="showErrors"

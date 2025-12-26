@@ -1,4 +1,10 @@
 On deploy:
-  - Update environment variables for production
-  - Live database structure updates
-  - Run tests
+
+- Update environment variables for production
+- Live database structure updates
+- Run tests
+
+Test all routes and check go correctly to dev tables
+Need to check again once deployed go correctly to live tables
+
+Tests
