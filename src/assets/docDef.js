@@ -69,7 +69,7 @@ const capAlert = {
     message: (req) =>
       generateCapAlert(
         req.calculations.bolusVolume.isCapped,
-        `Bolus capped to ${req.calculations.bolusVolume.mlsPerKg}mL/kg for ${req.config.weightLimits.max}kg.`
+        `Bolus capped to ${req.calculations.bolusVolume.mlsPerKg}mL/kg for ${req.config.weightLimits.max}kg.`,
       ),
   },
   deficit: {
@@ -87,7 +87,7 @@ const capAlert = {
     message: (req) =>
       generateCapAlert(
         req.calculations.deficit.volume.isCapped,
-        `Deficit capped to volume for ${req.config.weightLimits.max}kg with ${req.calculations.deficit.percentage.val}% dehydration.`
+        `Deficit capped to volume for ${req.config.weightLimits.max}kg with ${req.calculations.deficit.percentage.val}% dehydration.`,
       ),
   },
   maintenance: {
@@ -106,7 +106,7 @@ const capAlert = {
     message: (req) =>
       generateCapAlert(
         req.calculations.maintenance.volume.isCapped,
-        `Maintenance capped to volume for ${req.config.weightLimits.max}kg.`
+        `Maintenance capped to volume for ${req.config.weightLimits.max}kg.`,
       ),
   },
   insulin: {
@@ -124,7 +124,7 @@ const capAlert = {
     message: (req) =>
       generateCapAlert(
         req.calculations.insulinRate.isCapped,
-        `Insulin rate capped to ${req.insulinRate} Units/kg/hour for ${req.config.weightLimits.max}kg.`
+        `Insulin rate capped to ${req.insulinRate} Units/kg/hour for ${req.config.weightLimits.max}kg.`,
       ),
   },
   glucoseBolus: {
@@ -143,7 +143,7 @@ const capAlert = {
     message: (req) =>
       generateCapAlert(
         req.calculations.glucoseBolusVolume.isCapped,
-        `Glucose bolus capped to ${req.calculations.glucoseBolusVolume.mlsPerKg}mL/kg for ${req.config.weightLimits.max}kg.`
+        `Glucose bolus capped to ${req.calculations.glucoseBolusVolume.mlsPerKg}mL/kg for ${req.config.weightLimits.max}kg.`,
       ),
   },
   hhsBolus: {
@@ -161,7 +161,7 @@ const capAlert = {
     message: (req) =>
       generateCapAlert(
         req.calculations.hhsBolusVolume.isCapped,
-        `HHS bolus capped to ${req.calculations.hhsBolusVolume.mlsPerKg}mL/kg for ${req.config.weightLimits.max}kg.`
+        `HHS bolus capped to ${req.calculations.hhsBolusVolume.mlsPerKg}mL/kg for ${req.config.weightLimits.max}kg.`,
       ),
   },
 };
@@ -175,7 +175,7 @@ const capAlert = {
 const formatDateTime = (date, format) => {
   const pad = (num) => (num < 10 ? "0" : "") + num;
   const dateString = `${pad(date.getDate())}/${pad(
-    date.getMonth() + 1
+    date.getMonth() + 1,
   )}/${date.getFullYear()}`;
   const timeString = `${pad(date.getHours())}:${pad(date.getMinutes())}`;
   return format === "date" ? dateString : timeString;
@@ -301,9 +301,11 @@ function getDocDef(req) {
     ethSub: req.ethnicSubgroup,
   };
 
-  console.log(qrQueryObj.factors);
-
-  const b64QueryObj = btoa(JSON.stringify(qrQueryObj))
+  const jsonString = JSON.stringify(qrQueryObj);
+  const binaryString = String.fromCharCode(
+    ...new TextEncoder().encode(jsonString),
+  );
+  const b64QueryObj = btoa(binaryString)
     .replace(/\+/g, "-")
     .replace(/\//g, "_")
     .replace(/=/g, "");
@@ -402,7 +404,7 @@ function getDocDef(req) {
               { text: "" },
               {
                 text: `Protocol start: ${datetimes.protocolStart.time(
-                  req.protocolStartDatetime
+                  req.protocolStartDatetime,
                 )} ${datetimes.protocolStart.date(req.protocolStartDatetime)}`,
                 alignment: "right",
                 style: "header",
@@ -537,7 +539,7 @@ function getDocDef(req) {
       {
         text: `This protocol was generated at ${req.config.client.url.replace(
           "https://",
-          ""
+          "",
         )} and certain elements of the document, such as fluid`,
         link: req.config.client.url,
         fontSize: 10,
@@ -1441,7 +1443,7 @@ function getDocDef(req) {
               {
                 text: `You can also use the corrected sodium / effective osmolality calculator available at ${req.config.client.sodiumOsmoUrl.replace(
                   "https://",
-                  ""
+                  "",
                 )}.`,
                 link: req.config.client.sodiumOsmoUrl,
               },
@@ -1452,7 +1454,7 @@ function getDocDef(req) {
               {
                 text: `For worked examples, refer to the full guideline (${req.config.organisations.bsped.dkaGuidelines.replace(
                   "https://",
-                  ""
+                  "",
                 )}).`,
                 link: req.config.organisations.bsped.dkaGuidelines,
               },
@@ -1508,7 +1510,7 @@ function getDocDef(req) {
               {
                 text: `For worked examples, refer to the full guideline (${req.config.organisations.bsped.dkaGuidelines.replace(
                   "https://",
-                  ""
+                  "",
                 )}).`,
                 link: req.config.organisations.bsped.dkaGuidelines,
               },
@@ -1651,7 +1653,7 @@ function getDocDef(req) {
               "",
               `Important: Decisions about patient care remains the treating clinician's responsibility. By using this care pathway you confirm that you accept in full the terms of the disclaimer found at ${req.config.client.url.replace(
                 "https://",
-                ""
+                "",
               )}. If you do not agree to the terms, you must not use this care pathway.`,
               "",
             ],
