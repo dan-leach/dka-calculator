@@ -6,8 +6,8 @@ const clientUnderDevelopment =
   windowLocation.includes("localhost") || windowLocation.includes("dev.");
 
 // Set client version here.
-const clientVersion = "2.8";
-const clientLastUpdated = "2025-12-25";
+const clientVersion = "2.9";
+const clientLastUpdated = "2026-01-20";
 
 // Set ICP version here.
 const icpVersion = "1.7";
