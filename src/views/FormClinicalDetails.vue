@@ -40,7 +40,11 @@ useFormGuard(
     // Build date-related values; min/max are bound reactively in the template
     const { protocolStartDatetime } = data.value.inputs;
     protocolStartDatetime.todayString.build();
-    protocolStartDatetime.val = protocolStartDatetime.todayString.val;
+    // Only autofill for regular episodes — retrospective episodes need a
+    // manually entered historical start datetime
+    if (!data.value.retrospectiveEpisode) {
+      protocolStartDatetime.val = protocolStartDatetime.todayString.val;
+    }
     protocolStartDatetime.minDate.build();
     protocolStartDatetime.minDateString.build();
     protocolStartDatetime.maxDate.build();
