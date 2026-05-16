@@ -9,7 +9,7 @@ import router from "../router";
  */
 const continueClick = () => {
   data.value.inputs.legalAgreement.val = true;
-  router.push("/form-patient-details");
+  router.push("/form-protocol-purpose");
 };
 
 /**

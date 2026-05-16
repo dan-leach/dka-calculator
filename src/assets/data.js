@@ -751,7 +751,7 @@ export const data = ref({
       val: "",
       label: "What is this protocol being used for?",
       privacyLabel: "Episode type",
-      form: [3],
+      form: [8],
       info: "Episode type is stored by the DKA Calculator for audit purposes.",
       /**
        * Validates the episode type.

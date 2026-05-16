@@ -16,6 +16,11 @@ const router = createRouter({
       component: () => import("../views/FormDisclaimer.vue"),
     },
     {
+      path: "/form-protocol-purpose",
+      name: "form-protocol-purpose",
+      component: () => import("../views/FormProtocolPurpose.vue"),
+    },
+    {
       path: "/form-patient-details",
       name: "form-patient-details",
       component: () => import("../views/FormPatientDetails.vue"),

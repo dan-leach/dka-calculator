@@ -32,6 +32,8 @@ const continueClick = () => {
 onMounted(() => {
   if (!data.value.form.isValid(0)) {
     router.push("/form-disclaimer");
+  } else if (!data.value.form.isValid(8)) {
+    router.push("/form-protocol-purpose");
   } else if (!data.value.form.isValid(1)) {
     router.push("/form-patient-details");
   } else if (!data.value.form.isValid(2)) {
@@ -58,62 +60,6 @@ onMounted(() => {
     >
       Adding retrospective episode
     </h3>
-    <!--episodeType-->
-    <div class="mb-4">
-      <p class="text-center m-2">
-        {{ data.inputs.episodeType.label }}
-        <font-awesome-icon
-          :icon="['fas', 'circle-info']"
-          data-bs-toggle="collapse"
-          data-bs-target="#episodeTypeInfo"
-          class="ms-2"
-        />
-      </p>
-      <div class="d-flex justify-content-center">
-        <div>
-          <input
-            type="radio"
-            class="btn-check"
-            name="episodeType"
-            id="episodeTypeReal"
-            value="real"
-            v-model="data.inputs.episodeType.val"
-            @change="data.inputs.episodeType.isValid()"
-            autocomplete="off"
-            required
-          />
-          <label
-            class="btn btn-outline-secondary me-2 episode-type-btn py-3"
-            for="episodeTypeReal"
-            >For a real patient</label
-          >
-
-          <input
-            type="radio"
-            class="btn-check"
-            name="episodeType"
-            id="episodeTypeTest"
-            value="test"
-            v-model="data.inputs.episodeType.val"
-            @change="data.inputs.episodeType.isValid()"
-            autocomplete="off"
-          />
-          <label class="btn btn-outline-secondary" for="episodeTypeTest"
-            >For testing or training purposes</label
-          >
-        </div>
-      </div>
-      <div
-        v-if="showErrors"
-        class="form-text text-danger text-center mx-1"
-        id="episodeTypeErrors"
-      >
-        {{ data.inputs.episodeType.errors }}
-      </div>
-      <div class="collapse form-text text-center mx-1" id="episodeTypeInfo">
-        {{ data.inputs.episodeType.info }}
-      </div>
-    </div>
     <!--region-->
     <div class="mb-4">
       <div class="input-group">

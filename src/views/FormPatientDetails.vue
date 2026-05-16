@@ -65,6 +65,8 @@ const optOutClick = (i) => {
 onMounted(() => {
   if (!data.value.form.isValid(0)) {
     router.push("/form-disclaimer");
+  } else if (!data.value.form.isValid(8)) {
+    router.push("/form-protocol-purpose");
   } else {
     setMinMaxPatientDOB();
     // Scroll to top

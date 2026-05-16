@@ -35,6 +35,8 @@ const continueClick = () => {
 onMounted(() => {
   if (!data.value.form.isValid(0)) {
     router.push("/form-disclaimer");
+  } else if (!data.value.form.isValid(8)) {
+    router.push("/form-protocol-purpose");
   } else if (!data.value.form.isValid(1)) {
     router.push("/form-patient-details");
   } else {
