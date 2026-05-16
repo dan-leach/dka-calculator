@@ -54,6 +54,11 @@ a {
     flex-direction: row;
     align-items: flex-start;
   }
+  /* Back button sits after Continue in the DOM (so it stacks below on mobile)
+     but is pulled to the left on wider screens */
+  .nav-btn-row .nav-back {
+    order: -1;
+  }
 }
 .nav-btn-row > * {
   flex: 1;

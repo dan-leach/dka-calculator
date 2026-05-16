@@ -480,21 +480,21 @@ useFormGuard(
     </transition>
 
     <div class="nav-btn-row">
-      <!--back-->
-      <button
-        type="button"
-        @click="router.push('/form-patient-details')"
-        class="btn btn-lg btn-secondary"
-      >
-        Back
-      </button>
-      <!--next-->
+      <!--next — first in DOM so it sits on top when stacked-->
       <button
         type="button"
         @click="continueClick"
         class="btn btn-lg btn-primary"
       >
         Continue
+      </button>
+      <!--back — pulled left on desktop via .nav-back-->
+      <button
+        type="button"
+        @click="router.push('/form-patient-details')"
+        class="btn btn-lg btn-secondary nav-back"
+      >
+        Back
       </button>
     </div>
   </form>
