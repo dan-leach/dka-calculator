@@ -28,7 +28,7 @@ useFormGuard(
       <p class="text-center m-2">
         {{ data.inputs.episodeType.label }}
       </p>
-      <div class="d-flex justify-content-center gap-3 mt-3">
+      <div class="d-flex flex-column flex-sm-row gap-3 mt-3 episode-type-container">
         <button
           type="button"
           class="btn btn-outline-secondary episode-type-btn py-3"
@@ -54,8 +54,13 @@ useFormGuard(
 .container {
   max-width: 750px;
 }
+.episode-type-container {
+  max-width: 500px;
+  margin: 1rem auto 0;
+}
 .episode-type-btn {
-  min-width: 200px;
+  flex: 1;
+  min-width: 0;
 }
 .retrospective-indicator {
   font-size: 1.5rem;
