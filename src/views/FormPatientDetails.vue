@@ -1,8 +1,10 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { data } from "../assets/data.js";
 import Swal from "sweetalert2";
 import router from "../router";
+import { useFormGuard } from "../composables/useFormGuard.js";
+import FormField from "../components/FormField.vue";
 
 // Reactive variable to control error display.
 let showErrors = ref(false);
@@ -57,22 +59,16 @@ const optOutClick = (i) => {
   }
 };
 
-/**
- * Lifecycle hook that runs when the component is mounted.
- * Checks the validity of previous form steps and redirects if necessary.
- * Scrolls to the top of the page.
- */
-onMounted(() => {
-  if (!data.value.form.isValid(0)) {
-    router.push("/form-disclaimer");
-  } else if (!data.value.form.isValid(8)) {
-    router.push("/form-protocol-purpose");
-  } else {
+useFormGuard(
+  [
+    { formIndex: 0, redirect: "/form-disclaimer" },
+    { formIndex: 8, redirect: "/form-protocol-purpose" },
+  ],
+  () => {
     setMinMaxPatientDOB();
-    // Scroll to top
     window.scrollTo(0, 0);
   }
-});
+);
 </script>
 
 <template>
@@ -95,80 +91,27 @@ onMounted(() => {
         >privacy policy</RouterLink
       >.
     </p>
+
     <!--patientName-->
-    <div class="mb-4">
-      <div class="input-group">
-        <div class="form-floating">
-          <input
-            type="text"
-            class="form-control"
-            id="patientName"
-            v-model="data.inputs.patientName.val"
-            @change="data.inputs.patientName.isValid()"
-            placeholder="x"
-            :minlength="data.inputs.patientName.minLength"
-            :maxlength="data.inputs.patientName.maxLength"
-            required
-            autocomplete="off"
-          />
-          <label for="patientName">{{ data.inputs.patientName.label }}</label>
-        </div>
-        <span
-          class="input-group-text"
-          data-bs-toggle="collapse"
-          data-bs-target="#patientNameInfo"
-          ><font-awesome-icon :icon="['fas', 'circle-info']"
-        /></span>
-      </div>
-      <div
-        v-if="showErrors"
-        class="form-text text-danger mx-1"
-        id="patientNameErrors"
-      >
-        {{ data.inputs.patientName.errors }}
-      </div>
-      <div class="collapse form-text mx-1" id="patientNameInfo">
-        {{ data.inputs.patientName.info }}
-      </div>
-    </div>
+    <FormField
+      fieldId="patientName"
+      :input="data.inputs.patientName"
+      :showErrors="showErrors"
+      type="text"
+      :minlength="data.inputs.patientName.minLength"
+      :maxlength="data.inputs.patientName.maxLength"
+      required
+    />
+
     <!--patientDOB-->
-    <div class="mb-4">
-      <div class="input-group">
-        <div class="form-floating">
-          <input
-            type="date"
-            class="form-control"
-            id="patientDOB"
-            v-model="data.inputs.patientDOB.val"
-            @change="data.inputs.patientDOB.isValid()"
-            placeholder="x"
-            max=""
-            min=""
-            required
-            autocomplete="off"
-          />
-          <label for="patientDOB">{{ data.inputs.patientDOB.label }}</label>
-        </div>
-        <span
-          class="input-group-text"
-          data-bs-toggle="collapse"
-          data-bs-target="#patientDOBInfo"
-          ><font-awesome-icon :icon="['fas', 'circle-info']"
-        /></span>
-      </div>
-      <div
-        v-if="showErrors"
-        class="form-text text-danger mx-1"
-        id="patientDOBErrors"
-      >
-        {{ data.inputs.patientDOB.errors }}
-      </div>
-      <div
-        class="collapse form-text mx-1"
-        id="patientDOBInfo"
-        v-html="data.inputs.patientDOB.info"
-      ></div>
-    </div>
+    <FormField
+      fieldId="patientDOB"
+      :input="data.inputs.patientDOB"
+      :showErrors="showErrors"
+      type="date"
+      required
+    />
+
     <!--patientSex-->
     <div class="mb-4">
       <p class="text-center m-2">
@@ -219,6 +162,7 @@ onMounted(() => {
         {{ data.inputs.patientSex.info }}
       </div>
     </div>
+
     <!--patientNHS-->
     <div class="mb-4">
       <div class="input-group">
@@ -274,52 +218,22 @@ onMounted(() => {
         v-if="!data.inputs.patientNHS.optOut.val"
       ></div>
     </div>
-    <!--hospital number alternative-->
+
+    <!--patientHospNum (shown when NHS number opt-out is selected)-->
     <Transition>
-      <div
-        class="mb-4"
-        id="patientHospNumCollapse"
+      <FormField
         v-if="data.inputs.patientNHS.optOut.val"
-      >
-        <div class="input-group">
-          <div class="form-floating">
-            <input
-              type="text"
-              class="form-control"
-              id="patientHospNum"
-              v-model="data.inputs.patientHospNum.val"
-              @change="data.inputs.patientHospNum.isValid()"
-              placeholder="x"
-              :minlength="data.inputs.patientHospNum.minLength"
-              :maxlength="data.inputs.patientHospNum.maxLength"
-              autocomplete="off"
-              required
-            />
-            <label for="patientHospNum">{{
-              data.inputs.patientHospNum.label
-            }}</label>
-          </div>
-          <span
-            class="input-group-text"
-            data-bs-toggle="collapse"
-            data-bs-target="#patientHospNumInfo"
-            ><font-awesome-icon :icon="['fas', 'circle-info']"
-          /></span>
-        </div>
-        <div
-          v-if="showErrors"
-          class="form-text text-danger mx-1"
-          id="patientHospNum"
-        >
-          {{ data.inputs.patientHospNum.errors }}
-        </div>
-        <div
-          class="collapse form-text mx-1"
-          id="patientHospNumInfo"
-          v-html="data.inputs.patientHospNum.info"
-        ></div>
-      </div>
+        fieldId="patientHospNum"
+        :input="data.inputs.patientHospNum"
+        :showErrors="showErrors"
+        type="text"
+        :minlength="data.inputs.patientHospNum.minLength"
+        :maxlength="data.inputs.patientHospNum.maxLength"
+        required
+        autocomplete="off"
+      />
     </Transition>
+
     <!--patientPostcode-->
     <div class="mb-4">
       <div class="input-group">

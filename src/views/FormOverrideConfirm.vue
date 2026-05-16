@@ -1,9 +1,9 @@
 <script setup>
-import { onMounted } from "vue";
 import { data } from "../assets/data.js";
 import router from "../router";
 import Swal from "sweetalert2";
 import { inject } from "vue";
+import { useFormGuard } from "../composables/useFormGuard.js";
 const config = inject("config");
 
 /**
@@ -36,22 +36,14 @@ const use2SD = async () => {
   });
 };
 
-/**
- * Lifecycle hook that runs when the component is mounted.
- * Checks the validity of previous form steps and redirects if necessary.
- * Scrolls to the top of the page.
- */
-onMounted(() => {
-  if (!data.value.form.isValid(0)) {
-    router.push("/form-disclaimer");
-  } else if (!data.value.form.isValid(1)) {
-    router.push("/form-patient-details");
-  } else if (!data.value.form.isValid(2)) {
-    router.push("/form-clinical-details");
-  }
-  // Scroll to top
-  window.scrollTo(0, 0);
-});
+useFormGuard(
+  [
+    { formIndex: 0, redirect: "/form-disclaimer" },
+    { formIndex: 1, redirect: "/form-patient-details" },
+    { formIndex: 2, redirect: "/form-clinical-details" },
+  ],
+  () => { window.scrollTo(0, 0); }
+);
 </script>
 
 <template>

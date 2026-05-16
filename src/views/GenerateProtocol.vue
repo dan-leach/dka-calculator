@@ -1,6 +1,7 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { data } from "../assets/data.js";
+import { useFormGuard } from "../composables/useFormGuard.js";
 import { createPatientHash } from "../assets/createPatientHash.js";
 import router from "../router";
 import { api } from "@/assets/api.js";
@@ -323,31 +324,21 @@ const generate = {
 // Reactive variable to control button text
 let showWorkingBtnText = ref("Show working");
 
-/**
- * Lifecycle hook that runs when the component is mounted.
- * Checks the validity of previous form steps and redirects if necessary.
- * Scrolls to the top of the page.
- * Starts the protocol generation process
- */
-onMounted(() => {
-  // Validate previous form steps and redirect if necessary
-  if (!data.value.form.isValid(0)) {
-    router.push("/form-disclaimer");
-  } else if (!data.value.form.isValid(1)) {
-    router.push("/form-patient-details");
-  } else if (!data.value.form.isValid(2)) {
-    router.push("/form-clinical-details");
-  } else if (
-    data.value.inputs.weight.limit.override &&
-    !data.value.inputs.weight.limit.overrideConfirm
-  ) {
-    router.push("/form-override-confirm");
-  } else if (!data.value.form.isValid(3)) {
-    router.push("/form-audit-details");
-  } else {
-    // Scroll to top
+useFormGuard(
+  [
+    { formIndex: 0, redirect: "/form-disclaimer" },
+    { formIndex: 1, redirect: "/form-patient-details" },
+    { formIndex: 2, redirect: "/form-clinical-details" },
+    {
+      check: () =>
+        data.value.inputs.weight.limit.override &&
+        !data.value.inputs.weight.limit.overrideConfirm,
+      redirect: "/form-override-confirm",
+    },
+    { formIndex: 3, redirect: "/form-audit-details" },
+  ],
+  () => {
     window.scrollTo(0, 0);
-    // Start the generation process
     generate.start();
 
     // Handle show/hide working button text
@@ -363,7 +354,7 @@ onMounted(() => {
       );
     }
   }
-});
+);
 </script>
 
 <template>

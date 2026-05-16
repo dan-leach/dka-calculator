@@ -1,7 +1,9 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { data } from "../assets/data.js";
 import router from "../router";
+import { useFormGuard } from "../composables/useFormGuard.js";
+import FormField from "../components/FormField.vue";
 
 // Reactive variable to control error display.
 const showErrors = ref(false);
@@ -26,24 +28,16 @@ const continueClick = () => {
   }
 };
 
-/**
- * Lifecycle hook that runs when the component is mounted.
- * Checks the validity of previous form steps and redirects if necessary.
- * Sets initial form state.
- * Scrolls to the top of the page.
- */
-onMounted(() => {
-  if (!data.value.form.isValid(0)) {
-    router.push("/form-disclaimer");
-  } else if (!data.value.form.isValid(8)) {
-    router.push("/form-protocol-purpose");
-  } else if (!data.value.form.isValid(1)) {
-    router.push("/form-patient-details");
-  } else {
-    // Scroll to top
+useFormGuard(
+  [
+    { formIndex: 0, redirect: "/form-disclaimer" },
+    { formIndex: 8, redirect: "/form-protocol-purpose" },
+    { formIndex: 1, redirect: "/form-patient-details" },
+  ],
+  () => {
     window.scrollTo(0, 0);
 
-    // Build date-related values and set input min/max attributes
+    // Build date-related values; min/max are bound reactively in the template
     const { protocolStartDatetime } = data.value.inputs;
     protocolStartDatetime.todayString.build();
     protocolStartDatetime.val = protocolStartDatetime.todayString.val;
@@ -51,12 +45,8 @@ onMounted(() => {
     protocolStartDatetime.minDateString.build();
     protocolStartDatetime.maxDate.build();
     protocolStartDatetime.maxDateString.build();
-
-    const protocolInput = document.getElementById("protocolStartDatetime");
-    protocolInput.min = protocolStartDatetime.minDateString.val;
-    protocolInput.max = protocolStartDatetime.maxDateString.val;
   }
-});
+);
 </script>
 
 <template>
@@ -69,78 +59,26 @@ onMounted(() => {
       Adding retrospective episode
     </h3>
     <!--protocolStartDatetime-->
-    <div class="mb-4">
-      <div class="input-group">
-        <div class="form-floating">
-          <input
-            type="datetime-local"
-            class="form-control"
-            id="protocolStartDatetime"
-            v-model="data.inputs.protocolStartDatetime.val"
-            @change="data.inputs.protocolStartDatetime.isValid()"
-            placeholder="x"
-            min=""
-            max=""
-            required
-            autocomplete="off"
-          />
-          <label for="protocolStartDatetime">{{
-            data.inputs.protocolStartDatetime.label
-          }}</label>
-        </div>
-        <span
-          class="input-group-text"
-          data-bs-toggle="collapse"
-          data-bs-target="#protocolStartDatetimeInfo"
-          ><font-awesome-icon :icon="['fas', 'circle-info']"
-        /></span>
-      </div>
-      <div
-        v-if="showErrors"
-        class="form-text text-danger mx-1"
-        id="protocolStartDatetimeErrors"
-      >
-        {{ data.inputs.protocolStartDatetime.errors }}
-      </div>
-      <div class="collapse form-text mx-1" id="protocolStartDatetimeInfo">
-        {{ data.inputs.protocolStartDatetime.info }}
-      </div>
-    </div>
+    <FormField
+      fieldId="protocolStartDatetime"
+      :input="data.inputs.protocolStartDatetime"
+      :showErrors="showErrors"
+      type="datetime-local"
+      :min="data.inputs.protocolStartDatetime.minDateString.val"
+      :max="data.inputs.protocolStartDatetime.maxDateString.val"
+      required
+    />
     <!--pH-->
-    <div class="mb-4">
-      <div class="input-group">
-        <div class="form-floating">
-          <input
-            type="number"
-            class="form-control"
-            id="pH"
-            v-model="data.inputs.pH.val"
-            @change="data.inputs.pH.isValid()"
-            placeholder="x"
-            :min="data.inputs.pH.min()"
-            :max="data.inputs.pH.max()"
-            :step="data.inputs.pH.step"
-            autocomplete="off"
-            required
-          />
-          <label for="pH">{{ data.inputs.pH.label }}</label>
-        </div>
-        <span
-          class="input-group-text"
-          data-bs-toggle="collapse"
-          data-bs-target="#pHInfo"
-          ><font-awesome-icon :icon="['fas', 'circle-info']"
-        /></span>
-      </div>
-      <div v-if="showErrors" class="form-text text-danger mx-1" id="pHErrors">
-        {{ data.inputs.pH.errors }}
-      </div>
-      <div
-        class="collapse form-text mx-1"
-        id="pHInfo"
-        v-html="data.inputs.pH.info"
-      ></div>
-    </div>
+    <FormField
+      fieldId="pH"
+      :input="data.inputs.pH"
+      :showErrors="showErrors"
+      type="number"
+      :min="data.inputs.pH.min()"
+      :max="data.inputs.pH.max()"
+      :step="data.inputs.pH.step"
+      required
+    />
     <!--optional values-->
     <div class="card mb-4 bg-transparent">
       <div class="card-header d-flex flex-row flex-wrap">

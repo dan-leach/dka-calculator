@@ -1,7 +1,7 @@
 <script setup>
-import { onMounted } from "vue";
 import { data } from "../assets/data.js";
 import router from "../router";
+import { useFormGuard } from "../composables/useFormGuard.js";
 
 const selectPurpose = (value) => {
   data.value.inputs.episodeType.val = value;
@@ -9,13 +9,10 @@ const selectPurpose = (value) => {
   router.push("/form-patient-details");
 };
 
-onMounted(() => {
-  if (!data.value.form.isValid(0)) {
-    router.push("/form-disclaimer");
-  } else {
-    window.scrollTo(0, 0);
-  }
-});
+useFormGuard(
+  [{ formIndex: 0, redirect: "/form-disclaimer" }],
+  () => { window.scrollTo(0, 0); }
+);
 </script>
 
 <template>

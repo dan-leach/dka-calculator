@@ -1,7 +1,8 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { data } from "../assets/data.js";
 import router from "../router";
+import { useFormGuard } from "../composables/useFormGuard.js";
 
 import { inject } from "vue";
 const config = inject("config");
@@ -24,31 +25,22 @@ const continueClick = () => {
   }
 };
 
-/**
- * Lifecycle hook that runs when the component is mounted.
- * Checks the validity of previous form steps and redirects if necessary.
- * Scrolls to the top of the page.
- */
-onMounted(() => {
-  if (!data.value.form.isValid(0)) {
-    router.push("/form-disclaimer");
-  } else if (!data.value.form.isValid(8)) {
-    router.push("/form-protocol-purpose");
-  } else if (!data.value.form.isValid(1)) {
-    router.push("/form-patient-details");
-  } else if (!data.value.form.isValid(2)) {
-    router.push("/form-clinical-details");
-  } else if (
-    data.value.inputs.weight.limit.override &&
-    !data.value.inputs.weight.limit.overrideConfirm &&
-    data.value.retrospectiveEpisode === false
-  ) {
-    router.push("/form-override-confirm");
-  } else {
-    // Scroll to top
-    window.scrollTo(0, 0);
-  }
-});
+useFormGuard(
+  [
+    { formIndex: 0, redirect: "/form-disclaimer" },
+    { formIndex: 8, redirect: "/form-protocol-purpose" },
+    { formIndex: 1, redirect: "/form-patient-details" },
+    { formIndex: 2, redirect: "/form-clinical-details" },
+    {
+      check: () =>
+        data.value.inputs.weight.limit.override &&
+        !data.value.inputs.weight.limit.overrideConfirm &&
+        data.value.retrospectiveEpisode === false,
+      redirect: "/form-override-confirm",
+    },
+  ],
+  () => { window.scrollTo(0, 0); }
+);
 </script>
 
 <template>
