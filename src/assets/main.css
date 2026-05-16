@@ -41,6 +41,27 @@ a {
   transform: translateY(-30px);
 }
 
+/* nav-btn-row: centred, max-width, equal-width buttons, stacks on mobile */
+.nav-btn-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 500px;
+  margin: 1rem auto 0;
+}
+@media (min-width: 576px) {
+  .nav-btn-row {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+.nav-btn-row > * {
+  flex: 1;
+}
+.nav-btn-row .btn {
+  width: 100%;
+}
+
 /*misc*/
 td,
 th {

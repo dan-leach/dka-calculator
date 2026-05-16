@@ -103,20 +103,18 @@ useFormGuard(
     </p>
     <p>Proceed if you are sure {{ data.inputs.weight.val }}kg is correct.</p>
 
-    <div class="d-flex flex-row justify-content-evenly flex-wrap">
+    <div class="nav-btn-row">
       <!--back-->
-      <div class="text-center mb-2">
-        <button
-          type="button"
-          @click="router.push('/form-clinical-details')"
-          class="btn btn-lg btn-secondary"
-        >
-          Go back and review
-        </button>
-      </div>
-      <!--use +2SD-->
+      <button
+        type="button"
+        @click="router.push('/form-clinical-details')"
+        class="btn btn-lg btn-secondary"
+      >
+        Go back and review
+      </button>
+      <!--use +2SD (optional — only shown when weight is above lower limit but below max cap)-->
       <div
-        class="text-center mx-2 mb-2"
+        class="text-center"
         v-if="
           data.inputs.weight.limit.upper() != config.weightLimits.max &&
           data.inputs.weight.val > data.inputs.weight.limit.lower()
@@ -128,21 +126,19 @@ useFormGuard(
           >
           instead
         </button>
-        <br /><small>* plus 2 standard deviations above mean for age</small>
+        <br /><small>* 98th centile weight for age (+2SD)</small>
       </div>
       <!--proceed-->
-      <div class="text-center mb-2">
-        <button
-          type="button"
-          @click="continueClick"
-          class="btn btn-lg btn-danger"
-          v-html="
-            data.inputs.weight.val >= config.weightLimits.max
-              ? `Proceed with current weight<br /><small>(Calculations will be capped as above)</small>`
-              : `Proceed with weight of ${data.inputs.weight.val}kg`
-          "
-        ></button>
-      </div>
+      <button
+        type="button"
+        @click="continueClick"
+        class="btn btn-lg btn-danger"
+        v-html="
+          data.inputs.weight.val >= config.weightLimits.max
+            ? `Proceed with current weight<br /><small>(Calculations will be capped as above)</small>`
+            : `Proceed with weight of ${data.inputs.weight.val}kg`
+        "
+      ></button>
     </div>
   </form>
 </template>

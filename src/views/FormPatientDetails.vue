@@ -287,27 +287,23 @@ useFormGuard(
       </div>
     </div>
 
-    <div class="d-flex flex-row justify-content-evenly">
+    <div class="nav-btn-row">
       <!--back-->
-      <div class="text-center">
-        <button
-          type="button"
-          @click="router.push('/form-disclaimer')"
-          class="btn btn-lg btn-secondary"
-        >
-          Back
-        </button>
-      </div>
+      <button
+        type="button"
+        @click="router.push('/form-disclaimer')"
+        class="btn btn-lg btn-secondary"
+      >
+        Back
+      </button>
       <!--next-->
-      <div class="text-center">
-        <button
-          type="button"
-          @click="continueClick"
-          class="btn btn-lg btn-primary"
-        >
-          Continue
-        </button>
-      </div>
+      <button
+        type="button"
+        @click="continueClick"
+        class="btn btn-lg btn-primary"
+      >
+        Continue
+      </button>
     </div>
   </form>
 </template>
