@@ -14,10 +14,8 @@ const icpVersion = "1.7";
 const icpLastUpdated = "2025-12-21";
 const icpIsDraft = false;
 
-// Set API development mode with node environment variables
-
 const url = clientUnderDevelopment
-  ? "https://dev-api.dka-calculator.co.uk/config"
+  ? "/api-proxy/config"
   : "https://api.dka-calculator.co.uk/config";
 
 const timeoutDuration = 15000;
@@ -37,8 +35,7 @@ async function fetchConfig() {
     clearTimeout(timeoutId);
 
     if (!response.ok) {
-      const errorResponse = await response.json();
-      throw errorResponse;
+      throw new Error(`API responded with status ${response.status}`);
     }
 
     const jsonResponse = await response.json();
@@ -55,17 +52,37 @@ async function fetchConfig() {
 
     return jsonResponse;
   } catch (error) {
-    // Handle errors (including timeout and network issues)
+    clearTimeout(timeoutId);
+
+    if (clientUnderDevelopment) {
+      console.warn("API unavailable, loading local fallback config...", error);
+      try {
+        const fallbackResponse = await fetch("/localConfig.json");
+        const fallbackConfig = await fallbackResponse.json();
+        config.value = fallbackConfig;
+        config.value.client.version = clientVersion;
+        config.value.client.lastUpdated = clientLastUpdated;
+        config.value.client.underDevelopment = clientUnderDevelopment;
+        config.value.icp = {
+          version: icpVersion,
+          lastUpdated: icpLastUpdated,
+          isDraft: icpIsDraft,
+        };
+        return config.value;
+      } catch (fallbackError) {
+        console.error("Failed to load fallback config:", fallbackError);
+        throw [{ msg: "API error: Failed to load configuration." }];
+      }
+    }
+
     if (error.name === "AbortError") {
       const errorStr = "API error: The request timed out.";
       console.error(errorStr);
       throw [{ msg: errorStr }];
     } else if (error.errors) {
-      //is a jsonResponse with errors array
       console.error("API errors: ", error.errors);
       throw error.errors;
     } else {
-      //another unexpected error
       console.log("API error: ", error);
       throw [{ msg: "API error: " + error.toString() }];
     }
