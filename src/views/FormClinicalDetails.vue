@@ -321,25 +321,8 @@ useFormGuard(
             autocomplete="off"
             required
           />
-          <label class="btn btn-outline-secondary text-nowrap me-2" for="0.05"
-            >0.05 units/kg/hour<br />
-            (Default)</label
-          >
-
-          <input
-            type="radio"
-            class="btn-check"
-            name="insulinRate"
-            id="0.1"
-            value="0.1"
-            v-model="data.inputs.insulinRate.val"
-            @change="data.inputs.insulinRate.isValid()"
-            autocomplete="off"
-          />
-          <label
-            class="btn btn-outline-secondary text-nowrap insulin-rate-btn py-3"
-            for="0.1"
-            >0.1 units/kg/hour</label
+          <label class="btn btn-outline-secondary text-nowrap" for="0.05"
+            >0.05 units/kg/hour</label
           >
         </div>
       </div>
@@ -350,6 +333,11 @@ useFormGuard(
       >
         {{ data.inputs.insulinRate.errors }}
       </div>
+      <p class="form-text text-center mx-1 mt-2">
+        The 2026 guideline update recommends a starting rate of 0.05
+        units/kg/hour in all cases. Guidance on when escalation to 0.1
+        units/kg/hour is appropriate is provided in the care pathway.
+      </p>
       <div class="collapse form-text text-center mx-1" id="insulinRateInfo">
         {{ data.inputs.insulinRate.info }}
       </div>
@@ -510,9 +498,6 @@ useFormGuard(
 }
 .flex-wrap {
   column-gap: 20px;
-}
-.insulin-rate-btn {
-  height: 62px;
 }
 .v-enter-active {
   transition: all 0.5s ease;

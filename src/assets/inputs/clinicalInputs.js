@@ -386,7 +386,7 @@ export const clinicalInputs = {
   },
 
   insulinRate: {
-    val: "",
+    val: "0.05",
     label: "What starting rate of insulin is required?",
     privacyLabel: "Insulin starting rate",
     form: [4],
