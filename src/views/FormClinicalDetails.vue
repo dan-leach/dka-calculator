@@ -18,7 +18,7 @@ const continueClick = () => {
     .getElementById("form-clinical-details")
     .classList.add("was-validated");
 
-  if (data.value.form.isValid(2)) {
+  if (data.value.form.isValid(4)) {
     const nextRoute =
       data.value.inputs.weight.limit.override &&
       !data.value.retrospectiveEpisode
@@ -30,9 +30,9 @@ const continueClick = () => {
 
 useFormGuard(
   [
-    { formIndex: 0, redirect: "/form-disclaimer" },
-    { formIndex: 8, redirect: "/form-protocol-purpose" },
-    { formIndex: 1, redirect: "/form-patient-details" },
+    { formIndex: 1, redirect: "/form-disclaimer" },
+    { formIndex: 2, redirect: "/form-protocol-purpose" },
+    { formIndex: 3, redirect: "/form-patient-details" },
   ],
   () => {
     window.scrollTo(0, 0);

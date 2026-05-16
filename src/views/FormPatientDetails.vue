@@ -18,7 +18,7 @@ const continueClick = () => {
   document
     .getElementById("form-patient-details")
     .classList.add("was-validated");
-  if (data.value.form.isValid(1)) {
+  if (data.value.form.isValid(3)) {
     router.push("/form-clinical-details");
   }
 };
@@ -61,8 +61,8 @@ const optOutClick = (i) => {
 
 useFormGuard(
   [
-    { formIndex: 0, redirect: "/form-disclaimer" },
-    { formIndex: 8, redirect: "/form-protocol-purpose" },
+    { formIndex: 1, redirect: "/form-disclaimer" },
+    { formIndex: 2, redirect: "/form-protocol-purpose" },
   ],
   () => {
     setMinMaxPatientDOB();

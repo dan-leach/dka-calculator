@@ -9,7 +9,7 @@ export const patientInputs = {
   patientName: {
     val: "",
     label: "Full name",
-    form: [1],
+    form: [3],
     info: "Patient name is printed onto the generated care pathway document in the patient demographics area. It is not stored by the DKA Calculator.",
     minLength: 5,
     maxLength: 80,
@@ -29,7 +29,7 @@ export const patientInputs = {
   patientDOB: {
     val: "",
     label: "Date of birth",
-    form: [1, 6],
+    form: [3, 8],
     info: "Patient date of birth is printed onto the generated care pathway document in the patient demographics area. It is not stored directly by the DKA Calculator, but is used to calculate a patient age (in decimal years) which is used to check the patient weight is within the expected range. The decimal age is stored for audit purposes. To allow linkage of audit data between episodes the patient date of birth is also used (together with the NHS number) to generate a unique patient ID which is stored. The patient date of birth cannot be found from the calculated unique patient ID (<a href='https://www.codecademy.com/resources/blog/what-is-hashing/' target='_blank'>read more about secure cryptographic hashing</a>).",
     updateInfo:
       "Patient date of birth is not stored directly by the DKA Calculator. It is used to generate a unique patient ID which is compared with the unique ID generated when the episode was created to ensure the correct record is being updated. The patient date of birth cannot be found from the calculated unique patient ID (<a href='https://www.codecademy.com/resources/blog/what-is-hashing/' target='_blank'>read more about secure cryptographic hashing</a>).",
@@ -89,7 +89,7 @@ export const patientInputs = {
   patientSex: {
     val: "",
     label: "Patient sex",
-    form: [1],
+    form: [3],
     info: "Patient sex is printed onto the generated care pathway. It is stored by the DKA Calculator for audit purposes.",
     /**
      * Validates the patient sex.
@@ -105,7 +105,7 @@ export const patientInputs = {
   patientNHS: {
     val: "",
     label: "NHS number",
-    form: [1, 6],
+    form: [3, 8],
     info: "If provided, patient NHS number is printed onto the generated care pathway document in the patient demographics area. It is not stored directly by the DKA Calculator. To allow linkage of audit data between episodes the NHS number is used to generate a unique patient ID which is stored. The patient NHS number cannot be found from the calculated unique patient ID (<a href='https://www.codecademy.com/resources/blog/what-is-hashing/' target='_blank'>read more about secure cryptographic hashing</a>).",
     updateInfo:
       "Patient NHS number is not stored directly by the DKA Calculator. It is used to generate a unique patient ID which is compared with the unique ID generated when the episode was created to ensure the correct record is being updated. The patient NHS number cannot be found from the calculated unique patient ID (<a href='https://www.codecademy.com/resources/blog/what-is-hashing/' target='_blank'>read more about secure cryptographic hashing</a>).",
@@ -144,7 +144,7 @@ export const patientInputs = {
   patientHospNum: {
     val: "",
     label: "Hospital number",
-    form: [1],
+    form: [3],
     info: "If used instead of the patient NHS number, patient hospital number is printed onto the generated care pathway document in the patient demographics area. It is not stored by the DKA Calculator.",
     minLength: 4,
     maxLength: 20,
@@ -171,7 +171,7 @@ export const patientInputs = {
   patientPostcode: {
     val: "",
     label: "Postcode",
-    form: [1, 4],
+    form: [3, 7],
     info: "The patient postcode is not stored by the DKA Calculator. It is used to find an Index of Multiple Deprivation (IMD) decile which is stored for audit purposes.",
     minLength: 5, // valid postcodes will never be shorter than this
     maxLength: 8, // valid postcodes will never be longer than this

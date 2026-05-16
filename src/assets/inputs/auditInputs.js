@@ -9,7 +9,7 @@ export const auditInputs = {
     val: "",
     label: "What is this protocol being used for?",
     privacyLabel: "Episode type",
-    form: [8],
+    form: [2],
     info: "Episode type is stored by the DKA Calculator for audit purposes.",
     /**
      * Validates the episode type.
@@ -27,7 +27,7 @@ export const auditInputs = {
     val: "",
     label: "Please select your region",
     privacyLabel: "Region",
-    form: [3, 7],
+    form: [5, 9],
     info: "Region is stored by the DKA Calculator for audit purposes.",
     /**
      * Validates the region selection and updates the centre options based on the selected region.
@@ -53,7 +53,7 @@ export const auditInputs = {
     label: "Please select the treating centre",
     privacyLabel: "Treating centre",
     options: [],
-    form: [3, 7],
+    form: [5, 9],
     info: "Treating centre is stored by the DKA Calculator for audit purposes.",
     /**
      * Validates the treating centre selection.
@@ -71,7 +71,7 @@ export const auditInputs = {
     val: "",
     label: "Please select patient ethnic group",
     privacyLabel: "Patient ethnic group",
-    form: [3, 4],
+    form: [5, 7],
     info: "Patient ethnic group is stored by the DKA Calculator for audit purposes. The list of ethnic groups is taken from the Office for National Statistics.",
     /**
      * Validates the patient ethnic group selection and updates the ethnic subgroup options based on the selected group.
@@ -97,7 +97,7 @@ export const auditInputs = {
     label: "Please select patient ethnic subgroup",
     privacyLabel: "Patient ethnic subgroup",
     options: [],
-    form: [3, 4],
+    form: [5, 7],
     info: "Patient ethnic subgroup is stored by the DKA Calculator for audit purposes. The list of ethnic groups is taken from the Office for National Statistics.",
     /**
      * Validates the patient ethnic subgroup selection.
@@ -232,7 +232,7 @@ export const auditInputs = {
         categories: ["Social factors"],
       },
     ],
-    form: [3, 4],
+    form: [5, 7],
     info: "Preventable factors are stored by the DKA Calculator for audit purposes.",
     /**
      * Validates the preventable factors selection.

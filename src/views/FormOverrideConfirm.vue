@@ -38,9 +38,9 @@ const use2SD = async () => {
 
 useFormGuard(
   [
-    { formIndex: 0, redirect: "/form-disclaimer" },
-    { formIndex: 1, redirect: "/form-patient-details" },
-    { formIndex: 2, redirect: "/form-clinical-details" },
+    { formIndex: 1, redirect: "/form-disclaimer" },
+    { formIndex: 3, redirect: "/form-patient-details" },
+    { formIndex: 4, redirect: "/form-clinical-details" },
   ],
   () => { window.scrollTo(0, 0); }
 );

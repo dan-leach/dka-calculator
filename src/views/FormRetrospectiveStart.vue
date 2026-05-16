@@ -105,7 +105,7 @@ const checkRetrospectiveStatus = async () => {
     .classList.add("was-validated");
 
   // Abort if local validation fails
-  if (!data.value.form.isValid(6)) return false;
+  if (!data.value.form.isValid(8)) return false;
 
   step2Submit.value = {
     text: "Please wait...",
@@ -204,7 +204,7 @@ const addRetrospectivePatientHash = async () => {
     .classList.add("was-validated");
 
   // Abort if local validation fails
-  if (!data.value.form.isValid(7)) return false;
+  if (!data.value.form.isValid(9)) return false;
 
   step3Submit.value = {
     text: "Please wait...",

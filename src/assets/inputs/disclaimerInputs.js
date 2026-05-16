@@ -5,7 +5,7 @@ export const disclaimerInputs = {
     val: false,
     label: "Agreement to legal disclaimer",
     info: "Your agreement to the legal disclaimer is recorded.",
-    form: [0],
+    form: [1],
     isValid() {
       return this.val;
     },

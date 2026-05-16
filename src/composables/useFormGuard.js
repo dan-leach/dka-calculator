@@ -17,9 +17,9 @@ import router from "../router/index.js";
  * @example
  * useFormGuard(
  *   [
- *     { formIndex: 0, redirect: "/form-disclaimer" },
- *     { formIndex: 8, redirect: "/form-protocol-purpose" },
- *     { formIndex: 1, redirect: "/form-patient-details" },
+ *     { formIndex: 1, redirect: "/form-disclaimer" },
+ *     { formIndex: 2, redirect: "/form-protocol-purpose" },
+ *     { formIndex: 3, redirect: "/form-patient-details" },
  *   ],
  *   () => { window.scrollTo(0, 0); }
  * );

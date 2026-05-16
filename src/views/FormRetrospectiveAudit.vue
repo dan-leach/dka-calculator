@@ -19,7 +19,7 @@ const submitClick = () => {
   document.getElementById("form-update").classList.add("was-validated");
 
   // Check if the form is valid and navigate to the next route
-  if (data.value.form.isValid(4)) {
+  if (data.value.form.isValid(7)) {
     router.push("/form-retrospective-complete");
   }
 };

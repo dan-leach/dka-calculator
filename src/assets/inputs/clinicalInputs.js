@@ -8,7 +8,7 @@ export const clinicalInputs = {
   protocolStartDatetime: {
     val: "",
     label: "Protocol start date/time",
-    form: [2],
+    form: [4],
     info: "The protocol start date/time is used to calculate recommended review date/times on the serial data sheet on the care pathway. It is stored by the DKA Calculator for audit purposes.",
     todayString: {
       /**
@@ -112,7 +112,7 @@ export const clinicalInputs = {
   pH: {
     val: null,
     label: "pH",
-    form: [2],
+    form: [4],
     info: "pH is added to the relevant field in the care pathway. pH is used to determine DKA severity which is used in fluid deficit calculations. It is stored by the DKA Calculator for audit purposes.",
     min() {
       return config.value.validation.pH.min;
@@ -155,7 +155,7 @@ export const clinicalInputs = {
   bicarbonate: {
     val: null,
     label: "Bicarbonate",
-    form: [2],
+    form: [4],
     info: "If provided, these values will be added to the relevant fields in the care pathway. Bicarbonate is used to determine DKA severity which is used in fluid deficit calculations. Bicarbonate, glucose and ketones are stored by the DKA Calculator for audit purposes.",
     privacyInfo:
       "If provided, bicarbonate will be added to the relevant field in the care pathway. Bicarbonate is used to determine DKA severity which is used in fluid deficit calculations. It is stored by the DKA Calculator for audit purposes.",
@@ -197,8 +197,8 @@ export const clinicalInputs = {
     label: "Glucose",
     privacyInfo:
       "If provided, glucose will be added to the relevant field in the care pathway. It is stored by the DKA Calculator for audit purposes.",
-    form: [2, 5],
-    optionalForForms: [2],
+    form: [4, 6],
+    optionalForForms: [4],
     min() {
       return config.value.validation.glucose.min;
     },
@@ -243,7 +243,7 @@ export const clinicalInputs = {
     label: "Ketones",
     privacyInfo:
       "If provided, ketone level will be added to the relevant field in the care pathway. Ketone level is used to check the diagnostic threshold for DKA is reached. It is stored by the DKA Calculator for audit purposes.",
-    form: [2],
+    form: [4],
     min() {
       return config.value.validation.ketones.min;
     },
@@ -279,7 +279,7 @@ export const clinicalInputs = {
   weight: {
     val: null,
     label: "Weight",
-    form: [2],
+    form: [4],
     info: "Weight is used to calculate fluid volumes for boluses, deficit replacement and maintenance. It is stored by the DKA Calculator for audit purposes. If the weight provided falls outside 2 standard deviations of the mean for age, whether or not you override this limit is also recorded.",
     min() {
       return config.value.validation.weight.min;
@@ -370,7 +370,7 @@ export const clinicalInputs = {
     val: "",
     label: "Is the patient clinically shocked?",
     privacyLabel: "Clinical shock status",
-    form: [2],
+    form: [4],
     info: "Clinical shock status is used to indicate initial resuscitation strategy on the care pathway and to determine if the initial bolus is subtracted from the fluid deficit as part of the fluid calculations. It is stored by the DKA Calculator for audit purposes.",
     /**
      * Validates the clinical shock status.
@@ -389,7 +389,7 @@ export const clinicalInputs = {
     val: "",
     label: "What starting rate of insulin is required?",
     privacyLabel: "Insulin starting rate",
-    form: [2],
+    form: [4],
     info: "Insulin starting rate (in Units/kg/hour) is used to calculate an insulin rate in Units/hr. It is stored by the DKA Calculator for audit purposes.",
     /**
      * Validates the insulin starting rate.
@@ -409,7 +409,7 @@ export const clinicalInputs = {
     label:
       "Was the patient known to have diabetes prior to the current episode of DKA?",
     privacyLabel: "Pre-existing diabetes status",
-    form: [2, 4],
+    form: [4, 7],
     info: "If the patient has pre-existing diabetes, it is used to indicate the approach to managing existing insulin therapy on the care pathway. Pre-existing diabetes status also determines the preventable factors options that can be selected. It is stored by the DKA Calculator for audit purposes.",
     updateInfo:
       "Pre-existing diabetes status determines the preventable factors options that can be selected and is stored by the DKA Calculator for audit purposes.",
@@ -438,7 +438,7 @@ export const clinicalInputs = {
     val: "",
     label: "Which insulin delivery method does the patient use?",
     privacyLabel: "Insulin delivery method",
-    form: [2],
+    form: [4],
     info: "The insulin delivery method that the patient uses (if they have pre-existing diabetes) is stored by the DKA Calculator for audit purposes.",
     /**
      * Validates the insulin delivery method.

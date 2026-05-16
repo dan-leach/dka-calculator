@@ -8,7 +8,7 @@ export const retrospectiveInputs = {
   auditID: {
     val: "",
     label: "Audit ID",
-    form: [4, 6],
+    form: [7, 8],
     info: "Audit ID is required when updating the audit data for an episode. It is used to find the correct episode record.",
     minLength() {
       return config.value.validation.auditID.length;
@@ -39,7 +39,7 @@ export const retrospectiveInputs = {
     val: "",
     label: "Protocol end date/time",
     help: "Use the date/time of the first subcutaneous insulin dose as the end of the DKA protocol",
-    form: [4],
+    form: [7],
     info: "The protocol end date/time is used is stored by the DKA Calculator for audit purposes.",
     minDate: {
       /**
@@ -124,7 +124,7 @@ export const retrospectiveInputs = {
     label:
       "Were there any concerns of cerebral oedema during this episode of DKA?",
     privacyLabel: "Cerebral oedema concern",
-    form: [4],
+    form: [7],
     info: "If there were any concerns regarding cerebral oedema during the episode of DKA questions about treatment and imaging will also be asked. These responses are recorded for audit purposes.",
     /**
      * Validates the cerebral oedema status.
@@ -148,7 +148,7 @@ export const retrospectiveInputs = {
     label:
       "If imaging was performed did it show any evidence of cerebral oedema?",
     privacyLabel: "Cerebral oedema imaging",
-    form: [4],
+    form: [7],
     info: "Evidence of cerebral oedema on imaging is recorded for audit purposes",
     /**
      * Validates the cerebral oedema imaging status.
@@ -169,7 +169,7 @@ export const retrospectiveInputs = {
     val: [],
     label: "Was any treatment given for cerebral oedema?",
     privacyLabel: "Cerebral oedema treatment",
-    form: [4],
+    form: [7],
     info: "Treatment type given for cerebral oedema is recorded for audit purposes",
     /**
      * Validates the cerebral oedema treatment status.
@@ -190,7 +190,7 @@ export const retrospectiveInputs = {
   protocolStartDate: {
     val: "",
     label: "Protocol start date",
-    form: [7],
+    form: [9],
     info: "The protocol start date is used to check that the patient hash is being added to the correct episode.",
     /**
      * Validates the protocol start date.

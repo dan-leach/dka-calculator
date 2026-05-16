@@ -10,7 +10,7 @@ const selectPurpose = (value) => {
 };
 
 useFormGuard(
-  [{ formIndex: 0, redirect: "/form-disclaimer" }],
+  [{ formIndex: 1, redirect: "/form-disclaimer" }],
   () => { window.scrollTo(0, 0); }
 );
 </script>

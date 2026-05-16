@@ -20,17 +20,17 @@ const continueClick = () => {
   document.getElementById("form-audit-details").classList.add("was-validated");
 
   // Check if the form is valid and navigate to the next route
-  if (data.value.form.isValid(3)) {
+  if (data.value.form.isValid(5)) {
     router.push("/generate-protocol");
   }
 };
 
 useFormGuard(
   [
-    { formIndex: 0, redirect: "/form-disclaimer" },
-    { formIndex: 8, redirect: "/form-protocol-purpose" },
-    { formIndex: 1, redirect: "/form-patient-details" },
-    { formIndex: 2, redirect: "/form-clinical-details" },
+    { formIndex: 1, redirect: "/form-disclaimer" },
+    { formIndex: 2, redirect: "/form-protocol-purpose" },
+    { formIndex: 3, redirect: "/form-patient-details" },
+    { formIndex: 4, redirect: "/form-clinical-details" },
     {
       check: () =>
         data.value.inputs.weight.limit.override &&

@@ -18,7 +18,7 @@ const submitClick = async () => {
   try {
     showErrors.value = true;
     document.getElementById("form-sodium-osmo").classList.add("was-validated");
-    if (!data.value.form.isValid(5)) return false;
+    if (!data.value.form.isValid(6)) return false;
     locked.value = true;
     pending.value = true;
     const response = await api("sodium-osmo", {

@@ -9,7 +9,7 @@ export const sodiumInputs = {
     label: "Sodium",
     privacyInfo:
       "Sodium is used to calculate corrected sodium and effective osmolality using the relevant standalone calculator <a href='/sodium-osmo'>found here</a>. It is stored for audit purposes.",
-    form: [5],
+    form: [6],
     min() {
       return config.value.validation.sodium.min;
     },

@@ -13,15 +13,15 @@ import { sodiumInputs } from "./inputs/sodiumInputs.js";
  * All views continue to import { data } from "../assets/data.js" unchanged.
  *
  * Form index reference:
- *   0 — Disclaimer
- *   1 — Patient details
- *   2 — Clinical details
- *   3 — Audit details
- *   4 — Retrospective audit update
- *   5 — Sodium / osmolality calculator
- *   6 — Check retrospective status
- *   7 — Add retrospective patient hash
- *   8 — Protocol purpose
+ *   1 — Disclaimer
+ *   2 — Protocol purpose
+ *   3 — Patient details
+ *   4 — Clinical details
+ *   5 — Audit details
+ *   6 — Sodium / osmolality calculator
+ *   7 — Retrospective audit update
+ *   8 — Check retrospective status
+ *   9 — Add retrospective patient hash
  */
 data.value = {
   form: {

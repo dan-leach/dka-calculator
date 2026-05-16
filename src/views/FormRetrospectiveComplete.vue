@@ -141,7 +141,7 @@ const update = {
  */
 onMounted(() => {
   // Validate previous form step and redirect if necessary
-  if (!data.value.form.isValid(4)) {
+  if (!data.value.form.isValid(7)) {
     router.push("/form-retrospective-audit");
   } else {
     // Scroll to top

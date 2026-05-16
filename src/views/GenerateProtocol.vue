@@ -326,16 +326,16 @@ let showWorkingBtnText = ref("Show working");
 
 useFormGuard(
   [
-    { formIndex: 0, redirect: "/form-disclaimer" },
-    { formIndex: 1, redirect: "/form-patient-details" },
-    { formIndex: 2, redirect: "/form-clinical-details" },
+    { formIndex: 1, redirect: "/form-disclaimer" },
+    { formIndex: 3, redirect: "/form-patient-details" },
+    { formIndex: 4, redirect: "/form-clinical-details" },
     {
       check: () =>
         data.value.inputs.weight.limit.override &&
         !data.value.inputs.weight.limit.overrideConfirm,
       redirect: "/form-override-confirm",
     },
-    { formIndex: 3, redirect: "/form-audit-details" },
+    { formIndex: 5, redirect: "/form-audit-details" },
   ],
   () => {
     window.scrollTo(0, 0);
