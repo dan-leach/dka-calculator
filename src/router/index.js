@@ -1,3 +1,33 @@
+/**
+ * @file router/index.js
+ * Vue Router configuration for the DKA Calculator SPA.
+ *
+ * Standard episode flow (in order):
+ *   /                          Start — config fetch, episode type selection
+ *   /form-disclaimer           Form 1  — legal disclaimer agreement
+ *   /form-protocol-purpose     Form 2  — episode type (new / existing patient)
+ *   /form-patient-details      Form 3  — patient demographics
+ *   /form-clinical-details     Form 4  — clinical measurements
+ *   /form-override-confirm     (conditional) — weight limit override confirmation
+ *   /form-audit-details        Form 5  — audit / governance fields
+ *   /generate-protocol         Output  — PDF generation and display
+ *
+ * Standalone tools:
+ *   /sodium-osmo               Form 6  — sodium / osmolality calculator
+ *   /privacy-policy            Privacy policy (fetches config independently)
+ *
+ * Retrospective audit flow:
+ *   /form-retrospective-start  Form 8/9 — lookup or create a retrospective record
+ *   /form-retrospective-audit  Form 7   — retrospective clinical data entry
+ *   /form-retrospective-complete        — submission confirmation
+ *
+ * The form index numbers above correspond to the indices used in
+ * src/assets/data.js and checked by src/composables/useFormGuard.js to
+ * prevent users from reaching a form before completing earlier ones.
+ *
+ * /audit redirects to /form-retrospective-start for backwards-compatibility
+ * with links in earlier versions of the tool.
+ */
 import { createRouter, createWebHistory } from "vue-router";
 import Start from "../views/Start.vue";
 import { fetchConfig } from "../assets/fetchConfig";

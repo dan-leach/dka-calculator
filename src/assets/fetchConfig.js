@@ -1,3 +1,21 @@
+/**
+ * @file fetchConfig.js
+ * Fetches the application configuration from the remote API and exposes it as
+ * a reactive Vue ref consumed throughout the app via import.
+ *
+ * Environment detection:
+ *   - Development  (localhost or a URL containing "dev."):
+ *       Requests are proxied through /api-proxy/config (see vite.config.js)
+ *       to avoid CORS issues. If the API is unreachable the app falls back
+ *       to public/localConfig.json so development can continue offline.
+ *   - Production:
+ *       Requests go directly to https://api.dka-calculator.co.uk/config.
+ *       No fallback is attempted; a failure surfaces an error to the user.
+ *
+ * Version constants below (clientVersion, icpVersion, etc.) are maintained
+ * here rather than in the API so that client and ICP releases can be tracked
+ * independently of the back-end deployment cycle.
+ */
 import { ref } from "vue";
 let config = ref({});
 
@@ -20,6 +38,16 @@ const url = clientUnderDevelopment
 
 const timeoutDuration = 15000;
 
+/**
+ * Fetches and stores the application configuration.
+ *
+ * Merges the API response with the client-side version constants above and
+ * assigns the result to the shared `config` ref. In development, falls back
+ * to public/localConfig.json when the API is unavailable.
+ *
+ * @returns {Promise<Object>} The resolved configuration object.
+ * @throws {Array<{msg: string}>} Array of error message objects on failure.
+ */
 async function fetchConfig() {
   if (clientUnderDevelopment) console.log("***CLIENT DEV MODE ACTIVE***");
 

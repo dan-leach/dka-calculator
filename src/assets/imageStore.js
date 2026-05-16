@@ -1,6 +1,16 @@
-//variable contains an array of base64 images used in documentDefinition
-
-//https://www.base64encode.org/
+/**
+ * @file imageStore.js
+ * Base64-encoded images embedded in the pdfmake document definition.
+ *
+ * pdfmake cannot load images via URL in a Web Worker context, so all images
+ * used in the care pathway PDF are pre-encoded as base64 data URIs and
+ * referenced here. To update an image, convert the new file to base64 at
+ * https://www.base64encode.org/ and replace the relevant string below.
+ *
+ * Current images:
+ *   titlePage          — header image shown on the protocol cover page
+ *   introductoryNotes  — introductory notes image shown on page 2
+ */
 
 export const imageStore = {
   // encoding to be enclosed in " " follwed by comma
